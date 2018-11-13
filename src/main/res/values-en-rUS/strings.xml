@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SY云管家</string>
+    <string name="encode_qrcode">生成二维码</string>
+    <string name="dencode_qrcode">扫描二维码</string>
+    <string name="code_text">请输入生成二维码的文本信息</string>
+    <string name="qrcodetext">这里显示扫描结果</string>
+
+
+    <string name="jqdz">机器地址:</string>
+    <string name="jqzt1">机器状态:正常</string>
+    <string name="jqzt2">机器状态:不正常</string>
+    <string name="cplb">产品类别:</string>
+    <string name="price">¥</string>
+    <string name="present">%</string>
+    <string name="hint">请输入</string>
+    <string name="use_money">可用余额</string>
+    <string name="description">产品描述:</string>
+    <string name="productName">产品名称:</string>
+    <string name="userName">用户名</string>
+    <string name="balance_hint">输入金额超过余额</string>
+    <string name="loading">正在加载</string>
+    <string name="loadCompleted">没有更多数据</string>
+    <string name="text_no_song">无数据</string>
+
+
+    <string name="startDate">开始时间</string>
+    <string name="endDate">结束时间</string>
+
+
+    <string name="wxdl">SIGN IN WITH WECHAT</string>
+    <string name="zhdl">SIGN IN WITH ACCOUNT</string>
+    <string name="zczh">CREAT A NEW ACCOUNT</string>
+    <string name="home">HOME</string>
+    <string name="sys">SCAN BARCODE</string>
+    <string name="sk">REQUEST PAYMENT</string>
+    <string name="balance">BALANCE</string>
+    <string name="syygjfw">SY CLOD SERVICE</string>
+    <string name="myAsset">MY PROPERTY</string>
+    <string name="cpzx">PRODUCTS CENTER</string>
+    <string name="sjcz">PHONE RECHARGE</string>
+    <string name="ykkg">REMOTE CONTROL</string>
+    <string name="more">MORE</string>
+    <string name="friends">FRIENDS</string>
+    <string name="fx">发现</string>
+    <string name="smy">SCAN</string>
+    <string name="fh">RETURN</string>
+    <string name="ewm">QR CODE</string>
+    <string name="xc">PHOTO ALBUM</string>
+    <string name="jqbm">PRDCUT CODE:</string>
+    <string name="ddje">ORDER AMOUNT</string>
+    <string name="revenueSetting">设置营收分成</string>
+    <string name="search">查询</string>
+    <string name="jrtb">今日投币(枚):</string>
+    <string name="jrzc">今日纸钞:</string>
+    <string name="wdfc">我的分成:</string>
+    <string name="sysfq">SCAN TO PAY</string>
+    <string name="moneySetting">AMOUNT SETTING</string>
+    <string name="moneyClear">DELET AMOUNT</string>
+    <string name="savePhoto">SAVE PHOTO</string>
+    <string name="cancle">CANCEL</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="details">DETAILS</string>
+    <string name="recharge">RECHARGE</string>
+    <string name="withdraw">WITHDRAW</string>
+    <string name="bankAccount">BANK ACCOUNT</string>
+    <string name="transactionsDetail">TRANSACTIONS DETAIL</string>
+    <string name="transactionType">TRANSACTIONS TYPE</string>
+    <string name="zhichu">EXPENDITURE</string>
+    <string name="sx">SELECT</string>
+    <string name="cpys">PRODUCT REVENUE</string>
+    <string name="transferExpense">TRANSFER EXPENSE</string>
+    <string name="qrcodeGather">REQUEST PAYMENT WITH QR CODE</string>
+    <string name="selectTransferType">SELECT TRANSACTION TYPE</string>
+    <string name="all">ALL</string>
+    <string name="transfer">TRANSFER</string>
+    <string name="qrPayAndgather">QR CODE PAYMENT</string>
+    <string name="cztx">RECHARGE/WITHDRAW</string>
+    <string name="orderRefund">ORDER REFUND</string>
+    <string name="bindProduct">BINDING PRODUCT</string>
+    <string name="srbh">SERIAL NUMBER</string>
+    <string name="srjg">PRICE</string>
+    <string name="srdz">请输入产品地址</string>
+    <string name="srmc">请输入产品名称</string>
+    <string name="selectTpe">请选择产品类型</string>
+    <string name="mine">MINE</string>
+    <string name="me">ME</string>
+    <string name="smNumber">SY A/C NUMBER:</string>
+    <string name="wdsyfc">MY PROFIT SHARING RATIO</string>
+    <string name="setting">SETTING</string>
+    <string name="payPsd">PASSWORD OF PAYMENT</string>
+    <string name="versionInfo">VERSION INFO.</string>
+    <string name="loginOut">LOG OUT</string>
+    <string name="service_name">SERVICE REMINDER</string>
+    <string name="withDrawSuccess">WITHDRAW SUCCEED </string>
+    <string name="withDrawFailed">你的提现已失败</string>
+    <string name="txsb">WITHDRAW FAILED</string>
+    <string name="shbtg">AUDIT NOT APPROVED</string>
+    <string name="txsqbh">WITHDRAW APPLICATION FAILED</string>
+    <string name="cpysdz">RECEIVED YOUR PRODUCT REVENUE </string>
+    <string name="xzzcfc">ADD PROPORTY SHARING RATIO</string>
+
+
+    <string name="addBankCard">LINK A NEW CARD</string>
+    <string name="bindBankCard">BINDING A CRDEIT/DEBIT CARD</string>
+    <string name="accountName">ACCOUNT NAME</string>
+    <string name="accountNum">ACCOUNT NUMBER</string>
+    <string name="bankName">BANK NAME</string>
+    <string name="bankType">TYPE OF CARD</string>
+    <string name="next">NEXT</string>
+    <string name="zsj">(主商家)</string>
+    <string name="fsj">(副商家)</string>
+    <string name="deleteFriend">删除好友</string>
+    <string name="receivedRefund">您的退款已到账</string>
+    <string name="tytjhy">同意添加好友</string>
+    <string name="zhye">账号余额</string>
+    <string name="zrsm">YESTERDAYS TURNOVER:</string>
+    <string name="jrsm">今日扫码(元):</string>
+    <string name="sr">INCOME-</string>
+    <string name="tk">REFUND-</string>
+    <string name="cpsyjl">PRODUCT REVENUE RECORD </string>
+    <string name="orderNumber">ORDER NUMBER:</string>
+    <string name="editDivide">EDIT PROPORTY SHARING RATIO</string>
+
+    <string name="sj">售价</string>
+    <string name="yuan">元</string>
+
+</resources>

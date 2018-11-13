@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#393A3F</color>
+    <color name="colorPrimaryDark">#393A3F</color>
+    <color name="colorAccent">#0f0</color>
+
+    <!-- QRCode scanner color begin -->
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#B0000000</color>
+    <color name="viewfinder_frame">#90FFFFFF</color>
+    <color name="result_point_color">#C0FFFF00</color>
+    <color name="laser_color">#0F0</color>
+    <color name="corner_color">#00FF00</color>
+
+    <color name="tm">#00000000</color>
+
+    <color name="selected">#04be01</color>
+    <color name="unselect">#60dabc2a</color>
+
+    <color name="unselected">#c6c6c6</color>
+
+    <color name="background_tab_pressed">#6633B5E5</color>
+
+    <color name="tv_divider">#EBEBEB</color>
+
+    <color name="bg_productCenter">#F0EFF5</color>
+
+    <color name="theme_color">#dabc2a</color>
+
+    <color name="bg1">#ffffff</color>
+    <color name="bg2">#EBEBEB</color>
+    <color name="bg3">#ebebeb</color>
+    <color name="bg4">#419e58</color>
+    <color name="bg5">#232429</color>
+    <color name="bg6">#fafafa</color>
+    <color name="bg7">#686f79</color>
+
+    <color name="btn_psd_1">#F5F5F5</color>
+    <color name="btn_psd_2">#BFBFBF</color>
+
+    <color name="colorDefault">#ffffff</color>
+    <color name="colorBackground">#f1f0f6</color>
+    <color name="colorText">#9b9b9b</color>
+
+   <color name="netease_red">#d5a5b3</color>
+
+    <color name="home_text2">#838588</color>
+
+    <color name="c1">#d9d9d9</color>
+
+    <color name="yzm">#dbdbdb</color>
+
+    <color name="c2">#ff0101</color>
+    <color name="c3">#f0eff5</color>
+    <color name="c4">#d4d4d4</color>
+    <color name="c5">#fafafa</color>
+    <color name="c6">#e9c82b</color>
+    <color name="c7">#ff9800</color>
+    <color name="c8">#0099cb</color>
+    <color name="c9">#30c813</color>
+
+    <color name="picker_text_color">#878787</color>
+    <color name="picker_select_text_color">#03a9f4</color>
+    <color name="picker_title_text_color">#000000</color>
+    <color name="picker_border_color">#e5e5e5</color>
+
+    <color name="c10">#d3d3d3</color>
+
+
+
+</resources>

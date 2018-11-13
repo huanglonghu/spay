@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="presenter"
+            type="com.example.godcode.presenter.Presenter" />
+
+        <variable
+            name="user"
+            type="com.example.godcode.greendao.entity.User" />
+
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_divider" />
+
+        <RelativeLayout
+            android:id="@+id/presenal"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/bg_item"
+            android:paddingLeft="20dp">
+
+            <ImageView
+                android:id="@+id/iv_user"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/contact_normal"
+                />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/iv_user"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000"
+                    android:textSize="15sp"
+                    android:text="@{user.userName}"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_userName"
+                    android:layout_marginTop="5dp"
+                    android:text="@{@string/smNumber+user.syNumber}" />
+
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:onClick="@{()->presenter.step2Fragment(&quot;visitingcard&quot;)}"
+                android:src="@drawable/qrcode" />
+        </RelativeLayout>
+
+        <include layout="@layout/layout_divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/bg1"
+            android:divider="@drawable/divider2"
+            android:orientation="vertical"
+            android:showDividers="middle">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_item"
+                android:onClick="@{()->presenter.step2Fragment(&quot;bankCard&quot;)}"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/card" />
+
+                <TextView
+                    style="@style/text2"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/bankAccount" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_item"
+                android:onClick="@{()->presenter.step2Fragment(&quot;transationRecord&quot;)}"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/record_fill" />
+
+                <TextView
+                    style="@style/text2"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/transactionsDetail" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_item"
+                android:onClick="@{()->presenter.step2Fragment(&quot;myAsset&quot;)}"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/account" />
+
+                <TextView
+                    style="@style/text2"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/myAsset" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_item"
+                android:onClick="@{()->presenter.step2Ysjl(4)}"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/myrevenue" />
+
+                <TextView
+                    style="@style/text2"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/wdsyfc" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <include layout="@layout/layout_divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_item"
+            android:onClick="@{()->presenter.step2Fragment(&quot;setting&quot;)}"
+            android:paddingLeft="20dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/setting" />
+
+            <TextView
+                style="@style/text2"
+                android:layout_marginLeft="20dp"
+                android:text="@string/setting" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg2" />
+
+    </LinearLayout>
+</layout>

@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.zhi.www.wx.MainActivity">
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@mipmap/action_search"
+        android:title="Search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+
+    <item
+        android:id="@+id/action_plus"
+        android:icon="@mipmap/action_more"
+        android:title="@null"
+        app:actionProviderClass="com.example.godcode.ui.view.PlusActionProvider"
+        app:showAsAction="ifRoom"
+        />
+</menu>

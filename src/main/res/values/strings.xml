@@ -1,0 +1,147 @@
+<resources>
+    <string name="app_name">SY云管家</string>
+    <string name="encode_qrcode">生成二维码</string>
+    <string name="dencode_qrcode">扫描二维码</string>
+    <string name="code_text">请输入生成二维码的文本信息</string>
+    <string name="qrcodetext">这里显示扫描结果</string>
+
+
+    <string name="jqdz">机器地址:</string>
+    <string name="jqzt1">机器状态:正常</string>
+    <string name="jqzt2">机器状态:不正常</string>
+    <string name="cplb">产品类别:</string>
+    <string name="price">¥</string>
+    <string name="present">%</string>
+    <string name="hint">请输入</string>
+    <string name="use_money">可用余额</string>
+    <string name="description">产品描述:</string>
+    <string name="productName">产品名称:</string>
+    <string name="userName">用户名</string>
+    <string name="balance_hint">输入金额超过余额</string>
+    <string name="loading">正在加载</string>
+    <string name="loadCompleted">没有更多数据</string>
+    <string name="text_no_song">无数据</string>
+
+
+    <string name="startDate">开始时间</string>
+    <string name="endDate">结束时间</string>
+
+
+
+    <string name="wxdl">微信登录</string>
+    <string name="zhdl">账号登录</string>
+    <string name="zczh">注册SY新账号</string>
+    <string name="home">首页</string>
+    <string name="sys">扫一扫</string>
+    <string name="sk">收款</string>
+    <string name="balance">余额</string>
+    <string name="syygjfw">胜意云管家服务</string>
+    <string name="myAsset">我的资产</string>
+    <string name="cpzx">产品中心</string>
+    <string name="sjcz">手机充值</string>
+    <string name="ykkg">遥控开关</string>
+    <string name="more">更多</string>
+    <string name="friends">朋友</string>
+    <string name="fx">发现</string>
+    <string name="smy">扫码页</string>
+    <string name="fh">返回</string>
+    <string name="ewm">二维码/条码</string>
+    <string name="xc">相册</string>
+    <string name="jqbm">机器编码:</string>
+    <string name="ddje">订单金额</string>
+    <string name="revenueSetting">设置营收分成</string>
+    <string name="search">搜索</string>
+    <string name="jrtb">今日投币(枚):</string>
+    <string name="jrzc">今日纸钞:</string>
+    <string name="wdfc">我的分成:</string>
+    <string name="sysfq">扫一扫,向我付钱</string>
+    <string name="moneySetting">设置金额</string>
+    <string name="moneyClear">清除金额</string>
+    <string name="savePhoto">保存图片</string>
+    <string name="cancle">取消</string>
+    <string name="confirm">确定</string>
+    <string name="details">明细</string>
+    <string name="recharge">充值</string>
+    <string name="withdraw">提现</string>
+    <string name="bankAccount">银行卡</string>
+    <string name="transactionsDetail">交易记录</string>
+    <string name="transactionType">交易类型</string>
+    <string name="zhichu">支出</string>
+    <string name="sx">筛选</string>
+    <string name="cpys">产品营收</string>
+    <string name="transferExpense">转账支出</string>
+    <string name="qrcodeGather">二维码收款</string>
+    <string name="selectTransferType">选择交易类型</string>
+    <string name="all">全部</string>
+    <string name="transfer">转账</string>
+    <string name="qrPayAndgather">二维码收付</string>
+    <string name="cztx">充值提现</string>
+    <string name="orderRefund">订单退款</string>
+
+    <string name="bindProduct">绑定商品</string>
+    <string name="srbh">请输入编号</string>
+    <string name="srjg">请输入价格</string>
+    <string name="srdz">请输入产品地址</string>
+    <string name="srmc">请输入产品名称</string>
+    <string name="selectTpe">请选择产品类型</string>
+    <string name="mine">我的</string>
+    <string name="me">我</string>
+    <string name="smNumber">SY号:</string>
+    <string name="wdsyfc">我的营收分成</string>
+    <string name="setting">设置</string>
+    <string name="payPsd">支付密码</string>
+    <string name="versionInfo">版本信息</string>
+    <string name="loginOut">退出登录</string>
+    <string name="service_name">服务通知</string>
+    <string name="withDrawSuccess">你的提现已成功 </string>
+    <string name="withDrawFailed">你的提现已失败</string>
+    <string name="txsb">提现失败</string>
+    <string name="shbtg">审核不通过</string>
+    <string name="txsqbh">您的提现申请审核失败已驳回  </string>
+    <string name="cpysdz">您的产品营收已到账</string>
+    <string name="xzzcfc">新增资产分成</string>
+
+
+    <string name="addBankCard">添加银行卡</string>
+    <string name="bindBankCard">绑定银行卡</string>
+    <string name="accountName">户名</string>
+    <string name="accountNum">账号</string>
+    <string name="bankName">开户行</string>
+    <string name="bankType">卡类型</string>
+    <string name="next">下一步</string>
+    <string name="zsj">(主商家)</string>
+    <string name="fsj">(副商家)</string>
+
+    <string name="deleteFriend">删除好友</string>
+    <string name="receivedRefund">您的退款已到账</string>
+    <string name="tytjhy">同意添加好友</string>
+
+
+    <string name="zhye">账户余额(元)</string>
+    <string name="zrsm">昨日扫码:</string>
+    <string name="jrsm">今日扫码(元):</string>
+    <string name="sr">收入-</string>
+    <string name="tk">退款-</string>
+    <string name="cpsyjl">产品收益记录</string>
+    <string name="orderNumber">订单号:</string>
+    <string name="editDivide">修改资产分成</string>
+
+
+    <string name="zrfc">昨日分成(元)</string>
+    <string name="jrfc">今日分成(元)</string>
+
+    <string name="allAsset">总产品:</string>
+    <string name="normal">在线:</string>
+    <string name="abnormal">离线:</string>
+
+    <string name="sj">售价</string>
+    <string name="yuan">元</string>
+    <string name="fc">分成:</string>
+    <string name="sm">扫码:</string>
+    <string name="tb">投币:</string>
+    <string name="zc">纸钞:</string>
+
+
+
+
+</resources>

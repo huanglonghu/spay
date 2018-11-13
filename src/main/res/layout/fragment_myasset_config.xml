@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="presenter"
+            type="com.example.godcode.presenter.Presenter" />
+
+        <variable
+            name="assetBean"
+            type="com.example.godcode.bean.MyAssetList.ResultBean.DataBean" />
+
+
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_product_item"
+            android:padding="10dp">
+
+
+            <ImageView
+                android:id="@+id/iv_zc"
+                android:layout_width="60dp"
+                android:layout_height="80dp"
+                android:layout_alignParentLeft="true" />
+
+            <LinearLayout
+                android:id="@+id/ll_right"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/price+assetBean.price}"
+                    android:textColor="#efb537"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:onClick="@{()->presenter.showQrDialog(assetBean.productNumber)}"
+                    android:src="@drawable/qrcode" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/myAsset_content"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_toLeftOf="@id/ll_right"
+                android:layout_toRightOf="@id/iv_zc"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{assetBean.productName}"
+                    android:textColor="#000"
+                    android:textSize="15sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@{@string/jqbm+assetBean.productNumber}"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@{@string/jqdz+assetBean.machineAddress}"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="5dp"
+                    />
+
+                <include layout="@layout/layout_divider3" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="5dp"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{@string/jrtb+assetBean.todayCoin}"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{@string/jrsm+assetBean.scanCodeIncome}"
+                        android:layout_alignParentRight="true"
+                        android:textSize="12sp"
+                        />
+
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@{@string/jrzc+assetBean.todayBanknote}"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <include layout="@layout/layout_divider2" />
+
+        <TextView
+            android:id="@+id/revenueconfig"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="设置营收分成"
+            android:textColor="#000"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/et_price"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="修改价格"
+            android:textColor="#000"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:id="@+id/et_asset"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="修改商品信息"
+            android:textColor="#000"
+            android:textSize="15sp"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg3"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <Button
+                android:id="@+id/relieve_product"
+                style="@style/btn3"
+                android:layout_centerInParent="true"
+                android:text="解除商品" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>

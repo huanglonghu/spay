@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="presenter"
+            type="com.example.godcode.presenter.Presenter" />
+
+
+        <variable
+            name="fragment"
+            type="com.example.godcode.ui.fragment.deatailFragment.Asset_1_Fragment" />
+
+
+        <variable
+            name="selectPosition"
+            type="int" />
+
+        <variable
+            name="intcomeType"
+            type="String[]" />
+
+        <variable
+            name="coinCount"
+            type="int"/>
+
+          <variable
+              name="count"
+              type="int"/>
+
+        <variable
+            name="normalCount"
+            type="int"/>
+
+        <variable
+            name="errorCount"
+            type="int"/>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{()->fragment.selectDate(1)}"
+                android:text="今日"
+                android:textColor="@{selectPosition==1?@color/bg5:@color/c1}" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{()->fragment.selectDate(2)}"
+                android:text="昨日"
+                android:textColor="@{selectPosition==2?@color/bg5:@color/c1}" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{()->fragment.selectDate(3)}"
+                android:text="本周"
+                android:textColor="@{selectPosition==3?@color/bg5:@color/c1}" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{()->fragment.selectDate(4)}"
+                android:text="本月"
+                android:textColor="@{selectPosition==4?@color/bg5:@color/c1}" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{()->fragment.selectDate(5)}"
+                android:text="总营收"
+                android:textColor="@{selectPosition==5?@color/bg5:@color/c1}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/theme_color"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{intcomeType[(selectPosition-1)]+@string/fc}"
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/divideIncome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{intcomeType[(selectPosition-1)]+@string/tb+coinCount}" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{intcomeType[(selectPosition-1)]+@string/zc}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:onClick="@{()->fragment.querryByStatus(2)}"
+                android:text="@{@string/allAsset+count}" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{()->fragment.querryByStatus(1)}"
+                android:text="@{@string/normal+normalCount}" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{()->fragment.querryByStatus(0)}"
+                android:text="@{@string/abnormal+errorCount}" />
+
+        </LinearLayout>
+
+        <include layout="@layout/layout_divider3" />
+
+
+        <FrameLayout
+            android:id="@+id/asset_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+    </LinearLayout>
+</layout>
