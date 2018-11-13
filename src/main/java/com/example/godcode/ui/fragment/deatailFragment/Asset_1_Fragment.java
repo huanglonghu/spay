@@ -13,7 +13,6 @@ import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.fragment.asset.Asset_DetailFragment;
 import com.example.godcode.ui.fragment.asset.Asset_GroupFragment;
-import com.example.godcode.ui.view.AssetSelectDialog;
 import com.example.godcode.utils.GsonUtil;
 import java.util.ArrayList;
 
@@ -35,7 +34,7 @@ public class Asset_1_Fragment extends BaseFragment {
             binding.setIntcomeType(incomeType);
             binding.setPresenter(presenter);
             root = binding.getRoot();
-            parentFragment = (AssetFragment) getParentFragment();
+            parentFragment = (AssetFragment)getParentFragment();
             initListener();
             initView();
         }
@@ -64,7 +63,7 @@ public class Asset_1_Fragment extends BaseFragment {
 
     private int index;
 
-    public int getIndex() {
+    public int getIndex(){
         return index;
     }
 
@@ -76,7 +75,6 @@ public class Asset_1_Fragment extends BaseFragment {
         }else {
             parentFragment.getBinding().assetToolbar.option.setVisibility(View.VISIBLE);
         }
-
         getChildFragmentManager().beginTransaction().replace(R.id.asset_pager, fragments.get(index)).commit();
     }
 
