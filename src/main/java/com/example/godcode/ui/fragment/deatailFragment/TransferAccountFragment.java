@@ -3,29 +3,24 @@ package com.example.godcode.ui.fragment.deatailFragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentTransferaccountBinding;
 import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.ui.adapter.ContactAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.ui.view.DividerItemDecoration;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.LogUtil;
-
-import java.util.ArrayList;
+import com.example.godcode.utils.StringUtil;
 import java.util.List;
 
 public class TransferAccountFragment extends BaseFragment {
     private FragmentTransferaccountBinding binding;
     private View view;
     private ContactAdapter contactAdapter;
-    private List<Friend> friendList;
 
     @Nullable
     @Override
@@ -34,12 +29,12 @@ public class TransferAccountFragment extends BaseFragment {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_transferaccount, container, false);
             binding.setPresenter(presenter);
             view = binding.getRoot();
-            if(type==3){
-                binding.transferAccountToolBar.title.setText("转账");
-            }else {
+            if (type == 3) {
+                String title = StringUtil.getString(activity, R.string.transfer);
+                binding.transferAccountToolBar.title.setText(title);
+            } else {
                 binding.transferAccountToolBar.title.setText("选择好友");
             }
-
             initView();
             initListener();
         }
@@ -68,20 +63,16 @@ public class TransferAccountFragment extends BaseFragment {
     }
 
     public void initView() {
-        friendList = FriendOption.getInstance(activity).getAllFriend(Constant.userId);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        binding.transferAccountList.setLayoutManager(layoutManager);
-        binding.transferAccountList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-        contactAdapter = new ContactAdapter(getActivity(), friendList, presenter, type);
+        contactAdapter = new ContactAdapter(getActivity(), presenter, type);
         binding.transferAccountList.setAdapter(contactAdapter);
+        contactAdapter.refreshData(FriendOption.getInstance(activity).getAllFriend(Constant.userId));
         FriendOption.getInstance(activity).friendUpdateListener().subscribe(
                 update -> {
                     if (update) {
                         LogUtil.log("-------转账好友---更新-----");
-                        List<Friend> allFriend = FriendOption.getInstance(activity).getAllFriend(Constant.userId);
-                        friendList.clear();
-                        allFriend.addAll(allFriend);
-                        contactAdapter.notifyDataSetChanged();
+                        contactAdapter.clear();
+                        List<Friend> friendList = FriendOption.getInstance(activity).getAllFriend(Constant.userId);
+                        contactAdapter.refreshData(friendList);
                     }
                 }
         );
@@ -92,10 +83,6 @@ public class TransferAccountFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
 
 }

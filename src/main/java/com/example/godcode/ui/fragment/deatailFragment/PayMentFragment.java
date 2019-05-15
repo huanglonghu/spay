@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentPaymentBinding;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.EncryptUtil;
 import com.google.zxing.WriterException;
 import com.google.zxing.encoding.EncodingHandler;
@@ -69,10 +69,6 @@ public class PayMentFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
     public void initView() {
         refreshQRCode();

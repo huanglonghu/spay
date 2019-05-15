@@ -1,4 +1,4 @@
-package com.example.godcode.ui.view;
+package com.example.godcode.ui.view.widget;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentPaySuccessBinding;
-import com.example.godcode.databinding.FragmentSettingBinding;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.utils.FormatCheckUtil;
+import com.example.godcode.utils.FormatUtil;
 
 public class PaySuccessFragment extends BaseFragment {
     private FragmentPaySuccessBinding binding;
@@ -42,16 +41,11 @@ public class PaySuccessFragment extends BaseFragment {
 
     public void initView() {
         binding.setName(name);
-        binding.money.setText(FormatCheckUtil.getInstance().get2double(money));
+        binding.money.setText(FormatUtil.getInstance().get2double(money));
     }
 
     @Override
     protected void lazyLoad() {
-
-    }
-
-    @Override
-    public void refreshData() {
 
     }
 

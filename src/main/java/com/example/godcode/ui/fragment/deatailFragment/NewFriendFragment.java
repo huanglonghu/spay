@@ -11,18 +11,14 @@ import com.example.godcode.bean.ApplyFriend;
 import com.example.godcode.bean.ConcurAddFriend;
 import com.example.godcode.bean.ConcurAddFriendResponse;
 import com.example.godcode.databinding.FragmentNewfriendBinding;
-import com.example.godcode.greendao.entity.Friend;
-import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.adapter.NewFriendListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.utils.LogUtil;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.List;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class NewFriendFragment extends BaseFragment {
     private FragmentNewfriendBinding binding;
@@ -36,8 +32,10 @@ public class NewFriendFragment extends BaseFragment {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_newfriend, container, false);
             binding.setPresenter(presenter);
-            binding.newFriendToolbar.title.setText("新的朋友");
-            binding.newFriendToolbar.tvOption.setText("添加朋友");
+            String title = StringUtil.getString(activity, R.string.newfriend);
+            String str = StringUtil.getString(activity, R.string.addFriend);
+            binding.newFriendToolbar.title.setText(title);
+            binding.newFriendToolbar.tvOption.setText(str);
             view = binding.getRoot();
             initListener();
         }
@@ -72,13 +70,15 @@ public class NewFriendFragment extends BaseFragment {
         );
     }
 
+
+
     private void initData() {
         querryFriendList(1, false);
     }
 
 
     public void initView() {
-        adapter = new NewFriendListAdapter(activity, items, NewFriendFragment.this);
+        adapter = new NewFriendListAdapter(activity, items, R.layout.item_lv_newfriend);
         binding.lvNewFriend.setAdapter(adapter);
         binding.newFriendToolbar.option.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,24 +93,5 @@ public class NewFriendFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-    }
-
-    public void acceptFriend(ApplyFriend.ResultBean.ItemsBean bean) {
-        ConcurAddFriend concurAddFriend = new ConcurAddFriend();
-        concurAddFriend.setIsConcur(true);
-        concurAddFriend.setId(bean.getId());
-        HttpUtil.getInstance().concurAddFriend(concurAddFriend).subscribe(
-                concurAddFriendStr -> {
-                    ConcurAddFriendResponse concurAddFriendResponse = new Gson().fromJson(concurAddFriendStr, ConcurAddFriendResponse.class);
-                    if (concurAddFriendResponse.isSuccess()) {
-                        ContactDetailFragment cdf = new ContactDetailFragment();
-                        cdf.initData(bean.getFK_UserID());
-                        presenter.step2Fragment(cdf, "cdf");
-                    }
-                }
-        );
-    }
 
 }

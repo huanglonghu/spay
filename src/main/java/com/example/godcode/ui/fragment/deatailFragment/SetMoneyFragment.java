@@ -12,6 +12,7 @@ import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentSetmoneyBinding;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.view.MyEditText;
+import com.example.godcode.utils.StringUtil;
 
 public class SetMoneyFragment extends BaseFragment implements MyEditText.MoneyValueListener {
 
@@ -26,7 +27,8 @@ public class SetMoneyFragment extends BaseFragment implements MyEditText.MoneyVa
             binding.setPresenter(presenter);
             binding.etSetMoney.setMoneyValueListener(this);
             view = binding.getRoot();
-            binding.setMoneyToolbar.title.setText("设置金额");
+            String title = StringUtil.getString(activity, R.string.moneySetting);
+            binding.setMoneyToolbar.title.setText(title);
             initView();
             initListener();
         }
@@ -60,11 +62,6 @@ public class SetMoneyFragment extends BaseFragment implements MyEditText.MoneyVa
 
     @Override
     protected void lazyLoad() {
-    }
-
-    @Override
-    public void refreshData() {
-
     }
 
 

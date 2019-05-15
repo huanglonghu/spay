@@ -7,6 +7,10 @@
         <variable
             name="presenter"
             type="com.example.godcode.presenter.Presenter" />
+
+        <variable
+            name="teansation"
+            type="com.example.godcode.bean.Teansantion"/>
     </data>
 
     <LinearLayout
@@ -55,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:layout_below="@id/record_date"
+                android:text='@{@string/zhichu+"¥"+teansation.paySumMoney+"  "+@string/sr+"¥"+teansation.incomeSumMoney}'
                 />
 
         </RelativeLayout>

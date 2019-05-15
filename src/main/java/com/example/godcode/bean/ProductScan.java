@@ -1,13 +1,17 @@
 package com.example.godcode.bean;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/7/17.
  */
 
-public class ProductScan {
+public class ProductScan implements Serializable{
+
 
     /**
-     * result : {"productNumber":"784","productName":"密谋我搂你","isValid":true,"thumbnailImgPath":"/Files/Pictures/ProductType/a8b16a12-94dd-4fa2-89c2-5306781ba177.jpg","money":13,"isBind":false,"id":19}
+     * result : {"productNumber":"SY265","productName":"东华测试","isValid":true,"thumbnailImgPath":"/Files/Pictures/ProductType/bb70557b-5306-4159-8e0a-810900171f69.png","money":1,"isBind":true,"errContext":null,"isFreePlay":1,"productPackageList":[{"fK_ProductID":450,"fK_PackageID":36,"price":2,"coinCount":2,"id":38},{"fK_ProductID":450,"fK_PackageID":41,"price":5,"coinCount":5,"id":39},{"fK_ProductID":450,"fK_PackageID":39,"price":6,"coinCount":6,"id":40}],"id":450}
      * targetUrl : null
      * success : true
      * error : null
@@ -70,15 +74,18 @@ public class ProductScan {
         this.__abp = __abp;
     }
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable {
         /**
-         * productNumber : 784
-         * productName : 密谋我搂你
+         * productNumber : SY265
+         * productName : 东华测试
          * isValid : true
-         * thumbnailImgPath : /Files/Pictures/ProductType/a8b16a12-94dd-4fa2-89c2-5306781ba177.jpg
-         * money : 13.0
-         * isBind : false
-         * id : 19
+         * thumbnailImgPath : /Files/Pictures/ProductType/bb70557b-5306-4159-8e0a-810900171f69.png
+         * money : 1.0
+         * isBind : true
+         * errContext : null
+         * isFreePlay : 1
+         * productPackageList : [{"fK_ProductID":450,"fK_PackageID":36,"price":2,"coinCount":2,"id":38},{"fK_ProductID":450,"fK_PackageID":41,"price":5,"coinCount":5,"id":39},{"fK_ProductID":450,"fK_PackageID":39,"price":6,"coinCount":6,"id":40}]
+         * id : 450
          */
 
         private String productNumber;
@@ -87,7 +94,10 @@ public class ProductScan {
         private String thumbnailImgPath;
         private double money;
         private boolean isBind;
+        private String errContext;
+        private int isFreePlay;
         private int id;
+        private List<ProductPackageListBean> productPackageList;
 
         public String getProductNumber() {
             return productNumber;
@@ -137,12 +147,92 @@ public class ProductScan {
             this.isBind = isBind;
         }
 
+        public String getErrContext() {
+            return errContext;
+        }
+
+        public void setErrContext(String errContext) {
+            this.errContext = errContext;
+        }
+
+        public int getIsFreePlay() {
+            return isFreePlay;
+        }
+
+        public void setIsFreePlay(int isFreePlay) {
+            this.isFreePlay = isFreePlay;
+        }
+
         public int getId() {
             return id;
         }
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public List<ProductPackageListBean> getProductPackageList() {
+            return productPackageList;
+        }
+
+        public void setProductPackageList(List<ProductPackageListBean> productPackageList) {
+            this.productPackageList = productPackageList;
+        }
+
+        public static class ProductPackageListBean {
+            /**
+             * fK_ProductID : 450
+             * fK_PackageID : 36
+             * price : 2.0
+             * coinCount : 2
+             * id : 38
+             */
+
+            private int fK_ProductID;
+            private int fK_PackageID;
+            private int price;
+            private int coinCount;
+            private int id;
+
+            public int getFK_ProductID() {
+                return fK_ProductID;
+            }
+
+            public void setFK_ProductID(int fK_ProductID) {
+                this.fK_ProductID = fK_ProductID;
+            }
+
+            public int getFK_PackageID() {
+                return fK_PackageID;
+            }
+
+            public void setFK_PackageID(int fK_PackageID) {
+                this.fK_PackageID = fK_PackageID;
+            }
+
+            public int getPrice() {
+                return price;
+            }
+
+            public void setPrice(int price) {
+                this.price = price;
+            }
+
+            public int getCoinCount() {
+                return coinCount;
+            }
+
+            public void setCoinCount(int coinCount) {
+                this.coinCount = coinCount;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
         }
     }
 }

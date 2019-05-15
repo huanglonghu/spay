@@ -3,27 +3,46 @@ package com.example.godcode.ui.fragment.deatailFragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.GroupMsg;
+import com.example.godcode.bean.WebSocketNews1;
 import com.example.godcode.databinding.FragmentMyassetBinding;
+import com.example.godcode.handler.WebSocketNewsHandler;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.observable.WebSocketNewsObservable;
+import com.example.godcode.observable.WebSocketNewsObserver;
+import com.example.godcode.ui.activity.MainActivity;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.fragment.asset.Asset_DetailFragment;
 import com.example.godcode.ui.fragment.asset.Asset_GroupFragment;
+import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.GsonUtil;
+import com.example.godcode.utils.LogUtil;
+import com.example.godcode.utils.StringUtil;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Asset_1_Fragment extends BaseFragment {
     private FragmentMyassetBinding binding;
     private View root;
-    private AssetFragment parentFragment;
     private String[] incomeType = {"今日", "昨日", "本周", "本月", "总"};
     private Asset_GroupFragment asset_groupFragment;
     private Asset_DetailFragment asset_detailFragment;
     private ArrayList<BaseFragment> fragments;
+
+    public FragmentMyassetBinding getBinding() {
+        return binding;
+    }
+
+    public void setBinding(FragmentMyassetBinding binding) {
+        this.binding = binding;
+    }
 
     @Nullable
     @Override
@@ -33,17 +52,33 @@ public class Asset_1_Fragment extends BaseFragment {
             binding.setFragment(this);
             binding.setIntcomeType(incomeType);
             binding.setPresenter(presenter);
+            binding.asset1Toolbar.ivOption.setImageResource(R.drawable.config);
             root = binding.getRoot();
-            parentFragment = (AssetFragment)getParentFragment();
             initListener();
             initView();
+            initData();
+            MainActivity activity = (MainActivity) this.activity;
+            WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable = activity.getWebSocketNewsObservable();
+            WebSocketNewsObserver<WebSocketNewsHandler> observer = new WebSocketNewsObserver<WebSocketNewsHandler>() {
+                @Override
+                public void onUpdate(WebSocketNewsObservable<WebSocketNewsHandler> observable, WebSocketNewsHandler data) {
+                    if (data.getHandlerType() == 5) {
+                        refreshData(data.getWebSocketNews1().getData());
+                    }
+                }
+            };
+            webSocketNewsObservable.register(observer);
         }
-        toggleFragment(0);
+        toggleFragment(index);
         return root;
     }
 
+    private void initData() {
+
+    }
+
     public void querryByStatus(int status) {
-        if(index == 1){
+        if (index == 1) {
             asset_detailFragment.initParameter(status);
             asset_detailFragment.requestAssetList();
         }
@@ -63,24 +98,34 @@ public class Asset_1_Fragment extends BaseFragment {
 
     private int index;
 
-    public int getIndex(){
+    public int getIndex() {
         return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public void toggleFragment(int index) {
         this.index = index;
         if (index == 0) {
             selectDate(1);
-            parentFragment.getBinding().assetToolbar.option.setVisibility(View.GONE);
-        }else {
-            parentFragment.getBinding().assetToolbar.option.setVisibility(View.VISIBLE);
+            binding.asset1Toolbar.option.setVisibility(View.GONE);
+        } else {
+            binding.asset1Toolbar.option.setVisibility(View.VISIBLE);
         }
         getChildFragmentManager().beginTransaction().replace(R.id.asset_pager, fragments.get(index)).commit();
     }
 
     private void initListener() {
-
+          binding.asset1Toolbar.toolbar4Back.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  onKeyDown();
+              }
+          });
     }
+
 
     private int periodType;
 
@@ -98,7 +143,8 @@ public class Asset_1_Fragment extends BaseFragment {
                         GroupMsg.ResultBean result = groupMsg.getResult();
                         int normalCount = result.getNormalCount();
                         int errorCount = result.getErrorCount();
-                        refreshAsset(result.getCoinCount(), normalCount+errorCount,normalCount, result.getErrorCount(), result.getDividedMoney());
+                        int sumAwardCount = result.getSumAwardCount();
+                        refreshAsset(result.getCoinCount(), normalCount + errorCount, normalCount, result.getErrorCount(), result.getDividedMoney(), sumAwardCount);
                         asset_groupFragment.refreshGroup(result.getData(), periodType);
                     }
             );
@@ -109,12 +155,13 @@ public class Asset_1_Fragment extends BaseFragment {
 
     }
 
-    public void refreshAsset(int coinCount,int count,int normalCount, int errorCount, String divideMoney) {
+    public void refreshAsset(int coinCount, int count, int normalCount, int errorCount, String divideMoney, int awardCount) {
         binding.setCoinCount(coinCount);
         binding.setCount(count);
         binding.setNormalCount(normalCount);
         binding.setErrorCount(errorCount);
-        binding.divideIncome.setText(divideMoney);
+        binding.setDivideMoney(divideMoney);
+        binding.setAwardCount(awardCount);
     }
 
 
@@ -123,9 +170,47 @@ public class Asset_1_Fragment extends BaseFragment {
 
     }
 
-    @Override
-    public void refreshData() {
 
+    public void refreshData(WebSocketNews1.DataBean data) {
+        if (periodType != 2) {
+            double divedeMoney = data.getDivedeMoney();
+            int awardCount = 0;
+            if (!TextUtils.isEmpty(data.getAwardCount())) {
+                awardCount = Integer.parseInt(data.getAwardCount());
+            }
+            int coinCount = data.getCoinCount();
+            String s = binding.getDivideMoney();
+            double v = Double.parseDouble(s);
+            if (index == 0) {
+                asset_groupFragment.refreshData(data);
+                binding.setCoinCount(binding.getCoinCount() + coinCount);
+                binding.setAwardCount(binding.getAwardCount() + awardCount);
+                binding.setDivideMoney(FormatUtil.getInstance().get2double(v + divedeMoney));
+            } else if (index == 1) {
+                //改分组是否有该机器
+                HashMap<String, Integer> assetMap = asset_detailFragment.getAssetMap();
+                if (assetMap != null && assetMap.containsKey(data.getProductNumber())) {
+                    binding.setCoinCount(binding.getCoinCount() + coinCount);
+                    binding.setAwardCount(binding.getAwardCount() + awardCount);
+                    binding.setDivideMoney(FormatUtil.getInstance().get2double(v + divedeMoney));
+                    asset_detailFragment.refreshDivide(data);
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public void onKeyDown() {
+        if (index == 0) {
+            presenter.back();
+        } else if (index == 1) {
+            toggleFragment(0);
+        }
+    }
+
+    public void setTitle(String title) {
+        binding.asset1Toolbar.title.setText(title);
     }
 
 

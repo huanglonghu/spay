@@ -120,6 +120,12 @@ public class ErrrCodeShow {
             case 3012:
                 content="请先删除子级类别！";
                 break;
+            case 3014:
+                content="设备不在线，请稍后重试！";
+                break;
+            case 3015:
+                content="设备应答超时，请稍后重试！";
+                break;
             case 4000:
                 content = "好友不存在";
                 break;

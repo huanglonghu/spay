@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.godcode.R;
-import com.example.godcode.bean.EditBankCard;
+import com.example.godcode.bean.AddBankCard;
 import com.example.godcode.databinding.FragmentBindbankcardBinding;
 import com.example.godcode.greendao.entity.City;
 import com.example.godcode.greendao.entity.Province;
@@ -20,12 +20,15 @@ import com.example.godcode.greendao.gen.CityDao;
 import com.example.godcode.greendao.gen.ZoneDao;
 import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.Strategy;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.ui.view.BKLCDialog;
-import com.example.godcode.ui.view.BankCardEditText;
-import com.example.godcode.ui.view.DeleteDialog;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.ui.view.widget.BKLCDialog;
+import com.example.godcode.ui.view.customview.BankCardEditText;
+import com.example.godcode.ui.view.widget.DeleteDialog;
+import com.example.godcode.ui.view.TypeSelect;
 import com.example.godcode.utils.GreenDaoUtil;
+import com.example.godcode.utils.StringUtil;
 import com.youth.picker.PickerView;
 import com.youth.picker.entity.PickerData;
 import com.youth.picker.listener.OnPickerClickListener;
@@ -34,12 +37,13 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class AddBankCardFragment extends BaseFragment implements BankCardEditText.BankCardLengthListener, DeleteDialog.OnClickSureListerer {
+public class AddBankCardFragment extends BaseFragment implements BankCardEditText.BankCardLengthListener, TypeSelect.SelectResponse {
 
     private FragmentBindbankcardBinding binding;
     private View view;
-    private EditBankCard editBankCard;
+    private AddBankCard editBankCard;
     private PickerView pickerView;
+    private String[] bankArray;
 
     @Nullable
     @Override
@@ -47,7 +51,7 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bindbankcard, container, false);
             binding.etCardNumber.setBankCardLengthListener(this);
-            editBankCard = new EditBankCard();
+            editBankCard = new AddBankCard();
             editBankCard.setFK_UserID(Constant.userId);
             User user = UserOption.getInstance().querryUser(Constant.userId);
             editBankCard.setMobile(user.getPhoneNumer());
@@ -70,6 +74,15 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
             @Override
             public void onClick(View v) {
                 onKeyDown();
+            }
+        });
+        bankArray = new String[]{"中国银行", "中国农业银行", "中国工商银行", "中国建设银行", "交通银行", "招商银行", "广发银行", "中国民生银行", "浦发银行", "中国光大银行", "中国邮政", "中信银行", "兴业银行", "汇丰中国银行"};
+        binding.etBankName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TypeSelect bankTypeSelect = new TypeSelect(activity, bankArray);
+                bankTypeSelect.setSelectResponse(AddBankCardFragment.this);
+                bankTypeSelect.show();
             }
         });
 
@@ -102,10 +115,7 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
                 if (TextUtils.isEmpty(editBankCard.getAccountName())) {
                     Toast.makeText(activity, "开户名不能为空", Toast.LENGTH_SHORT).show();
                     return;
-                } else if (TextUtils.isEmpty(editBankCard.getBankCardNumber())) {
-                    Toast.makeText(activity, "银行卡号不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (TextUtils.isEmpty(editBankCard.getBankName())) {
+                }else if (TextUtils.isEmpty(editBankCard.getBankName())) {
                     Toast.makeText(activity, "卡户行不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (TextUtils.isEmpty(editBankCard.getArea())) {
@@ -125,7 +135,6 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
             }
         });
 
-
         binding.bklc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,12 +145,13 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
     }
 
     public void initView() {
-        binding.addBankCardToolbar.title.setText("添加银行卡");
+        String title = StringUtil.getString(activity, R.string.addBankCard);
+        binding.addBankCardToolbar.title.setText(title);
     }
 
 
     public void clear() {
-        getChildFragmentManager().beginTransaction().remove(AddBankCardFragment.this).commit();
+        getFragmentManager().beginTransaction().remove(AddBankCardFragment.this).commit();
 
     }
 
@@ -150,25 +160,28 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
     @Override
     public void onKeyDown() {
         super.onKeyDown();
         String title = "是否放弃绑定银行卡?";
-        DeleteDialog deleteDialog = new DeleteDialog(activity, title);
-        deleteDialog.setListerer(this);
+        DeleteDialog deleteDialog = new DeleteDialog(activity, title,new UnBindBankCardStrategy());
         deleteDialog.show();
     }
 
-    @Override
-    public void clickSure() {
-        clear();
-        presenter.back();
+    private class UnBindBankCardStrategy implements Strategy{
+
+        @Override
+        public void sure() {
+            try {
+                clear();
+                presenter.back();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
+
 
     private void initPickerData() {
         PickerData data = new PickerData();
@@ -207,13 +220,19 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
     @Override
     public void length(boolean isPass) {
         if (isPass) {
-            if (!binding.bindNext.isSelected()) {
+            if (!binding.bindNext.isEnabled()) {
                 binding.bindNext.setEnabled(true);
             }
         } else {
-            if (binding.bindNext.isSelected()) {
+            if (binding.bindNext.isEnabled()) {
                 binding.bindNext.setEnabled(false);
             }
         }
+    }
+
+
+    @Override
+    public void select(int pos) {
+        binding.etBankName.setText(bankArray[pos]);
     }
 }

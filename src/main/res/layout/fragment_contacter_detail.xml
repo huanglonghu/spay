@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_userName"
                     android:layout_marginTop="10dp"
-                    android:text="@{@string/smNumber+friend.syNum}" />
+                    android:text="@{@string/syNumber+friend.syNum}" />
             </RelativeLayout>
 
         </RelativeLayout>
@@ -74,7 +74,7 @@
             android:background="@color/bg1"
             android:gravity="center_vertical"
             android:paddingLeft="20dp"
-            android:text="设置备注" />
+            android:text="@string/note" />
 
         <include layout="@layout/layout_divider" />
 
@@ -89,7 +89,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="地区" />
+                android:text="@string/area" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -114,7 +114,7 @@
             android:id="@+id/deleteFriend"
             style="@style/btn3"
             android:layout_margin="20dp"
-            android:text="删除好友" />
+            android:text="@string/deleteFriend" />
 
     </LinearLayout>
 

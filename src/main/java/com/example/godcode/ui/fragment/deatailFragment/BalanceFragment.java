@@ -6,15 +6,21 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.BalanceResponse;
 import com.example.godcode.bean.DivideIncome;
 import com.example.godcode.databinding.FragmentBalanceBinding;
+import com.example.godcode.handler.WebSocketNewsHandler;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.observable.WebSocketNewsObservable;
+import com.example.godcode.observable.WebSocketNewsObserver;
+import com.example.godcode.ui.activity.MainActivity;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.DateUtil;
 import com.example.godcode.utils.GsonUtil;
+import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
@@ -35,6 +41,18 @@ public class BalanceFragment extends BaseFragment {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_balance, container, false);
             binding.setPresenter(presenter);
             view = binding.getRoot();
+            MainActivity activity = (MainActivity) this.activity;
+            WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable = activity.getWebSocketNewsObservable();
+            WebSocketNewsObserver<WebSocketNewsHandler> observer=new WebSocketNewsObserver<WebSocketNewsHandler>() {
+                @Override
+                public void onUpdate(WebSocketNewsObservable<WebSocketNewsHandler> observable, WebSocketNewsHandler data) {
+                    int handlerType = data.getHandlerType();
+                    if(handlerType==6){
+                        qurryBalance();
+                    }
+                }
+            };
+            webSocketNewsObservable.register(observer);
             initView();
             initListener();
         }
@@ -44,16 +62,17 @@ public class BalanceFragment extends BaseFragment {
     }
 
 
-
-
     private void querryDivide() {
         HttpUtil.getInstance().getDivideIncome(Constant.userId).subscribe(
                 divideStr -> {
                     DivideIncome divideIncome = GsonUtil.getInstance().fromJson(divideStr, DivideIncome.class);
-                    double todayMoney = divideIncome.getResult().getToDayMoney();
-                    double yesterDayMoney = divideIncome.getResult().getYesterDayMoney();
+                    DivideIncome.ResultBean result = divideIncome.getResult();
+                    double todayMoney = result.getToDayMoney();
+                    double yesterDayMoney = result.getYesterDayMoney();
+                    double balances = result.getBalances();
                     binding.balanceDivide.incomeToday.setText(decimalFormat.format(todayMoney));
                     binding.balanceDivide.incomeYesterDay.setText(decimalFormat.format(yesterDayMoney));
+                    binding.balance.setText(decimalFormat.format(balances));
                 }
         );
     }
@@ -66,7 +85,7 @@ public class BalanceFragment extends BaseFragment {
                 TxFragment txFragment = new TxFragment();
                 Bundle bundle = new Bundle();
                 bundle.putDouble("balance", balances);
-                bundle.putDouble("withdrawRate",withdrawRate);
+                bundle.putDouble("withdrawRate", withdrawRate);
                 txFragment.setArguments(bundle);
                 presenter.step2Fragment(txFragment, "tx");
             }
@@ -99,7 +118,8 @@ public class BalanceFragment extends BaseFragment {
 
     public void initView() {
         decimalFormat = new DecimalFormat("0.00");
-        binding.balanceToolbar.title.setText("余额");
+        String title = StringUtil.getString(activity, R.string.balance);
+        binding.balanceToolbar.title.setText(title);
         binding.balance.setText(decimalFormat.format(balances));
         String today = DateUtil.getInstance().getToday();
         String yesterDaty = DateUtil.getInstance().getYesterDaty();
@@ -120,7 +140,7 @@ public class BalanceFragment extends BaseFragment {
                 balanceStr -> {
                     BalanceResponse balanceResponse = new Gson().fromJson(balanceStr, BalanceResponse.class);
                     BalanceResponse.ResultBean result = balanceResponse.getResult();
-                    if(result!=null){
+                    if (result != null && binding != null) {
                         balances = result.getBalances();
                         withdrawRate = result.getWithdrawRate();
                         binding.balance.setText(decimalFormat.format(balances));
@@ -133,7 +153,4 @@ public class BalanceFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-    }
 }

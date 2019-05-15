@@ -3,37 +3,33 @@ package com.example.godcode.ui.fragment.mainActivity;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentFriendBinding;
 import com.example.godcode.databinding.ItemHeadBinding;
+import com.example.godcode.databinding.LayoutMainPopupBinding;
 import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.ui.adapter.ContactAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.deatailFragment.SearchFragment;
-import com.example.godcode.ui.view.DividerItemDecoration;
 import com.example.godcode.ui.view.LetterView;
-import com.example.godcode.utils.LogUtil;
+import com.example.godcode.ui.view.MenuWindow;
 import com.example.godcode.utils.ToastUtil;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class FriendFragment extends BaseFragment {
     private View view;
-    private RecyclerView contactList;
     private int type;
     private FragmentFriendBinding binding;
     private ContactAdapter adapter;
-    private List<Friend> friendList;
-    private LinearLayoutManager layoutManager;
+    private MenuWindow menuWindow;
+
 
     @Nullable
     @Override
@@ -42,6 +38,7 @@ public class FriendFragment extends BaseFragment {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend, container, false);
             view = binding.getRoot();
+            binding.setTitle("朋友");
             initData();
             initView();
             initListener();
@@ -54,16 +51,9 @@ public class FriendFragment extends BaseFragment {
         FriendOption.getInstance(activity).friendUpdateListener().subscribe(
                 update -> {
                     if (update) {
-                        LogUtil.log("-------好友---更新-----");
-                        List<Friend> allFriend = FriendOption.getInstance(activity).getAllFriend(Constant.userId);
                         adapter.clear();
-                        layoutManager.removeAllViews();
-                        friendList.clear();
-                        friendList.addAll(allFriend);
-                        for (int i = 0; i < friendList.size(); i++) {
-                            LogUtil.log("======firstChar========" + friendList.get(i).getFirstChar());
-                        }
-                        adapter.notifyDataSetChanged();
+                        List<Friend> friendList = FriendOption.getInstance(activity).getAllFriend(Constant.userId);
+                        adapter.refreshData(friendList);
                     }
                 }
         );
@@ -79,35 +69,42 @@ public class FriendFragment extends BaseFragment {
             }
         });
 
+        binding.friendToolBar.ivMine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.step2Fragment("personal");
+            }
+        });
+
+        binding.friendToolBar.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuWindow = new MenuWindow(activity);
+                LayoutMainPopupBinding binding = menuWindow.getBinding1();
+                binding.setFragment(FriendFragment.this);
+                menuWindow.show(v);
+            }
+        });
+
     }
 
     private void initView() {
-        friendList = new ArrayList<>();
-        contactList = (RecyclerView) view.findViewById(R.id.friend_list);
         LetterView letterView = (LetterView) view.findViewById(R.id.letter_view);
-        layoutManager = new LinearLayoutManager(getActivity());
-        adapter = new ContactAdapter(getActivity(), friendList, presenter, type);
-        contactList.setLayoutManager(layoutManager);
-        contactList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-        contactList.setAdapter(adapter);
+        adapter = new ContactAdapter(getActivity(), presenter, type);
+        binding.friendList.setAdapter(adapter);
         letterView.setCharacterListener(new LetterView.CharacterClickListener() {
             @Override
             public void clickCharacter(String character) {
                 ToastUtil.getInstance().showToast(character, 1000, activity);
                 int scrollPosition = adapter.getScrollPosition(character);
-                LogUtil.log("-------scrllPosition-------=" + scrollPosition);
-//                if (scrollPosition != -1) {
-//                    View view = layoutManager.findViewByPosition(scrollPosition);
-//                    int top = view.getTop();
-//                    layoutManager.scrollToPositionWithOffset(scrollPosition, top);
-//                }
-
-
+                if (scrollPosition != -1) {
+                    binding.friendList.setSelection(scrollPosition);
+                }
             }
 
             @Override
             public void clickArrow() {
-                layoutManager.scrollToPositionWithOffset(0, 0);
+                binding.friendList.setSelection(0);
             }
         });
 
@@ -118,20 +115,32 @@ public class FriendFragment extends BaseFragment {
 
     }
 
-    @Override
     public void refreshData() {
-        friendList.clear();
-        friendList.addAll(FriendOption.getInstance(activity).getAllFriend(Constant.userId));
-        for (int i = 0; i < friendList.size(); i++) {
-            LogUtil.log("======firstChar========" + friendList.get(i).getFirstChar());
-        }
-        adapter.notifyDataSetChanged();
+        adapter.clear();
+        List<Friend> friendList = FriendOption.getInstance(activity).getAllFriend(Constant.userId);
+        adapter.refreshData(friendList);
     }
 
     public void showNews(int count) {
-        View view = layoutManager.findViewByPosition(0);
+        View view = adapter.getView(0, null, null);
         ItemHeadBinding binding = DataBindingUtil.findBinding(view);
         binding.setNewsCount(count);
+    }
+
+
+    public void config(View view) {
+        switch (view.getId()) {
+            case R.id.mainPopup_addFriend:
+                presenter.step2Fragment("addFriend");
+                break;
+            case R.id.mainPopup_sys:
+                presenter.sys();
+                break;
+            case R.id.mainPopup_gathering:
+                presenter.step2Fragment("gathering");
+                break;
+        }
+        menuWindow.dismiss();
     }
 
 }

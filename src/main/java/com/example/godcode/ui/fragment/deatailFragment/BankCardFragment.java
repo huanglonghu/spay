@@ -3,36 +3,32 @@ package com.example.godcode.ui.fragment.deatailFragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.BankCard;
 import com.example.godcode.bean.BindBankCard;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.databinding.FragmentBankcardBinding;
-import com.example.godcode.databinding.LayoutEditProductpriceBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.EtStrategy;
 import com.example.godcode.ui.adapter.BankCardListAdaPter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.ui.view.DeleteBank;
-import com.example.godcode.ui.view.EtItemDialog;
+import com.example.godcode.ui.view.widget.BankConfigDialog;
+import com.example.godcode.ui.view.widget.EtItemDialog;
+import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
-
 import java.util.List;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class BankCardFragment extends BaseFragment implements EtItemDialog.EtResponse {
+public class BankCardFragment extends BaseFragment {
     private FragmentBankcardBinding binding;
     private boolean isPrepared;
     private View view;
     private List<BankCard.ResultBean> result;
-    private EtItemDialog etItemDialog;
 
     @Nullable
     @Override
@@ -43,7 +39,8 @@ public class BankCardFragment extends BaseFragment implements EtItemDialog.EtRes
             binding.setPresenter(presenter);
             isPrepared = true;
             view = binding.getRoot();
-            binding.bankcardToolbar.title.setText("银行卡");
+            String title = StringUtil.getString(activity, R.string.bankCard);
+            binding.bankcardToolbar.title.setText(title);
             initView();
             lazyLoad();
             initListener();
@@ -99,7 +96,7 @@ public class BankCardFragment extends BaseFragment implements EtItemDialog.EtRes
         }
     }
 
-    @Override
+
     public void refreshData() {
         querryBankCard();
     }
@@ -110,9 +107,14 @@ public class BankCardFragment extends BaseFragment implements EtItemDialog.EtRes
             case 1://待审核
                 break;
             case 2://已审核
-                etItemDialog = new EtItemDialog(activity, "请输入该银行卡绑定手机号收取的信息金额", "金额","",2);
-                etItemDialog.setEtResponse(this);
-                etItemDialog.setPosition(position);
+                EtItemDialog etItemDialog = new EtItemDialog.Builder().
+                        context(activity).
+                        etStragety(new EtBankCardStrategy()).
+                        title("请输入该银行卡绑定手机号收取的信息金额").
+                        hint("金额").
+                        position(position).
+                        type(2).
+                        build();
                 etItemDialog.show();
                 break;
             case 3://已绑定
@@ -128,25 +130,25 @@ public class BankCardFragment extends BaseFragment implements EtItemDialog.EtRes
 
     private void deleteBank(int position) {
         BankCard.ResultBean resultBean = result.get(position);
-        int bankID = resultBean.getId();
-        String bankCardNumber = resultBean.getBankCardNumber();
-        String num = bankCardNumber.substring(bankCardNumber.length() - 4, bankCardNumber.length());
-        DeleteBank deleteBank = new DeleteBank(activity, num, bankID, this);
+        BankConfigDialog deleteBank = new BankConfigDialog(activity, resultBean, this);
         deleteBank.show();
     }
 
-    @Override
-    public void hanlderEt(String str,int position) {
-        double value= Double.parseDouble(str);
-        BindBankCard bindBankCard = new BindBankCard();
-        bindBankCard.setMoney(value);
-        bindBankCard.setBankCardId(result.get(position).getId());
-        HttpUtil.getInstance().bindBankCard(bindBankCard).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                bindBankCardStr -> {
-                    Toast.makeText(activity, "绑定成功", Toast.LENGTH_SHORT).show();
-                    etItemDialog.dismiss();
-                    querryBankCard();
-                }
-        );
+
+    public class EtBankCardStrategy extends EtStrategy {
+
+        @Override
+        public void etComplete(String str, int position) {
+            double value= Double.parseDouble(str);
+            BindBankCard bindBankCard = new BindBankCard();
+            bindBankCard.setMoney(value);
+            bindBankCard.setBankCardId(result.get(position).getId());
+            HttpUtil.getInstance().bindBankCard(bindBankCard).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                    bindBankCardStr -> {
+                        Toast.makeText(activity, "绑定成功", Toast.LENGTH_SHORT).show();
+                        querryBankCard();
+                    }
+            );
+        }
     }
 }

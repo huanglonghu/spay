@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.godcode" android:versionCode="1" android:versionName="2.1.8">
+    package="com.example.godcode"
+    android:versionCode="1"
+    android:versionName="2.4.9">
+
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络权限 -->
     <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
     <uses-permission android:name="android.permission.CAMERA" /> <!-- 摄像头权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 
     <application
@@ -20,33 +24,41 @@
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.LoginActivity"
+        <activity
+            android:name=".ui.activity.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"
+        <activity
+            android:name=".ui.activity.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name="com.google.zxing.activity.CaptureActivity" />
-        <activity android:name=".wxapi.WXEntryActivity" android:exported="true"/>
-        <activity android:name=".ui.activity.ClipImageActivity"/>
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true" />
+        <activity android:name=".ui.activity.ClipImageActivity" />
 
-        <service android:name=".service.WebSocketService"/>
+        <service android:name=".service.WebSocketService" />
         <service android:name=".service.PushIntentService" />
-        <service android:name=".service.TimeService"/>
+        <service android:name=".service.TimeService" />
 
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <receiver
             android:name=".service.MyBroadCastReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="ELITOR_CLOCK"/>
+                <action android:name="ELITOR_CLOCK" />
             </intent-filter>
         </receiver>
     </application>

@@ -1,15 +1,12 @@
 package com.example.godcode.ui.fragment.deatailFragment;
 
-import android.app.DatePickerDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
 
 import com.example.godcode.R;
 import com.example.godcode.bean.YSRecord;
@@ -17,18 +14,14 @@ import com.example.godcode.databinding.FragmentYsjlBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.adapter.YsjlListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.ui.view.MyDatePickerDialog;
 import com.example.godcode.ui.view.MyListView;
 import com.example.godcode.utils.DateUtil;
-import com.example.godcode.utils.FormatCheckUtil;
+import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.LogUtil;
+import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 public class YSJLFragment extends BaseFragment implements MyListView.RefreshData, SelectTimeFragment.TimeSelect {
@@ -50,11 +43,11 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
             data = new ArrayList<>();
             initView();
             initListener();
+            binding.lvYsjl.setPage(1);
+            LogUtil.log("===========BBBBBBBBBBBBB==========");
+            querryYsjl();
         }
-        data.clear();
-        ysjlListAdapter.clearView();
-        binding.lvYsjl.setPage(1);
-        initData();
+
         return view;
     }
 
@@ -64,13 +57,15 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
         } else if (type == 2) {
             binding.ysjlToolbar.title.setText("昨日扫码记录");
         } else if (type == 3) {
-            binding.ysjlToolbar.title.setText("本月营收记录");
+            String title = StringUtil.getString(activity, R.string.byys);
+            binding.ysjlToolbar.title.setText(title);
         } else if (type == 4) {
             binding.tvDate1.setText(time1);
             binding.tvDate2.setText(time2);
-            binding.ysjlToolbar.title.setText("总营收记录");
+            String title = StringUtil.getString(activity, R.string.totalYs);
+            binding.ysjlToolbar.title.setText(title);
         }
-        ysjlListAdapter = new YsjlListAdapter(activity, data);
+        ysjlListAdapter = new YsjlListAdapter(activity, data,R.layout.item_lv_ysjl);
         binding.lvYsjl.setAdapter(ysjlListAdapter);
     }
 
@@ -90,7 +85,6 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
         binding.calender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtil.log("-----click-----");
                 SelectTimeFragment selectTimeFragment = new SelectTimeFragment();
                 selectTimeFragment.setTimeSelect(YSJLFragment.this);
                 presenter.step2Fragment(selectTimeFragment, "selectTime");
@@ -99,18 +93,17 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
     }
 
     private void initData() {
-        querryYsjl();
+
     }
 
     private void querryYsjl() {
-        LogUtil.log(time2+"---------time--------"+time1);
         HttpUtil.getInstance().getYSRecord(time1, time2, binding.lvYsjl.getPage()).subscribe(
                 ysRecordStr -> {
                     YSRecord ysRecord = new Gson().fromJson(ysRecordStr, YSRecord.class);
                     List<YSRecord.ResultBean.DataBean> list = ysRecord.getResult().getData();
                     double allSumMoney = ysRecord.getResult().getAllSumMoney();
-                    binding.divideIncomeTotal.setText(FormatCheckUtil.getInstance().get2double(allSumMoney));
-                    String incomeSumMoney = FormatCheckUtil.getInstance().get2double(ysRecord.getResult().getIncomeSumMoney());
+                    binding.divideIncomeTotal.setText(FormatUtil.getInstance().get2double(allSumMoney));
+                    String incomeSumMoney = FormatUtil.getInstance().get2double(ysRecord.getResult().getIncomeSumMoney());
                     binding.sz.setText("收入¥  " + incomeSumMoney);
                     if (list.size() > 0) {
                         data.addAll(list);
@@ -128,12 +121,6 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
     @Override
     protected void lazyLoad() {
     }
-
-    @Override
-    public void refreshData() {
-
-    }
-
 
     private String time1;
     private String time2;
@@ -164,6 +151,7 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
 
     @Override
     public void refreshData(int page) {
+        LogUtil.log("===========CCCCCCCCCCCCCCCCCCCCCC==========");
         querryYsjl();
     }
 
@@ -173,6 +161,7 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
         this.time2 = date2;
         binding.tvDate1.setText(time1);
         binding.tvDate2.setText(time2);
+        LogUtil.log("===========AAAAAAAAAAAAAAA==========");
         querryYsjl();
     }
 }

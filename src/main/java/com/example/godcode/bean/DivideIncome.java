@@ -8,7 +8,7 @@ public class DivideIncome {
 
 
     /**
-     * result : {"toDayMoney":0,"yesterDayMoney":0,"toDayCoin":0,"sumCoin":0,"toDayBanknote":0,"sumBanknote":0,"monthMoney":0}
+     * result : {"toDayMoney":0,"yesterDayMoney":0,"balances":0.44}
      * targetUrl : null
      * success : true
      * error : null
@@ -75,20 +75,12 @@ public class DivideIncome {
         /**
          * toDayMoney : 0.0
          * yesterDayMoney : 0.0
-         * toDayCoin : 0.0
-         * sumCoin : 0.0
-         * toDayBanknote : 0.0
-         * sumBanknote : 0.0
-         * monthMoney : 0.0
+         * balances : 0.44
          */
 
         private double toDayMoney;
         private double yesterDayMoney;
-        private int toDayCoin;
-        private int sumCoin;
-        private int toDayBanknote;
-        private int sumBanknote;
-        private double monthMoney;
+        private double balances;
 
         public double getToDayMoney() {
             return toDayMoney;
@@ -106,44 +98,12 @@ public class DivideIncome {
             this.yesterDayMoney = yesterDayMoney;
         }
 
-        public int getToDayCoin() {
-            return toDayCoin;
+        public double getBalances() {
+            return balances;
         }
 
-        public void setToDayCoin(int toDayCoin) {
-            this.toDayCoin = toDayCoin;
-        }
-
-        public int getSumCoin() {
-            return sumCoin;
-        }
-
-        public void setSumCoin(int sumCoin) {
-            this.sumCoin = sumCoin;
-        }
-
-        public int getToDayBanknote() {
-            return toDayBanknote;
-        }
-
-        public void setToDayBanknote(int toDayBanknote) {
-            this.toDayBanknote = toDayBanknote;
-        }
-
-        public int getSumBanknote() {
-            return sumBanknote;
-        }
-
-        public void setSumBanknote(int sumBanknote) {
-            this.sumBanknote = sumBanknote;
-        }
-
-        public double getMonthMoney() {
-            return monthMoney;
-        }
-
-        public void setMonthMoney(double monthMoney) {
-            this.monthMoney = monthMoney;
+        public void setBalances(double balances) {
+            this.balances = balances;
         }
     }
 }

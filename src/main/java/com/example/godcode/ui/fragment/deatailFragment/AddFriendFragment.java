@@ -11,7 +11,8 @@ import com.example.godcode.databinding.FragmentAddfriendBinding;
 import com.example.godcode.greendao.entity.User;
 import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.utils.StringUtil;
 
 
 public class AddFriendFragment extends BaseFragment {
@@ -27,7 +28,8 @@ public class AddFriendFragment extends BaseFragment {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_addfriend, container, false);
             isPrepared = true;
             binding.setPresenter(presenter);
-            binding.addFriendToolBar.title.setText("添加朋友");
+            String title = StringUtil.getString(activity, R.string.addFriend);
+            binding.addFriendToolBar.title.setText(title);
             view = binding.getRoot();
             initData();
             initView();
@@ -62,8 +64,5 @@ public class AddFriendFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void refreshData() {
 
-    }
 }

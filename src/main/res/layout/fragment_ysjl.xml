@@ -40,7 +40,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="总营收(元)"
+                android:text="@string/totalYs"
                 android:textColor="#fff"
                 android:textSize="17sp" />
 

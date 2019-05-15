@@ -12,10 +12,9 @@ import android.widget.ArrayAdapter;
 import com.example.godcode.R;
 import com.example.godcode.bean.BankCard;
 import com.example.godcode.databinding.FragmentBankselectBinding;
-import com.example.godcode.databinding.FragmentVisitingcardBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -39,6 +38,7 @@ public class BankSelectFragment extends BaseFragment {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bankselect, container, false);
             binding.setPresenter(presenter);
             view = binding.getRoot();
+
             binding.selectBankToolbar.title.setText("选择银行卡");
             initData();
             initView();
@@ -90,8 +90,5 @@ public class BankSelectFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
 
-    }
 }

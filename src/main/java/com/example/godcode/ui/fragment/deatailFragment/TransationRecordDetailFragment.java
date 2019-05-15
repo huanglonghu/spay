@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.MobileRechargeRecord;
 import com.example.godcode.bean.QRPay;
@@ -24,11 +23,9 @@ import com.example.godcode.databinding.FragmentTransactionDetailBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.utils.DateUtil;
-import com.example.godcode.utils.FormatCheckUtil;
+import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.GsonUtil;
-
 import java.text.DecimalFormat;
-
 
 public class TransationRecordDetailFragment extends BaseFragment {
     private FragmentTransactionDetailBinding binding;
@@ -36,7 +33,6 @@ public class TransationRecordDetailFragment extends BaseFragment {
     private int id;
     private int relatedKey;
     private int transactionType;
-    private TranferAccountDetail tranferAccountDetail;
     private String[] typeArray = {"", "转账支出", "二维码收款", "二维码付款", "商户消费", "充值", "提现", "退款", "转账收入", "产品营收","手机充值"};
     private DecimalFormat decimalFormat;
 
@@ -59,6 +55,7 @@ public class TransationRecordDetailFragment extends BaseFragment {
     }
 
     private void initData() {
+       // String transferExpense = StringUtil.getString(activity, R.string.transferExpense);
         TransationDetail transationDetail = new TransationDetail();
         transationDetail.setRelatedKey(relatedKey);
         transationDetail.setId(id);
@@ -80,7 +77,7 @@ public class TransationRecordDetailFragment extends BaseFragment {
                             QrcodeGathering qrcodeGathering = GsonUtil.getInstance().fromJson(transactionStr, QrcodeGathering.class);
                             QrcodeGathering.ResultBean result1 = qrcodeGathering.getResult();
                             transcationMsg.setDate(changeDate(result1.getIncomeTime()));
-                            transcationMsg.setMoney(FormatCheckUtil.getInstance().get2double(result1.getIncomeAmount()));
+                            transcationMsg.setMoney(FormatUtil.getInstance().get2double(result1.getIncomeAmount()));
                             transcationMsg.setPayType(incomeType[result1.getIncomeGenre()]);
                             transcationMsg.setPayWay(payWay[result1.getIncomeMode()]);
                             transcationMsg.setTranscationObj(result1.getDisbursUserName());
@@ -89,7 +86,7 @@ public class TransationRecordDetailFragment extends BaseFragment {
                             QRPay qrPay = GsonUtil.getInstance().fromJson(transactionStr, QRPay.class);
                             QRPay.ResultBean result3 = qrPay.getResult();
                             transcationMsg.setDate(changeDate(result3.getPaymentTime()));
-                            transcationMsg.setMoney(FormatCheckUtil.getInstance().get2double(result3.getPaymentAmount()));
+                            transcationMsg.setMoney(FormatUtil.getInstance().get2double(result3.getPaymentAmount()));
                             transcationMsg.setTranscationObj(result3.getDisbursUserName());
                             transcationMsg.setPayWay(payType[result3.getPaymentGenre()]);
                             transcationMsg.setPayWay(payWay[result3.getPaymentMode()]);
@@ -133,7 +130,7 @@ public class TransationRecordDetailFragment extends BaseFragment {
                         case 8://转账收入
                             ZzIncome zzIncome = GsonUtil.getInstance().fromJson(transactionStr, ZzIncome.class);
                             ZzIncome.ResultBean result8 = zzIncome.getResult();
-                            transcationMsg.setMoney(FormatCheckUtil.getInstance().get2double(result8.getIncomeAmount()));
+                            transcationMsg.setMoney(FormatUtil.getInstance().get2double(result8.getIncomeAmount()));
                             transcationMsg.setDate(changeDate(result8.getIncomeTime()));
                             transcationMsg.setTranscationObj(result8.getDisbursUserName());
                             transcationMsg.setPayType(incomeType[result8.getIncomeGenre()]);
@@ -143,7 +140,7 @@ public class TransationRecordDetailFragment extends BaseFragment {
                             SHSR shsr = GsonUtil.getInstance().fromJson(transactionStr, SHSR.class);
                             SHSR.ResultBean result9 = shsr.getResult();
                             transcationMsg.setPayType(incomeType[result9.getIncomeGenre()]);
-                            transcationMsg.setMoney(FormatCheckUtil.getInstance().get2double(result9.getIncomeAmount()));
+                            transcationMsg.setMoney(FormatUtil.getInstance().get2double(result9.getIncomeAmount()));
                             transcationMsg.setDate(changeDate(result9.getIncomeTime()));
                             break;
                         case 10:
@@ -179,7 +176,4 @@ public class TransationRecordDetailFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-    }
 }

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentSelecttimeBinding;
 import com.example.godcode.ui.base.BaseFragment;
+import com.example.godcode.utils.StringUtil;
 
 import java.util.Calendar;
 
@@ -91,10 +92,7 @@ public class SelectTimeFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
 
-    }
 
     public interface TimeSelect {
         void setDate(String date1, String date2);

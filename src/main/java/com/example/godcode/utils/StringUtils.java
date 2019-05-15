@@ -648,13 +648,13 @@ public class StringUtils {
 	public static String formatFileSize(long size)
 	{
 		if (size > 0 && size < 1024) {
-			return Long.toString(size) + " B";
+			return Long.toString(size) + " CommodityRoad";
 		} else if (size >= 1024 && size < 1024 * 1024) {
 			return StringUtils.double2Str((double)size/1024) + " KB";
 		} else if (size >= 1024 * 1024) {
 			return StringUtils.double2Str((double)size/1024/1024) + " MB";
 		} else {
-			return "0 B";
+			return "0 CommodityRoad";
 		}
 	}
 

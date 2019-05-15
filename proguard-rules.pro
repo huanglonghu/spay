@@ -101,9 +101,6 @@ public static java.lang.String TABLENAME;
 -dontwarn pl.droidsonroids.gif.**
 -keep class pl.droidsonroids.gif.**{*;}
 
--dontwarn me.weyye.hipermission.**
--keep class  me.weyye.hipermission.**{*;}
-
 -dontwarn net.orfjackal.retrolambda**
 -keep class net.orfjackal.retrolambda.**{*;}
 

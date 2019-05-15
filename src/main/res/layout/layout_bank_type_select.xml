@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:text="@string/confirm"
-                android:textColor="@color/selected" />
+                android:textColor="@color/theme_color" />
 
         </RelativeLayout>
 

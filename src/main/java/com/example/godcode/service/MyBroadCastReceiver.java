@@ -3,17 +3,13 @@ package com.example.godcode.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.PowerManager;
 
 import com.example.godcode.bean.LoginResponse;
 import com.example.godcode.http.HttpUtil;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.GsonUtil;
 import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.SharepreferenceUtil;
-import com.umeng.commonsdk.internal.a;
-
-import static com.umeng.commonsdk.internal.a.l;
 
 /**
  * Created by Administrator on 2018/9/7.
@@ -37,8 +33,6 @@ public class MyBroadCastReceiver extends BroadcastReceiver {
                             long l = System.currentTimeMillis();
                             Constant.expireInSeconds = result.getExpireInSeconds();
                             SharepreferenceUtil.getInstance().saveAccessToken(accessToken, Constant.uniquenessToken, l);
-                            Intent intent1 = new Intent(context, TimeService.class);
-                            context.startService(intent1);
                         }
                 );
                 break;

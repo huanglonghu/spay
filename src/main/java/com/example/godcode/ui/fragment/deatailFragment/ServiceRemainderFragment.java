@@ -13,7 +13,9 @@ import com.example.godcode.greendao.entity.Notification;
 import com.example.godcode.greendao.option.NotificationOption;
 import com.example.godcode.ui.adapter.ServiceRemainderListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.utils.StringUtil;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +31,8 @@ public class ServiceRemainderFragment extends BaseFragment {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_servicereaminder, container, false);
             binding.setPresenter(presenter);
             view = binding.getRoot();
-            binding.serviceRemainderToolbar.title.setText("服务提醒");
+            String title = StringUtil.getString(activity, R.string.fwtx);
+            binding.serviceRemainderToolbar.title.setText(title);
             lazyLoad();
             initListener();
         }
@@ -80,9 +83,5 @@ public class ServiceRemainderFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
 }

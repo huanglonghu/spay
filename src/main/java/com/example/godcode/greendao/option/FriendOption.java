@@ -10,18 +10,15 @@ import com.example.godcode.bean.FriendListResponse;
 import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.gen.FriendDao;
 import com.example.godcode.http.HttpUtil;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.base.GodCodeApplication;
 import com.example.godcode.utils.LogUtil;
-import com.example.godcode.utils.PingYingUtil;
+import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Observable;
 
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import rx.subjects.PublishSubject;
 import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
@@ -67,7 +64,6 @@ public class FriendOption {
         FriendDao friendDao = GodCodeApplication.getInstance().getDaoSession().getFriendDao();
         Friend friend = friendDao.queryBuilder()
                 .where(FriendDao.Properties.UserId.eq(userId), FriendDao.Properties.FriendId.eq(Constant.userId)).unique();
-        LogUtil.log(userId + "-------querryFriend------" + friend);
         return friend;
     }
 
@@ -80,7 +76,6 @@ public class FriendOption {
 
     public void addFriend(FriendListResponse.ResultBean.ItemsBean itemsBean) {
         Friend friend = querryFriend(itemsBean.getToUserID());
-        LogUtil.log("add=====firstChar===="+friend);
         if (friend == null) {
             FriendDao friendDao = GodCodeApplication.getInstance().getDaoSession().getFriendDao();
             friend = new Friend();
@@ -91,11 +86,10 @@ public class FriendOption {
             friend.setSyNum(itemsBean.getToUserName());
             friend.setId_(itemsBean.getId());
             String nickName = itemsBean.getNickName();
-            LogUtil.log("nick======firstChar========" + nickName);
             if (!TextUtils.isEmpty(nickName)) {
-                String firstChar = PingYingUtil.getPingYin(nickName).substring(0, 1);
+                String firstChar = StringUtil.getPingYin(nickName).substring(0, 1);
                 friend.setFirstChar(firstChar.toUpperCase());
-                LogUtil.log("111======firstChar========" + firstChar);
+                LogUtil.log(firstChar.toUpperCase()+"======firstChar========" + firstChar);
             }
             friendDao.insert(friend);
         }
@@ -116,9 +110,6 @@ public class FriendOption {
                 .where(FriendDao.Properties.FriendId.eq(friendId))
                 .orderAsc(FriendDao.Properties.FirstChar)
                 .list();
-        for (int i = 0; i < friends.size(); i++) {
-            LogUtil.log("22======firstChar========" + friends.get(i).getFirstChar());
-        }
         return friends;
     }
 

@@ -35,12 +35,17 @@ public class MyEditText extends EditText {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String str = s.toString().trim();
             LogUtil.log("-------Str---------"+str);
-            if (!TextUtils.isEmpty(str)) {
-                double value = Double.parseDouble(str);
-                if (value > 0) {
-                    moneyValueListener.setEnable(true,value);
-                } else {
-                    moneyValueListener.setEnable(false,value);
+            if (!TextUtils.isEmpty(str) ){
+                char first = str.charAt(0);
+                if(first>=48&&first<=57){
+                    double value = Double.parseDouble(str);
+                    if (value > 0) {
+                        moneyValueListener.setEnable(true,value);
+                    } else {
+                        moneyValueListener.setEnable(false,value);
+                    }
+                }else {
+                    moneyValueListener.setEnable(false,0);
                 }
             } else {
                 moneyValueListener.setEnable(false,0);

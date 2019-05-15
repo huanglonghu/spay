@@ -13,9 +13,8 @@ import com.example.godcode.databinding.FragmentProductcenterBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.adapter.ProductListAdaPter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.view.BottomDialog;
+import com.example.godcode.ui.view.widget.BottomDialog;
 import com.example.godcode.ui.view.MyListView;
-import com.example.godcode.utils.LogUtil;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ public class ProductCenterFragment extends BaseFragment implements BottomDialog.
         binding.productCenterToolbar.title.setText("产品中心");
         binding.productCenterToolbar.tvOption.setText("筛选");
         data = new ArrayList<>();
-        productListAdaPter = new ProductListAdaPter(data, activity);
+        productListAdaPter = new ProductListAdaPter(activity,data,R.layout.item_lv_productcenter);
         binding.setAdapter(productListAdaPter);
     }
 
@@ -122,9 +121,6 @@ public class ProductCenterFragment extends BaseFragment implements BottomDialog.
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-    }
 
     @Override
     public void selectType(int selectPosition) {

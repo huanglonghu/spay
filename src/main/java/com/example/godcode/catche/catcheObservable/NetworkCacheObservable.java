@@ -2,17 +2,12 @@ package com.example.godcode.catche.catcheObservable;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import com.example.godcode.bean.ImageBean;
-import com.example.godcode.http.HttpUtil;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-
-import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 
 public class NetworkCacheObservable extends CacheObservable {
@@ -21,7 +16,6 @@ public class NetworkCacheObservable extends CacheObservable {
         Bitmap bitmap = downloadImage(url);
         return new ImageBean(bitmap, url);
     }
-
 
 
     @Override
@@ -37,7 +31,6 @@ public class NetworkCacheObservable extends CacheObservable {
         Bitmap bitmap = null;
         InputStream inputStream = null;
         try {
-
             URL imageUrl = new URL(url);
             URLConnection urlConnection = (HttpURLConnection) imageUrl.openConnection();
             inputStream = urlConnection.getInputStream();

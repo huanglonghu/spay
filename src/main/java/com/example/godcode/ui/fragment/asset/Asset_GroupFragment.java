@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 
 import com.example.godcode.R;
 import com.example.godcode.bean.GroupMsg;
+import com.example.godcode.bean.WebSocketNews1;
 import com.example.godcode.databinding.LayoutAssetGroupBinding;
 import com.example.godcode.ui.adapter.GroupListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
@@ -35,6 +36,7 @@ public class Asset_GroupFragment extends BaseFragment {
             initData();
             initListener();
         }
+        parentFragment.setTitle("我的资产");
         return binding.getRoot();
     }
 
@@ -43,9 +45,11 @@ public class Asset_GroupFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int groupId = groupListAdapter.getGroupId(position);
+                String groupName = groupListAdapter.getGroupName(position);
                 Asset_DetailFragment fragment = (Asset_DetailFragment) parentFragment.getFragments().get(1);
                 fragment.setCurrentGroupUserID(groupId);
                 parentFragment.toggleFragment(1);
+                parentFragment.setTitle(groupName);
             }
         });
     }
@@ -66,11 +70,6 @@ public class Asset_GroupFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
-
 
     public void refreshGroup(Map<String, GroupMsg.ResultBean.bean> data, int periodType) {
         groupListAdapter.clearData(periodType);
@@ -80,6 +79,22 @@ public class Asset_GroupFragment extends BaseFragment {
             groupList.add(bean);
         }
         groupListAdapter.notifyDataSetChanged();
+    }
+
+    public void refreshData(WebSocketNews1.DataBean data) {
+        String merchantUserIds = data.getMerchantUserIds();
+        double scanQRMoney = data.getScanQRMoney();
+        double divedeMoney = data.getDivedeMoney();
+        for (int i = 0; i < groupList.size(); i++) {
+            GroupMsg.ResultBean.bean bean = groupList.get(i);
+            double v1 = Double.parseDouble(bean.getScanCodeIncome());
+            double v2 = Double.parseDouble(bean.getDivideIncome());
+            bean.setScanCodeIncome(v1 + scanQRMoney);
+            bean.setDivideIncome(v2 + divedeMoney);
+            groupListAdapter.refreshData(i, bean);
+            break;
+
+        }
     }
 
 }

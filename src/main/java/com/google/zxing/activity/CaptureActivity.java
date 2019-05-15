@@ -24,8 +24,14 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.godcode.R;
+import com.example.godcode.handler.ActivityResultHandler;
+import com.example.godcode.interface_.HandlerStrategy;
+import com.example.godcode.ui.activity.MainActivity;
+import com.example.godcode.utils.BitmapUtil;
 import com.example.godcode.utils.LogUtil;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -41,6 +47,7 @@ import com.google.zxing.decoding.InactivityTimer;
 import com.google.zxing.decoding.RGBLuminanceSource;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.view.ViewfinderView;
+
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -64,6 +71,8 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
     //	private Button cancelScanButton;
     public static final int RESULT_CODE_QR_SCAN = 0xA1;
     public static final String INTENT_EXTRA_KEY_QR_SCAN = "qr_scan_result";
+    private TextView photo;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,16 +80,26 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
         CameraManager.init(getApplication());
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_content);
         back = (ImageView) findViewById(R.id.scanner_toolbar_back);
+        photo = findViewById(R.id.scanner_toolbar_photo);
+        photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                new ActivityResultHandler.Builder().activity(CaptureActivity.this).intent(intent).requestCode(ActivityResultHandler.REQUEST_ANALY_PHOTO).build().startActivityForResult();
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
     }
-
 
 
     @Override
@@ -90,51 +109,56 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
 
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
-        if (requestCode==RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_CODE_SCAN_GALLERY:
-                    //获取选中图片的路径
-                    Cursor cursor = getContentResolver().query(data.getData(), null, null, null, null);
-                    if (cursor.moveToFirst()) {
-                        photo_path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                    }
-                    cursor.close();
-                    mProgress = new ProgressDialog(CaptureActivity.this);
-                    mProgress.setMessage("正在扫描...");
-                    mProgress.setCancelable(false);
-                    mProgress.show();
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Result result = scanningImage(photo_path);
-                            if (result != null) {
-                                Intent resultIntent = new Intent();
-                                Bundle bundle = new Bundle();
-                                bundle.putString(INTENT_EXTRA_KEY_QR_SCAN ,result.getText());
-                                resultIntent.putExtras(bundle);
-                                CaptureActivity.this.setResult(RESULT_CODE_QR_SCAN, resultIntent);
-                            } else {
-                                Message m = handler.obtainMessage();
-                                m.what = R.id.decode_failed;
-                                m.obj = "Scan failed!";
-                                handler.sendMessage(m);
-                            }
-                        }
-                    }).start();
-                    break;
-            }
-        }
+        LogUtil.log(requestCode + "===========captureActivity=============" + resultCode);
+       ActivityResultHandler.getInstance().handler(requestCode,resultCode,data);
+//        if (requestCode==RESULT_OK) {
+//            switch (requestCode) {
+//                case REQUEST_CODE_SCAN_GALLERY:
+//                    //获取选中图片的路径
+//                    Cursor cursor = getContentResolver().query(data.getData(), null, null, null, null);
+//                    if (cursor.moveToFirst()) {
+//                        photo_path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+//                    }
+//                    cursor.close();
+//                    mProgress = new ProgressDialog(CaptureActivity.this);
+//                    mProgress.setMessage("正在扫描...");
+//                    mProgress.setCancelable(false);
+//                    mProgress.show();
+//
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Result result = scanningImage(photo_path);
+//                            if (result != null) {
+//                                Intent resultIntent = new Intent();
+//                                Bundle bundle = new Bundle();
+//                                bundle.putString(INTENT_EXTRA_KEY_QR_SCAN ,result.getText());
+//                                resultIntent.putExtras(bundle);
+//                                CaptureActivity.this.setResult(RESULT_CODE_QR_SCAN, resultIntent);
+//                            } else {
+//                                Message m = handler.obtainMessage();
+//                                m.what = R.id.decode_failed;
+//                                m.obj = "Scan failed!";
+//                                handler.sendMessage(m);
+//                            }
+//                        }
+//                    }).start();
+//                    break;
+//            }
+//        }else {
+//
+//        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
      * 扫描二维码图片的方法
+     *
      * @param path
      * @return
      */
     public Result scanningImage(String path) {
-        if(TextUtils.isEmpty(path)){
+        if (TextUtils.isEmpty(path)) {
             return null;
         }
         Hashtable<DecodeHintType, String> hints = new Hashtable<>();

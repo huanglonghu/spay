@@ -22,9 +22,10 @@ import com.example.godcode.http.HttpUtil;
 import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.activity.MainActivity;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.utils.FormatCheckUtil;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.GsonUtil;
+import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.SharepreferenceUtil;
 import com.google.gson.Gson;
 
@@ -101,7 +102,6 @@ public class LoginFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 login();
-
             }
         });
     }
@@ -114,7 +114,7 @@ public class LoginFragment extends BaseFragment {
             return;
         }
         loginBody.setUserName(account);
-        if (FormatCheckUtil.getInstance().checkYzm(loginBody.getVerificationCode())) {
+        if (FormatUtil.getInstance().checkYzm(loginBody.getVerificationCode())) {
             HttpUtil.getInstance().login(loginBody).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                     loginStr -> {
                         if (loginStr.contains("\"success\":false")) {
@@ -123,7 +123,11 @@ public class LoginFragment extends BaseFragment {
                             LoginResponse loginResponse = new Gson().fromJson(loginStr, LoginResponse.class);
                             LoginResponse.ResultBean result = loginResponse.getResult();
                             LoginResult loginResult = new LoginResult(Constant.uniquenessToken, result.getPayServerUrl(), result.getUserId());
+                            Constant.balances = result.getBalances();
+                            Constant.toDayMoney = result.getToDayMoney();
+                            Constant.yesterDayMoney = result.getYesterDayMoney();
                             Constant.uniquenessToken = result.getUniquenessToken();
+                            LogUtil.log("111==============babababa================"+Constant.balances);
                             loginResult.setUniquenessToken(Constant.uniquenessToken);
                             LoginResultOption.getInstance().insertLoginResult(loginResult);
                             Constant.expireInSeconds = result.getExpireInSeconds();
@@ -167,8 +171,4 @@ public class LoginFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 }

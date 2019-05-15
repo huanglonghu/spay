@@ -8,21 +8,21 @@ import java.text.DecimalFormat;
  * Created by Administrator on 2018/8/9.
  */
 
-public class FormatCheckUtil {
+public class FormatUtil {
 
     private DecimalFormat decimalFormat;
 
-    private FormatCheckUtil() {
+    private FormatUtil() {
     }
 
-    private static FormatCheckUtil defaultInstance;
+    private static FormatUtil defaultInstance;
 
-    public static FormatCheckUtil getInstance() {
-        FormatCheckUtil dateUtil = defaultInstance;
+    public static FormatUtil getInstance() {
+        FormatUtil dateUtil = defaultInstance;
         if (defaultInstance == null) {
             synchronized (DateUtil.class) {
                 if (defaultInstance == null) {
-                    dateUtil = new FormatCheckUtil();
+                    dateUtil = new FormatUtil();
                 }
             }
         }
@@ -42,6 +42,20 @@ public class FormatCheckUtil {
 //        }
         return true;
     }
+
+    public   boolean isBeginWith4G(String productNumber){
+        if(!TextUtils.isEmpty(productNumber)){
+            if(productNumber.length()>=2){
+                String first = productNumber.substring(0, 2);
+                if("4g".equals(first)||"4G".equals(first)){
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
 
     public boolean checkYzm(String yzm) {
 

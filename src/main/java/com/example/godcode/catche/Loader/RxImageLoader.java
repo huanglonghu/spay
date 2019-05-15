@@ -55,7 +55,7 @@ public class RxImageLoader {
                     @Override
                     public void onNext(ImageBean imageBean) {
                         if (imageBean.getBitmap() != null) {
-                            imageView.setImageDrawable(new BitmapDrawable(imageBean.getBitmap()));
+                            imageView.setBackground(new BitmapDrawable(imageBean.getBitmap()));
                         }
                     }
 

@@ -1,13 +1,17 @@
 package com.example.godcode.service;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.example.godcode.R;
 import com.example.godcode.bean.Notice2;
@@ -80,16 +84,25 @@ public class PushIntentService extends UmengMessageService {
 
 
     public void showNotification(Context context, UMessage msg, int type, String message) {
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setAutoCancel(true);
-        NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat
-                        .Builder(this)
-                        .setSmallIcon(R.drawable.logo)
-                        .setContentTitle(msg.title)
-                        .setContentText(msg.text);
-        Notification mNotification = mBuilder.build();
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Notification mNotification = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            showChannel1Notification(context, manager);
+            Notification.Builder builder = new Notification.Builder(context, "1"); //与channelId对应
+            builder.setSmallIcon(R.drawable.logo)
+                    .setContentTitle(msg.title)
+                    .setContentText(msg.text);
+            mNotification = builder.build();
+        } else {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+            builder.setAutoCancel(true);
+            NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat
+                    .Builder(this)
+                    .setSmallIcon(R.drawable.logo)
+                    .setContentTitle(msg.title)
+                    .setContentText(msg.text);
+            mNotification = mBuilder.build();
+        }
         Intent intent = new Intent(context, MainActivity.class);//代表fragment所绑定的activity，这个需要写全路径
         intent.putExtra("message", type);
         if (message.contains("TransactionType")) {
@@ -112,7 +125,16 @@ public class PushIntentService extends UmengMessageService {
         mNotification.flags = Notification.FLAG_AUTO_CANCEL;
         //使用自定义下拉视图时，不需要再调用setLatestEventInfo()方法，但是必须定义contentIntent
         mNotification.contentIntent = pIntent;
-        mNotificationManager.notify(103, mNotification);
+        manager.notify(103, mNotification);
+    }
+
+    @TargetApi(26)
+    public static void showChannel1Notification(Context context, NotificationManager manager) {
+        NotificationChannel channel = new NotificationChannel("1",
+                "Channel1", NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setLightColor(Color.GREEN); //小红点颜色
+        channel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
+        manager.createNotificationChannel(channel);
     }
 
 }

@@ -101,10 +101,6 @@ public class TxFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
     @Override
     public void onKeyDown() {

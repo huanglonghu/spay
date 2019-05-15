@@ -60,5 +60,28 @@ public class SharepreferenceUtil {
         return tokenTime;
     }
 
+    public void setUpdateAddress(String updateAddress) {
+        SharedPreferences sp = GodCodeApplication.getInstance().getSharedPreferences("sy", Context.MODE_PRIVATE);
+        sp.edit().putString("updateAddress", updateAddress).commit();
+    }
+
+    public String getUpdateAddress() {
+        SharedPreferences sp = GodCodeApplication.getInstance().getSharedPreferences("sy", Context.MODE_PRIVATE);
+        String updateAddress = sp.getString("updateAddress", "");
+        return updateAddress;
+    }
+
+
+    public void setLanuageIsChinese(boolean isChinese) {
+        SharedPreferences sp = GodCodeApplication.getInstance().getSharedPreferences("sy", Context.MODE_PRIVATE);
+        sp.edit().putBoolean("isChinese", isChinese).commit();
+    }
+
+    public boolean getLanuageIsChinese() {
+
+        SharedPreferences sp = GodCodeApplication.getInstance().getSharedPreferences("sy", Context.MODE_PRIVATE);
+        return sp.getBoolean("isChinese", true);
+    }
+
 
 }

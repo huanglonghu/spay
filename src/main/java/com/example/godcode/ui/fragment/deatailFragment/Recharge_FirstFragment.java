@@ -48,11 +48,6 @@ public class Recharge_FirstFragment extends BaseFragment implements MyEditText.M
     }
 
     @Override
-    public void refreshData() {
-
-    }
-
-    @Override
     public void setEnable(boolean enable,double money) {
         if (enable) {
             if (!binding.btnNext.isEnabled()) {

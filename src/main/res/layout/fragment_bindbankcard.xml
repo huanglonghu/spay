@@ -5,7 +5,7 @@
 
         <variable
             name="bean"
-            type="com.example.godcode.bean.EditBankCard" />
+            type="com.example.godcode.bean.AddBankCard" />
     </data>
 
     <LinearLayout
@@ -42,7 +42,7 @@
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|left"
-                    android:text="开户名"
+                    android:text="@string/accountName"
                     android:textColor="#000"
                     android:textSize="17sp" />
 
@@ -71,11 +71,11 @@
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|left"
-                    android:text="卡号"
+                    android:text="@string/accountNum"
                     android:textColor="#000"
                     android:textSize="17sp" />
 
-                <com.example.godcode.ui.view.BankCardEditText
+                <com.example.godcode.ui.view.customview.BankCardEditText
                     android:id="@+id/et_cardNumber"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -109,9 +109,10 @@
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|left"
-                    android:text="开户行"
+                    android:text="@string/bankName"
                     android:textColor="#000"
                     android:textSize="17sp" />
+
 
                 <EditText
                     android:id="@+id/et_bankName"
@@ -120,8 +121,11 @@
                     android:background="@null"
                     android:gravity="center_vertical"
                     android:text="@={bean.bankName}"
+                    android:hint="请选择开户行"
+                    android:focusable="false"
                     android:textColor="#000"
                     android:textSize="17sp" />
+
 
             </LinearLayout>
 
@@ -199,18 +203,17 @@
         </LinearLayout>
 
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/bg3"
-            android:orientation="vertical"
             android:padding="20dp">
 
             <TextView
                 android:id="@+id/bklc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentLeft="true"
                 android:text="了解绑卡流程"
                 android:textColor="@color/theme_color"
                 android:textSize="15sp" />
@@ -220,10 +223,11 @@
                 style="@style/btn1"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_next"
+                android:layout_alignParentBottom="true"
                 android:enabled="false"
-                android:text="添加" />
+                android:text="@string/add" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
     </LinearLayout>

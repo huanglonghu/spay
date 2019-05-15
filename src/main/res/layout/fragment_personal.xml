@@ -123,7 +123,7 @@
                     android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
                     android:gravity="center_vertical"
-                    android:text="SY号"
+                    android:text="@string/syNumber"
                     android:textColor="#000"
                     android:textSize="15sp" />
 

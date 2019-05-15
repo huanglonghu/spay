@@ -6,29 +6,19 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.example.godcode.bean.LoginResponse;
-import com.example.godcode.http.HttpUtil;
+import com.example.godcode.handler.WebSocketNewsHandler;
+import com.example.godcode.observable.WebSocketNewsObservable;
 import com.example.godcode.ui.activity.BaseActivity;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.utils.GsonUtil;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.LogUtil;
-import com.example.godcode.utils.SharepreferenceUtil;
-import com.example.godcode.utils.TimeUtil;
 import com.example.godcode.utils.WebSocketUtil;
 
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class WebSocketService extends Service {
 
-
     private WebSocketUtil webSocketUtil;
-    private Disposable subscribe;
 
     @Override
     public void onCreate() {
@@ -66,10 +56,9 @@ public class WebSocketService extends Service {
 
 
     public class MyBinder extends Binder {
-        public void connectWebSocket(BaseActivity activity) {
-            webSocketUtil = new WebSocketUtil(activity);
+        public void connectWebSocket(BaseActivity activity, WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable) {
+            webSocketUtil = new WebSocketUtil(activity, webSocketNewsObservable);
             webSocketUtil.connect(Constant.webSocketUrl + "?userId=" + Constant.userId);
-
         }
     }
 

@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import com.example.godcode.R;
 import com.example.godcode.databinding.LayoutQrcodeBinding;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.BitmapUtil;
 import com.google.zxing.encoding.EncodingHandler;
 

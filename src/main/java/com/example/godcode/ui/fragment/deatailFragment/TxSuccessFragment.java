@@ -34,7 +34,6 @@ public class TxSuccessFragment extends BaseFragment {
         binding.txSuccessBank.setText(parentFragment.getBank());
         binding.txSuccessMoney.setText(parentFragment.getMoney()+"");
         //182.255.63.151:8091
-        binding.accountingDate.setText("正常工作日（周一至周五9:00—18:00）两小时内到账");
         binding.txComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,14 +42,12 @@ public class TxSuccessFragment extends BaseFragment {
         });
     }
 
+
+
     @Override
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
     public String getDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");

@@ -8,9 +8,6 @@
             name="presenter"
             type="com.example.godcode.presenter.Presenter" />
 
-        <variable
-            name="orderBean"
-            type="com.example.godcode.bean.OrderResult.ResultBean"/>
 
     </data>
 
@@ -71,7 +68,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="@{orderBean.orderNumber}"
                 />
 
 

@@ -1,7 +1,7 @@
 package com.example.godcode.bean;
 
 
-import com.example.godcode.utils.FormatCheckUtil;
+import com.example.godcode.utils.FormatUtil;
 
 import java.io.Serializable;
 import java.util.List;
@@ -87,7 +87,16 @@ public class MyAssetList {
         private double dividedMoney;
         private int coinCount;
         private int count;
+        private int sumAwardCount;
         private List<DataBean> data;
+
+        public int getSumAwardCount() {
+            return sumAwardCount;
+        }
+
+        public void setSumAwardCount(int sumAwardCount) {
+            this.sumAwardCount = sumAwardCount;
+        }
 
         public int getNormalCount() {
             return normalCount;
@@ -106,7 +115,7 @@ public class MyAssetList {
         }
 
         public String getDividedMoney() {
-            String aDouble = FormatCheckUtil.getInstance().get2double(dividedMoney);
+            String aDouble = FormatUtil.getInstance().get2double(dividedMoney);
             return aDouble;
         }
 
@@ -192,10 +201,47 @@ public class MyAssetList {
             private double divideIncome;
             private double todayCoin;
             private double todayBanknote;
+            private int todayAwardCount;
             private int divideRate;
             private int primaevalUserID;
             private String parentID;
+            private boolean isPenetrate;
             private int id;
+            private int commodityRoadCount;
+            private int currentStock;
+            private int sumStock;
+
+            public int getCurrentStock() {
+                return currentStock;
+            }
+
+            public void setCurrentStock(int currentStock) {
+                this.currentStock = currentStock;
+            }
+
+            public int getSumStock() {
+                return sumStock;
+            }
+
+            public void setSumStock(int sumStock) {
+                this.sumStock = sumStock;
+            }
+
+            public int getCommodityRoadCount() {
+                return commodityRoadCount;
+            }
+
+            public void setCommodityRoadCount(int commodityRoadCount) {
+                this.commodityRoadCount = commodityRoadCount;
+            }
+
+            public boolean isPenetrate() {
+                return isPenetrate;
+            }
+
+            public void setPenetrate(boolean penetrate) {
+                isPenetrate = penetrate;
+            }
 
             public int getFK_UserID() {
                 return fK_UserID;
@@ -227,6 +273,15 @@ public class MyAssetList {
 
             public void setFriendNickName(Object friendNickName) {
                 this.friendNickName = friendNickName;
+            }
+
+
+            public int getTodayAwardCount() {
+                return todayAwardCount;
+            }
+
+            public void setTodayAwardCount(int todayAwardCount) {
+                this.todayAwardCount = todayAwardCount;
             }
 
             public int getFK_ProductID() {
@@ -350,7 +405,7 @@ public class MyAssetList {
             }
 
             public String getScanCodeIncome() {
-                String aDouble = FormatCheckUtil.getInstance().get2double(scanCodeIncome);
+                String aDouble = FormatUtil.getInstance().get2double(scanCodeIncome);
                 return aDouble;
             }
 
@@ -359,7 +414,7 @@ public class MyAssetList {
             }
 
             public String getDivideIncome() {
-                String aDouble = FormatCheckUtil.getInstance().get2double(divideIncome);
+                String aDouble = FormatUtil.getInstance().get2double(divideIncome);
                 return aDouble;
             }
 

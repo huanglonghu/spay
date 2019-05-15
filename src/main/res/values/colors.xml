@@ -34,6 +34,8 @@
     <color name="bg5">#232429</color>
     <color name="bg6">#fafafa</color>
     <color name="bg7">#686f79</color>
+    <color name="bg8">#f9fafc</color>
+    <color name="bg9">#f0eff5</color>
 
     <color name="btn_psd_1">#F5F5F5</color>
     <color name="btn_psd_2">#BFBFBF</color>
@@ -65,6 +67,10 @@
     <color name="picker_border_color">#e5e5e5</color>
 
     <color name="c10">#d3d3d3</color>
+
+    <color name="c11">#f9fafc</color>
+
+
 
 
 

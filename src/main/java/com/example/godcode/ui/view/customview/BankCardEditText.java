@@ -1,7 +1,8 @@
-package com.example.godcode.ui.view;
+package com.example.godcode.ui.view.customview;
 
 
 import android.content.Context;
+import android.databinding.BindingAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -87,10 +88,9 @@ public class BankCardEditText extends EditText {
 
         @Override
         public void afterTextChanged(Editable s) {
-
-            if(s.length()>=17){
+            if (s.length() >= 17) {
                 bankCardLengthListener.length(true);
-            }else {
+            } else {
                 bankCardLengthListener.length(false);
             }
         }
@@ -103,7 +103,7 @@ public class BankCardEditText extends EditText {
     }
 
 
-    public interface BankCardLengthListener{
+    public interface BankCardLengthListener {
         void length(boolean isPass);
     }
 
@@ -112,5 +112,29 @@ public class BankCardEditText extends EditText {
     }
 
     private BankCardLengthListener bankCardLengthListener;
+
+
+    @BindingAdapter(value = {"android:text"})
+    public static void setValue(BankCardEditText bankCardEditText, String text) {
+        LogUtil.log("===========pppppppppppppppp======");
+        if (!text.contains(" ")) {
+            String newStr = text.replace(" ", "");
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < newStr.length(); i += 4) {
+                if (i > 0) {
+                    sb.append(" ");
+                }
+                if (i + 4 <= newStr.length()) {
+                    sb.append(newStr.substring(i, i + 4));
+                } else {
+                    sb.append(newStr.substring(i, newStr.length()));
+                }
+            }
+            bankCardEditText.setText(sb.toString());
+        } else {
+            bankCardEditText.setText(text);
+        }
+    }
+
 
 }

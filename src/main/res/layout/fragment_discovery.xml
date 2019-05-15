@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="title"
+            type="String"/>
+    </data>
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -8,14 +14,30 @@
     android:background="@color/bg2"
     android:orientation="vertical">
 
+
+    <include
+        layout="@layout/layout_toolbar1"
+        bind:title="@{title}" />
+
+    <TextView
+        android:id="@+id/noNews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="暂无公告消息"
+        android:textSize="17sp"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        />
+
     <ListView
         android:id="@+id/lv_discovery"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
-        >
+        />
 
-    </ListView>
+
+
 
 </LinearLayout>
 </layout>

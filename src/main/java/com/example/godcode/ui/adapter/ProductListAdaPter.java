@@ -4,59 +4,28 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import com.example.godcode.catche.Loader.RxImageLoader;
-import com.example.godcode.R;
 import com.example.godcode.bean.ProductList;
 import com.example.godcode.databinding.ItemLvProductcenterBinding;
-import com.example.godcode.ui.base.Constant;
-import java.util.HashMap;
+import com.example.godcode.constant.Constant;
 import java.util.List;
 
-public class ProductListAdaPter extends BaseAdapter {
-    private List<ProductList.DataBean> datas;
-    private LayoutInflater layoutInflater;
-    private HashMap<Integer, View> viewMap = new HashMap<>();
-    private Context context;
+public class ProductListAdaPter extends BaseListAdapter {
 
-    public ProductListAdaPter(List<ProductList.DataBean> datas, Context context) {
-        this.context = context;
-        this.datas = datas;
-        layoutInflater = LayoutInflater.from(context);
+    public ProductListAdaPter(Context context, List<ProductList.DataBean> datas, int res) {
+        super(context, datas, res);
     }
+
 
     @Override
-    public int getCount() {
-        return datas.size();
+    View initView(LayoutInflater layoutInflater, int res, List datas, int position) {
+        ItemLvProductcenterBinding binding = DataBindingUtil.inflate(layoutInflater, res, null, false);
+        ProductList.DataBean dataBean = (ProductList.DataBean) datas.get(position);
+        binding.setBean(dataBean);
+        String url = dataBean.getThumbnailImgPath();
+        RxImageLoader.with(context).load(Constant.baseUrl + url).into(binding.ivProduct);
+        return binding.getRoot();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return datas.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (viewMap.get(position) == null) {
-            ItemLvProductcenterBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_lv_productcenter, parent, false);
-            ProductList.DataBean dataBean = datas.get(position);
-            binding.setBean(dataBean);
-            convertView = binding.getRoot();
-            String url = dataBean.getThumbnailImgPath();
-            RxImageLoader.with(context).load(Constant.baseUrl + url).into(binding.ivProduct);
-            viewMap.put(position, convertView);
-        }
-        return viewMap.get(position);
-    }
-
-    public void clearView() {
-        viewMap.clear();
-    }
 
 }

@@ -10,7 +10,7 @@ import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentPaypsdBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.PayPsdSetting;
 import java.util.ArrayList;
@@ -89,9 +89,6 @@ public class PayPsdFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void refreshData() {
 
-    }
 
 }

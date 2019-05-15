@@ -39,9 +39,4 @@ public class Recharge_SuccessFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-    }
-
-
 }

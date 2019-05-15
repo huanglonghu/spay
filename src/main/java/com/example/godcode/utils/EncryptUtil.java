@@ -2,8 +2,10 @@ package com.example.godcode.utils;
 
 import android.util.Base64;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -23,6 +25,8 @@ import static android.util.Base64.NO_WRAP;
 
 public class EncryptUtil {
 
+    private static String key="87a4d115c0956912b495d6bb8b7c0013";
+
     public static String aesEncrypt(String str, String key) throws Exception {
         if (str == null || key == null) return null;
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
@@ -32,13 +36,20 @@ public class EncryptUtil {
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
-    public static String aesDecrypt(String str, String key) throws Exception {
-        if (str == null || key == null) return null;
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
-        cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getBytes("utf-8"), "AES"));
-        byte[] bytes = Base64.decode(str, Base64.DEFAULT);
-        bytes = cipher.doFinal(bytes);
-        return new String(bytes, "utf-8");
+    public static String aesDecrypt(String str){
+        String text=null;
+        if (str == null) return null;
+        try {
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getBytes("utf-8"), "AES"));
+            byte[] bytes = Base64.decode(str, Base64.DEFAULT);
+            bytes = cipher.doFinal(bytes);
+            text = new String(bytes, "utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return text;
     }
 
     public static String decryptDES(String decryptString, String decryptKey) throws Exception {

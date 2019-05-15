@@ -105,9 +105,4 @@ public class RechargeFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
-
 }

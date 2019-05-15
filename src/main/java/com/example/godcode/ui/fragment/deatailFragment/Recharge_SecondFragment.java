@@ -12,7 +12,7 @@ import com.example.godcode.bean.RechargeBody;
 import com.example.godcode.databinding.FragmentRechargeSecondBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
 import com.example.godcode.ui.view.PsdPopupWindow;
 import com.example.godcode.utils.PayPsdSetting;
@@ -138,10 +138,4 @@ public class Recharge_SecondFragment extends BaseFragment implements KeyBoard.Ps
 
 
 
-
-
-    @Override
-    public void refreshData() {
-
-    }
 }

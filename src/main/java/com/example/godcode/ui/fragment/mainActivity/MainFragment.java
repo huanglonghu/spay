@@ -16,9 +16,10 @@ import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.adapter.MyViewPagerAdapter;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.view.MenuWindow;
+import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -27,8 +28,7 @@ public class MainFragment extends BaseFragment {
     private FragmentMainBinding binding;
     private ArrayList<BaseFragment> fragments;
     private View view;
-    private MenuWindow menuWindow;
-    private int[] newsArray;
+
 
     public FragmentMainBinding getBinding() {
         return binding;
@@ -64,24 +64,27 @@ public class MainFragment extends BaseFragment {
                     personalStr -> {
                         User mine = new Gson().fromJson(personalStr, User.class);
                         User.ResultBean result = mine.getResult();
-                        if (UserOption.getInstance().querryUser(Constant.userId) == null) {
-                            Constant.userName = mine.getResult().getNickName();
-                            Constant.syNum = mine.getResult().getUserName();
-                            com.example.godcode.greendao.entity.User user = new com.example.godcode.greendao.entity.User();
-                            user.setHeadImageUrl(result.getHeadImgUrl());
-                            user.setUserName(result.getNickName());
-                            user.setSyNumber(result.getUserName());
-                            user.setArea(result.getArea());
-                            user.setPhoneNumer(result.getPhoneNumber());
-                            if (result.getSex() == 1) {
-                                user.setSex("男");
-                            } else {
-                                user.setSex("女");
+                        if (result != null) {
+                            if (UserOption.getInstance().querryUser(Constant.userId) == null) {
+                                Constant.userName = result.getNickName();
+                                Constant.syNum = result.getUserName();
+                                com.example.godcode.greendao.entity.User user = new com.example.godcode.greendao.entity.User();
+                                user.setHeadImageUrl(result.getHeadImgUrl());
+                                user.setUserName(result.getNickName());
+                                user.setSyNumber(result.getUserName());
+                                user.setArea(result.getArea());
+                                user.setPhoneNumer(result.getPhoneNumber());
+                                if (result.getSex() == 1) {
+                                    user.setSex("男");
+                                } else {
+                                    user.setSex("女");
+                                }
+                                user.setUserId(result.getId());
+                                UserOption.getInstance().addUser(user);
+                                FriendOption.getInstance(activity).querryFriendList(1, true);
                             }
-                            user.setUserId(result.getId());
-                            UserOption.getInstance().addUser(user);
-                            FriendOption.getInstance(activity).querryFriendList(1, true);
                         }
+
                     }
             );
         } else {
@@ -92,23 +95,6 @@ public class MainFragment extends BaseFragment {
     }
 
     private void initListener() {
-        binding.mainToolbar.ivMine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.step2Fragment("personal");
-            }
-        });
-
-        binding.mainToolbar.ivMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menuWindow = new MenuWindow(activity);
-                LayoutMainPopupBinding binding = menuWindow.getBinding1();
-                binding.setFragment(MainFragment.this);
-                menuWindow.show(v);
-            }
-        });
-
         binding.mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -133,13 +119,13 @@ public class MainFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
     public void initFragments() {
-        String[] titleArray = {"首页", "朋友", "发现", "我"};
+        String home = StringUtil.getString(activity, R.string.home);
+        String friends = StringUtil.getString(activity, R.string.friends);
+        String fx = StringUtil.getString(activity, R.string.fx);
+        String me = StringUtil.getString(activity, R.string.me);
+        String[] titleArray = {home, friends, fx, me};
         binding.setTitleArray(titleArray);
         fragments = new ArrayList<>();
         HomeFragment homeFragment = new HomeFragment();
@@ -154,22 +140,7 @@ public class MainFragment extends BaseFragment {
         fragments.add(discoveryFragment);
         fragments.add(mineFragment);
         presenter.setFragments(fragments);
-
     }
 
-    public void config(View view) {
-        switch (view.getId()) {
-            case R.id.mainPopup_addFriend:
-                presenter.step2Fragment("addFriend");
-                break;
-            case R.id.mainPopup_sys:
-                presenter.sys();
-                break;
-            case R.id.mainPopup_gathering:
-                presenter.step2Fragment("gathering");
-                break;
-        }
-        menuWindow.dismiss();
-    }
 
 }

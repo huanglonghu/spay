@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.MyAssetList;
 import com.example.godcode.bean.ProductCategory;
@@ -18,13 +17,14 @@ import com.example.godcode.databinding.LayoutAssetDetailBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.adapter.AssetListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.ui.fragment.deatailFragment.AssetFragment;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.deatailFragment.Asset_1_Fragment;
-import com.example.godcode.ui.view.AssetSelectDialog;
+import com.example.godcode.ui.fragment.deatailFragment.Asset_2_Fragment;
+import com.example.godcode.ui.view.widget.AssetSelectDialog;
 import com.example.godcode.ui.view.MyListView;
+import com.example.godcode.utils.FormatUtil;
+import com.example.godcode.utils.LogUtil;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +40,7 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
         if (binding == null) {
             parentFragment = (Asset_1_Fragment) getParentFragment();
             binding = DataBindingUtil.inflate(inflater, R.layout.layout_asset_detail, null, false);
+            binding.lvDetail.setRefreshData(this);
             initView();
             initListener();
         }
@@ -63,17 +64,18 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ItemLvMyassetBinding binding = DataBindingUtil.findBinding(view);
-                if (binding.getIsMaster()) {
-                    MyAssetList.ResultBean.DataBean dataBean = assetList.get(position);
-                    AssetFragment fragment = (AssetFragment) parentFragment.getParentFragment();
-                    fragment.initData(dataBean);
-                    fragment.toogleFragment(1);
+                MyAssetList.ResultBean.DataBean dataBean = assetList.get(position);
+                if (binding.getIsMaster()||FormatUtil.getInstance().isBeginWith4G(dataBean.getProductNumber())) {
+                    Asset_2_Fragment asset_2_fragment = new Asset_2_Fragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("dataBean",dataBean);
+                    asset_2_fragment.setArguments(bundle);
+                    presenter.step2Fragment(asset_2_fragment,"asset_2");
                 }
             }
         });
 
-        AssetFragment fragment = (AssetFragment) parentFragment.getParentFragment();
-        fragment.getBinding().assetToolbar.option.setOnClickListener(new View.OnClickListener() {
+       parentFragment.getBinding().asset1Toolbar.option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AssetSelectDialog assetSelectDialog = new AssetSelectDialog(activity, typeMap);
@@ -96,7 +98,6 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
     private void initData() {
         getProductCategorys();
     }
-
 
     private List<ProductCategory.ResultBean.ItemsBean> categoryList;
     private HashMap<Integer, Integer> categoryMap = new HashMap<>();
@@ -121,11 +122,6 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
-
     private int currentGroupUserID;
     private String productType;
     private int selectPosition;
@@ -135,7 +131,6 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
     public void setCurrentGroupUserID(int currentGroupUserID) {
         this.currentGroupUserID = currentGroupUserID;
     }
-
     public void requestAssetList() {
         HashMap<String, String> urlMap = new HashMap<>();
         urlMap.put("UserId", String.valueOf(Constant.userId));
@@ -156,14 +151,14 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
         }
 
         urlMap.put("page", binding.lvDetail.getPage() + "");
+        assetMap=new HashMap<>();
         HttpUtil.getInstance().getGroupById(urlMap).subscribe(
                 assetStr -> {
                     MyAssetList myAssetList = new Gson().fromJson(assetStr, MyAssetList.class);
                     MyAssetList.ResultBean result = myAssetList.getResult();
                     List<MyAssetList.ResultBean.DataBean> datas = result.getData();
                     parentFragment.refreshAsset(result.getCoinCount(), result.getCount(), result.getNormalCount()
-                            , result.getErrorCount(), result.getDividedMoney()
-                    );
+                            ,result.getErrorCount(), result.getDividedMoney(),result.getSumAwardCount());
                     if (datas.size() > 0) {
                         binding.lvDetail.setLoading(true);
                         for (int i = 0; i < datas.size(); i++) {
@@ -179,24 +174,38 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
         );
     }
 
-    public void refreshDivide(WebSocketNews1 webSocketNews1) {
-        WebSocketNews1.DataBean data = webSocketNews1.getData();
+    public void refreshDivide(WebSocketNews1.DataBean data) {
         String productNumber = data.getProductNumber();
-        if (assetMap.containsKey(productNumber)) {
-            int position = assetMap.get(productNumber);
-            MyAssetList.ResultBean.DataBean dataBean = assetList.get(position);
-            int coinCount = data.getCoinCount();
-            int paperMoney = (int) data.getPaperMoney();
-            dataBean.setScanCodeIncome(Double.parseDouble(dataBean.getScanCodeIncome()) + data.getScanQRMoney());
-            dataBean.setTodayBanknote(dataBean.getTodayBanknote() + paperMoney);
-            dataBean.setTodayCoin(dataBean.getTodayCoin() + coinCount);
-            assetListAdapter.refreshData(position, dataBean);
+        try {
+            if (assetMap.containsKey(productNumber)) {
+                int position = assetMap.get(productNumber);
+                MyAssetList.ResultBean.DataBean dataBean = assetList.get(position);
+                int coinCount = data.getCoinCount();
+                int awardCount=0;
+                String awardCountStr=data.getAwardCount();
+                if(!TextUtils.isEmpty(awardCountStr)){
+                    awardCount=Integer.parseInt(awardCountStr);
+                }
+                dataBean.setScanCodeIncome(Double.parseDouble(dataBean.getScanCodeIncome()) + data.getScanQRMoney());
+                dataBean.setTodayAwardCount(dataBean.getTodayAwardCount() + awardCount);
+                dataBean.setTodayCoin(dataBean.getTodayCoin() + coinCount);
+                double divideMoney = Double.parseDouble(dataBean.getDivideIncome()) + data.getDivedeMoney();
+                dataBean.setDivideIncome(divideMoney);
+                assetListAdapter.refreshData(position, dataBean);
+            }
+        }catch (Exception e){
+            LogUtil.log("=====eeeeeeeeee======"+e.toString());
         }
+
 
     }
 
 
-    private HashMap<String, Integer> assetMap = new HashMap<>();
+    private HashMap<String, Integer> assetMap;
+
+    public HashMap<String, Integer> getAssetMap() {
+        return assetMap;
+    }
 
     private List<MyAssetList.ResultBean.DataBean> assetList = new ArrayList<>();
 

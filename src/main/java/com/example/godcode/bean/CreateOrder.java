@@ -18,6 +18,15 @@ public class CreateOrder {
     private String feeType;
     private double sumOrder;
     private int fK_UserID;
+    private Integer coinCount;
+
+    public Integer getCoinCount() {
+        return coinCount;
+    }
+
+    public void setCoinCount(Integer coinCount) {
+        this.coinCount = coinCount;
+    }
 
     public int getFK_ProductID() {
         return fK_ProductID;

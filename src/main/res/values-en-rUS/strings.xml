@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SY云管家</string>
-    <string name="encode_qrcode">生成二维码</string>
+    <string name="encode_qrcode">Generating two-dimensional codes</string>
     <string name="dencode_qrcode">扫描二维码</string>
     <string name="code_text">请输入生成二维码的文本信息</string>
     <string name="qrcodetext">这里显示扫描结果</string>
 
-
-    <string name="jqdz">机器地址:</string>
+    <string name="ci">次</string>
+    <string name="jqdz">Machine address:</string>
     <string name="jqzt1">机器状态:正常</string>
     <string name="jqzt2">机器状态:不正常</string>
-    <string name="cplb">产品类别:</string>
+    <string name="cplb">Product category:</string>
     <string name="price">¥</string>
     <string name="present">%</string>
-    <string name="hint">请输入</string>
-    <string name="use_money">可用余额</string>
-    <string name="description">产品描述:</string>
-    <string name="productName">产品名称:</string>
-    <string name="userName">用户名</string>
-    <string name="balance_hint">输入金额超过余额</string>
-    <string name="loading">正在加载</string>
-    <string name="loadCompleted">没有更多数据</string>
-    <string name="text_no_song">无数据</string>
+    <string name="hint">Please input</string>
+    <string name="use_money">Available balance</string>
+    <string name="description">Product description:</string>
+    <string name="productName">Product name:</string>
+    <string name="userName">User name</string>
+    <string name="balance_hint">Input amount exceeds balance</string>
+    <string name="loading">Loading</string>
+    <string name="loadCompleted">No more data</string>
+    <string name="text_no_song">No data</string>
 
 
-    <string name="startDate">开始时间</string>
-    <string name="endDate">结束时间</string>
+    <string name="startDate">Start Time</string>
+    <string name="endDate">End Time</string>
 
 
     <string name="wxdl">SIGN IN WITH WECHAT</string>
@@ -35,25 +35,27 @@
     <string name="sys">SCAN BARCODE</string>
     <string name="sk">REQUEST PAYMENT</string>
     <string name="balance">BALANCE</string>
-    <string name="syygjfw">SY CLOD SERVICE</string>
+    <string name="syygjfw">SY CLOUD SERVICE</string>
     <string name="myAsset">MY PROPERTY</string>
     <string name="cpzx">PRODUCTS CENTER</string>
     <string name="sjcz">PHONE RECHARGE</string>
     <string name="ykkg">REMOTE CONTROL</string>
     <string name="more">MORE</string>
     <string name="friends">FRIENDS</string>
-    <string name="fx">发现</string>
+    <string name="fx">DISCOVERY</string>
     <string name="smy">SCAN</string>
     <string name="fh">RETURN</string>
     <string name="ewm">QR CODE</string>
     <string name="xc">PHOTO ALBUM</string>
+    <string name="xzlx">PRODUCT TYPE</string>
+    <string name="packageConfig">套餐设置</string>
     <string name="jqbm">PRDCUT CODE:</string>
     <string name="ddje">ORDER AMOUNT</string>
-    <string name="revenueSetting">设置营收分成</string>
-    <string name="search">查询</string>
-    <string name="jrtb">今日投币(枚):</string>
-    <string name="jrzc">今日纸钞:</string>
-    <string name="wdfc">我的分成:</string>
+    <string name="revenueSetting">PROFIT SHARING SETTING</string>
+    <string name="search">SEARCH</string>
+    <string name="jrtb">Coin throw today(枚):</string>
+    <string name="jrtl">今日退礼:</string>
+    <string name="wdfc">My Division:</string>
     <string name="sysfq">SCAN TO PAY</string>
     <string name="moneySetting">AMOUNT SETTING</string>
     <string name="moneyClear">DELET AMOUNT</string>
@@ -66,30 +68,34 @@
     <string name="bankAccount">BANK ACCOUNT</string>
     <string name="transactionsDetail">TRANSACTIONS DETAIL</string>
     <string name="transactionType">TRANSACTIONS TYPE</string>
-    <string name="zhichu">EXPENDITURE</string>
+    <string name="zhichu">Expenditure</string>
+    <string name="fwtx">SERVICE REMINDER</string>
+    <string name="save">SAVE</string>
     <string name="sx">SELECT</string>
     <string name="cpys">PRODUCT REVENUE</string>
     <string name="transferExpense">TRANSFER EXPENSE</string>
-    <string name="qrcodeGather">REQUEST PAYMENT WITH QR CODE</string>
+    <string name="qrcodeGather">Request Payment With QR Code</string>
     <string name="selectTransferType">SELECT TRANSACTION TYPE</string>
     <string name="all">ALL</string>
+    <string name="editPrice">EDIT PRICE</string>
     <string name="transfer">TRANSFER</string>
+    <string name="checkpaypsd">ENTER PASSWORD OF PAYMENT(VERIFIED IDENTITY)</string>
     <string name="qrPayAndgather">QR CODE PAYMENT</string>
     <string name="cztx">RECHARGE/WITHDRAW</string>
     <string name="orderRefund">ORDER REFUND</string>
     <string name="bindProduct">BINDING PRODUCT</string>
     <string name="srbh">SERIAL NUMBER</string>
     <string name="srjg">PRICE</string>
-    <string name="srdz">请输入产品地址</string>
-    <string name="srmc">请输入产品名称</string>
-    <string name="selectTpe">请选择产品类型</string>
+    <string name="srdz">ADDRESS</string>
+    <string name="srmc">ITME NAME</string>
+    <string name="selectTpe">Please choose the product type.</string>
     <string name="mine">MINE</string>
     <string name="me">ME</string>
-    <string name="smNumber">SY A/C NUMBER:</string>
+    <string name="syNumber">SY A/C NUMBER:</string>
     <string name="wdsyfc">MY PROFIT SHARING RATIO</string>
     <string name="setting">SETTING</string>
     <string name="payPsd">PASSWORD OF PAYMENT</string>
-    <string name="versionInfo">VERSION INFO.</string>
+    <string name="versionInfo">VERSION INFO</string>
     <string name="loginOut">LOG OUT</string>
     <string name="service_name">SERVICE REMINDER</string>
     <string name="withDrawSuccess">WITHDRAW SUCCEED </string>
@@ -103,26 +109,110 @@
 
     <string name="addBankCard">LINK A NEW CARD</string>
     <string name="bindBankCard">BINDING A CRDEIT/DEBIT CARD</string>
-    <string name="accountName">ACCOUNT NAME</string>
+
     <string name="accountNum">ACCOUNT NUMBER</string>
     <string name="bankName">BANK NAME</string>
     <string name="bankType">TYPE OF CARD</string>
     <string name="next">NEXT</string>
     <string name="zsj">(主商家)</string>
     <string name="fsj">(副商家)</string>
-    <string name="deleteFriend">删除好友</string>
-    <string name="receivedRefund">您的退款已到账</string>
-    <string name="tytjhy">同意添加好友</string>
-    <string name="zhye">账号余额</string>
+    <string name="receivedRefund">Your refund has arrived</string>
+    <string name="tytjhy">Agree to add friends</string>
+    <string name="zhye">Account balance</string>
     <string name="zrsm">YESTERDAYS TURNOVER:</string>
-    <string name="jrsm">今日扫码(元):</string>
-    <string name="sr">INCOME-</string>
+    <string name="jrsm">TODAY SCAN(￥):</string>
+    <string name="sr">Income</string>
     <string name="tk">REFUND-</string>
     <string name="cpsyjl">PRODUCT REVENUE RECORD </string>
     <string name="orderNumber">ORDER NUMBER:</string>
     <string name="editDivide">EDIT PROPORTY SHARING RATIO</string>
 
-    <string name="sj">售价</string>
+    <string name="zrfc">昨日分成(元)</string>
+    <string name="jrfc">今日分成(元)</string>
+
+    <string name="allAsset">TOTAL PRODUCT:</string>
+    <string name="normal">ONL INE:</string>
+    <string name="abnormal">OFF-LINE:</string>
+
+    <string name="sj">price</string>
     <string name="yuan">元</string>
+    <string name="fc">分成:</string>
+    <string name="sm">SCAN:</string>
+    <string name="tb">COIN-IN(UNIT)</string>
+    <string name="tl">退礼:</string>
+    <string name="fenc">分成</string>
+    <string name="et_voice">Volume Setting</string>
+    <string name="et_jv">Probability Setting</string>
+    <string name="et_coin">几币一玩</string>
+    <string name="parameter1">0-10</string>
+    <string name="parameter2">0-255</string>
+    <string name="yjpw">WiFi configuration</string>
+    <string name="newfriend">NEW FRIEND</string>
+    <string name="deleteFriend">DELETE FRIEND</string>
+    <string name="bankCard">DEBIT CARD</string>
+    <string name="binding">BINDING</string>
+    <string name="totalYs">TOTAL REVENUE</string>
+    <string name="accountName">ACCOUNT NAME</string>
+    <string name="add">Add</string>
+    <string name="unbindAsset">UNBIND PRODUCT</string>
+    <string name="editProductInfo">EDIT PRODUCT INFO</string>
+
+    <string name="today">Today</string>
+    <string name="yesterday">YesterDay</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
+    <string name="total">Total</string>
+    <string name="addFriend">ADD Friend</string>
+
+    <string name="cpbh">Serial Number</string>
+    <string name="jg">Price</string>
+    <string name="dz">Address</string>
+    <string name="mc">Item Name</string>
+    <string name="qxzlx">Product Type</string>
+    <string name="selectBankCard">CHOOSE CREDIT/DEBIT CARD</string>
+    <string name="note">Note</string>
+    <string name="area">Area</string>
+    <string name="fcsdje">AMOUNT OF INCOME SHARING</string>
+    <string name="fcbl">INCOME SHARE RATIO</string>
+    <string name="jysj">TRANSACTION TIME</string>
+
+    <string name="byys">MONTHLY REVENUE</string>
+
+    <string name="sxf">HANDLING FEE</string>
+    <string name="dzyh">ACCOUNT BANK</string>
+    <string name="txsj">WITHDRAW TIME</string>
+    <string name="zzje">TRASFER AMOUNT</string>
+
+    <string name="payWay">PAYMENT METHOD</string>
+    <string name="friendNum">CONTACTS</string>
+    <string name="tjlp">添加礼品</string>
+
+    <string name="spcsjg">商品出售价格:</string>
+    <string name="hddj">货道(游戏)单价:</string>
+    <string name="xykc">现有库存:</string>
+    <string name="hdsphdgl">货道商品获得概率:</string>
+    <string name="hdrl">货道容量:</string>
+
+    <string name="kc">库存</string>
+
+    <string name="unit1">元/局</string>
+    <string name="unit2">个</string>
+    <string name="unit3">局/个</string>
+
+    <string name="supply_product">补货</string>
+    <string name="clean_product">清货</string>
+
+    <string name="batch_supply">批量补货</string>
+    <string name="cancle_supply">取消补货</string>
+
+    <string name="batch_clean">批量清货</string>
+    <string name="cancle_clean">取消清货</string>
+
+
+    <string name="commodityNumber">货道总数</string>
+    <string name="sumStock">库存总容量:</string>
+    <string name="tlbl">退礼比例(局/个)</string>
+    <string name="currentStock">现有库存</string>
+    <string name="bi">币</string>
 
 </resources>

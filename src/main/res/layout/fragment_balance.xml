@@ -78,7 +78,7 @@
             android:paddingLeft="20dp"
             android:showDividers="middle">
 
-            <com.example.godcode.ui.view.ImageTextView
+            <com.example.godcode.ui.view.customview.ImageTextView
                 android:id="@+id/recharge"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -92,7 +92,7 @@
                 app:drawableHeight="12dp"
                 app:drawableWidth="12dp" />
 
-            <com.example.godcode.ui.view.ImageTextView
+            <com.example.godcode.ui.view.customview.ImageTextView
                 android:id="@+id/tx"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -106,7 +106,7 @@
                 app:drawableHeight="12dp"
                 app:drawableWidth="12dp" />
 
-            <com.example.godcode.ui.view.ImageTextView
+            <com.example.godcode.ui.view.customview.ImageTextView
                 android:id="@+id/balance_bank"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -120,7 +120,7 @@
                 app:drawableHeight="12dp"
                 app:drawableWidth="12dp" />
 
-            <com.example.godcode.ui.view.ImageTextView
+            <com.example.godcode.ui.view.customview.ImageTextView
                 android:id="@+id/balance_zz"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -135,7 +135,7 @@
                 app:drawableWidth="12dp" />
 
 
-            <com.example.godcode.ui.view.ImageTextView
+            <com.example.godcode.ui.view.customview.ImageTextView
                 android:id="@+id/balance_jyjl"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

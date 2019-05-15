@@ -5,7 +5,7 @@ import android.view.View;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.activity.BaseActivity;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.deatailFragment.SetPayPsdFragment;
 import com.example.godcode.ui.view.KeyBoard;
 import com.example.godcode.ui.view.PsdPopupWindow;

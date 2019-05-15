@@ -9,22 +9,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.NumberPicker;
+
 import com.example.godcode.R;
 import com.example.godcode.databinding.LayoutBankTypeSelectBinding;
 import com.example.godcode.presenter.Presenter;
+import com.example.godcode.utils.LogUtil;
 
-public class BankTypeSelect extends Dialog {
+public class TypeSelect extends Dialog {
 
     private LayoutBankTypeSelectBinding binding;
 
-    public BankTypeSelect(@NonNull Context context, String[] data) {
+    public TypeSelect(@NonNull Context context, String[] data) {
         super(context, R.style.dialog3);
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.layout_bank_type_select, null, false);
+        LogUtil.log("======binding========"+binding);
         binding.typePicker.setDisplayedValues(data);
         binding.typePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         binding.typePicker.setMinValue(0);
         binding.typePicker.setMaxValue(data.length - 1);
+        binding.typePicker.setWrapSelectorWheel(false);
         binding.cancelBankType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,7 +40,9 @@ public class BankTypeSelect extends Dialog {
             public void onClick(View v) {
                 dismiss();
                 int value = binding.typePicker.getValue();
-                bankSelect.selectBankType(data[value]);
+                if (selectResponse != null) {
+                    selectResponse.select(value);
+                }
             }
         });
         setCancelable(false);
@@ -56,15 +62,13 @@ public class BankTypeSelect extends Dialog {
         getWindow().setAttributes(layoutParams);
     }
 
-    public interface BankSelect {
-        void selectBankType(String type);
+    public interface SelectResponse {
+        void select(int pos);
     }
 
-    public void setBankSelect(BankSelect bankSelect) {
-        this.bankSelect = bankSelect;
+    private SelectResponse selectResponse;
+
+    public void setSelectResponse(SelectResponse selectResponse) {
+        this.selectResponse = selectResponse;
     }
-
-    private BankSelect bankSelect;
-
-
 }

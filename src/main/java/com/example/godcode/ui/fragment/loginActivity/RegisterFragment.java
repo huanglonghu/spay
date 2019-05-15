@@ -23,7 +23,7 @@ import com.example.godcode.greendao.option.LoginResultOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.activity.MainActivity;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.GsonUtil;
 import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.SharepreferenceUtil;
@@ -195,6 +195,9 @@ public class RegisterFragment extends BaseFragment {
                                     LoginResult loginResult = new LoginResult(Constant.uniquenessToken, result.getPayServerUrl(), result.getUserId());
                                     Constant.uniquenessToken = result.getUniquenessToken();
                                     loginResult.setUniquenessToken(Constant.uniquenessToken);
+                                    Constant.balances = result.getBalances();
+                                    Constant.toDayMoney = result.getToDayMoney();
+                                    Constant.yesterDayMoney = result.getYesterDayMoney();
                                     LoginResultOption.getInstance().insertLoginResult(loginResult);
                                     Constant.userId = result.getUserId();
                                     Constant.expireInSeconds = result.getExpireInSeconds();
@@ -215,9 +218,7 @@ public class RegisterFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-    }
+
 
     public void initData(RegisterBody registerBody) {
         this.registerBody = registerBody;

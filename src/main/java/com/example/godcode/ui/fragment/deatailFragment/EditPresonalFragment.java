@@ -21,8 +21,8 @@ import com.example.godcode.greendao.gen.CityDao;
 import com.example.godcode.greendao.gen.ZoneDao;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.ui.view.BankTypeSelect;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.ui.view.TypeSelect;
 import com.example.godcode.utils.GreenDaoUtil;
 import com.youth.picker.PickerView;
 import com.youth.picker.entity.PickerData;
@@ -31,7 +31,7 @@ import com.youth.picker.listener.OnPickerClickListener;
 import java.util.HashMap;
 import java.util.List;
 
-public class EditPresonalFragment extends BaseFragment implements BankTypeSelect.BankSelect {
+public class EditPresonalFragment extends BaseFragment implements TypeSelect.SelectResponse {
     private FragmentEditpersonalBinding binding;
     private View view;
     private PickerView pickerView;
@@ -62,8 +62,8 @@ public class EditPresonalFragment extends BaseFragment implements BankTypeSelect
                 break;
             case 2:
                 binding.editPresonalToolbar.title.setText("修改性别");
-                BankTypeSelect bankTypeSelect = new BankTypeSelect(activity, sexArray);
-                bankTypeSelect.setBankSelect(EditPresonalFragment.this);
+                TypeSelect bankTypeSelect = new TypeSelect(activity, sexArray);
+                bankTypeSelect.setSelectResponse(EditPresonalFragment.this);
                 bankTypeSelect.show();
                 break;
             case 3:
@@ -167,15 +167,6 @@ public class EditPresonalFragment extends BaseFragment implements BankTypeSelect
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
-
-    @Override
-    public void selectBankType(String type) {
-        editBean.content.set(type);
-    }
 
     private String content;
 
@@ -198,6 +189,11 @@ public class EditPresonalFragment extends BaseFragment implements BankTypeSelect
         editBean.type.set(type);
     }
 
+    @Override
+    public void select(int pos) {
+        editBean.content.set(sexArray[pos]);
+    }
+
     public interface PersonalUpdate {
         void update(int type, String content);
     }
@@ -211,8 +207,8 @@ public class EditPresonalFragment extends BaseFragment implements BankTypeSelect
     public void edit() {
         switch (editBean.type.get()) {
             case 2:
-                BankTypeSelect bankTypeSelect = new BankTypeSelect(activity, sexArray);
-                bankTypeSelect.setBankSelect(EditPresonalFragment.this);
+                TypeSelect bankTypeSelect = new TypeSelect(activity, sexArray);
+                bankTypeSelect.setSelectResponse(EditPresonalFragment.this);
                 bankTypeSelect.show();
                 break;
             case 3:

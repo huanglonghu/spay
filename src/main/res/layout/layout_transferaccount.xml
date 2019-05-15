@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|right"
-                android:text="转账"
+                android:text="@string/transfer"
                 android:textColor="#000" />
 
         </LinearLayout>
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="付款方式"
+                android:text="@string/payWay"
                 android:textSize="15sp" />
 
             <TextView
@@ -99,7 +99,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="20dp"
                 android:gravity="center_vertical|right"
-                android:text="余额"
+                android:text="@string/balance"
                 android:textColor="#000" />
 
         </LinearLayout>

@@ -6,11 +6,10 @@ package com.example.godcode.bean;
 
 public class WsHeart {
 
-
     /**
      * EventType : 21
-     * Data : {"IOSVer":"2.1.4","AndroidVer":"2.1.5","IOSVerDes":"1.增加手机话费充值|2.优化主界面","AndroidVerDes":"1.增加手机话费充值|2.优化主界面"}
-     * Flag : 3b83e4d1-55e0-441c-8cff-0010cf581832
+     * Data : {"IOSVer":"2.2.3","AndroidVer":"2.2.3","IOSVerDes":"1.修改已知BUG,优化用户体验|2.增加产品设置及退礼展示","AndroidVerDes":"1.修改资产页面|2.优化主界面","UpdateAddress":"https://gcp.app.d.godcode.me?pla?platform=godcode2"}
+     * Flag : 89c49e58-09ff-431d-a049-71efc61d59cb
      */
 
     private int EventType;
@@ -43,16 +42,18 @@ public class WsHeart {
 
     public static class DataBean {
         /**
-         * IOSVer : 2.1.4
-         * AndroidVer : 2.1.5
-         * IOSVerDes : 1.增加手机话费充值|2.优化主界面
-         * AndroidVerDes : 1.增加手机话费充值|2.优化主界面
+         * IOSVer : 2.2.3
+         * AndroidVer : 2.2.3
+         * IOSVerDes : 1.修改已知BUG,优化用户体验|2.增加产品设置及退礼展示
+         * AndroidVerDes : 1.修改资产页面|2.优化主界面
+         * UpdateAddress : https://gcp.app.d.godcode.me?pla?platform=godcode2
          */
 
         private String IOSVer;
         private String AndroidVer;
         private String IOSVerDes;
         private String AndroidVerDes;
+        private String UpdateAddress;
 
         public String getIOSVer() {
             return IOSVer;
@@ -84,6 +85,14 @@ public class WsHeart {
 
         public void setAndroidVerDes(String AndroidVerDes) {
             this.AndroidVerDes = AndroidVerDes;
+        }
+
+        public String getUpdateAddress() {
+            return UpdateAddress;
+        }
+
+        public void setUpdateAddress(String UpdateAddress) {
+            this.UpdateAddress = UpdateAddress;
         }
     }
 }

@@ -4,23 +4,22 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Message;
 import android.support.v4.app.FragmentManager;
-
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentMainBinding;
 import com.example.godcode.greendao.entity.Friend;
+import com.example.godcode.handler.ActivityResultHandler;
+import com.example.godcode.observable.WebSocketNewsObservable;
 import com.example.godcode.ui.activity.BaseActivity;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.base.GodCodeApplication;
+import com.example.godcode.ui.fragment.bindproduct.BindProductFragment;
 import com.example.godcode.ui.fragment.deatailFragment.AddFriendFragment;
-import com.example.godcode.ui.fragment.deatailFragment.AssetFragment;
+import com.example.godcode.ui.fragment.deatailFragment.Asset_1_Fragment;
 import com.example.godcode.ui.fragment.deatailFragment.BalanceFragment;
 import com.example.godcode.ui.fragment.deatailFragment.BankCardFragment;
-import com.example.godcode.ui.fragment.deatailFragment.BindingProductFragment;
 import com.example.godcode.ui.fragment.deatailFragment.ContactDetailFragment;
 import com.example.godcode.ui.fragment.deatailFragment.GatheringFragment;
-import com.example.godcode.ui.fragment.deatailFragment.MobileRechargeFragment;
 import com.example.godcode.ui.fragment.deatailFragment.NewFriendFragment;
 import com.example.godcode.ui.fragment.deatailFragment.PayMentFragment;
 import com.example.godcode.ui.fragment.deatailFragment.PayPsdFragment;
@@ -35,12 +34,10 @@ import com.example.godcode.ui.fragment.deatailFragment.TxSuccessFragment;
 import com.example.godcode.ui.fragment.deatailFragment.VisitingCardFragment;
 import com.example.godcode.ui.fragment.deatailFragment.YSJLFragment;
 import com.example.godcode.ui.fragment.mainActivity.FriendFragment;
-import com.example.godcode.ui.view.ExitDialog;
+import com.example.godcode.ui.view.widget.ExitDialog;
 import com.example.godcode.ui.view.QrcodeDialog;
 import com.example.godcode.utils.CommonUtil;
 import com.google.zxing.activity.CaptureActivity;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,6 +160,20 @@ public class Presenter {
         }
     }
 
+
+    private WebSocketNewsObservable<Integer> kucunObservable;
+    public void initObservable(){
+        kucunObservable = new WebSocketNewsObservable<Integer>();
+    }
+
+    public WebSocketNewsObservable<Integer> getKucunObservable() {
+        return kucunObservable;
+    }
+
+    public void setKucunObservable(WebSocketNewsObservable<Integer> kucunObservable) {
+        this.kucunObservable = kucunObservable;
+    }
+
     public void removeFragment(BaseFragment fragment) {
         fm.beginTransaction().remove(fragment).commit();
     }
@@ -188,7 +199,7 @@ public class Presenter {
             BaseFragment fragment = null;
             switch (name) {
                 case "myAsset":
-                    fragment = new AssetFragment();
+                    fragment = new Asset_1_Fragment();
                     break;
                 case "productCenter":
                     fragment = new ProductCenterFragment();
@@ -236,7 +247,7 @@ public class Presenter {
                     fragment = new PayPsdFragment();
                     break;
                 case "bindProduct":
-                    fragment = new BindingProductFragment();
+                    fragment = new BindProductFragment();
                     break;
             }
             fragmentMap.put(name, fragment);
@@ -246,12 +257,12 @@ public class Presenter {
         }
     }
 
-    private int REQUEST_CODE = 0x01;
 
     public void sys() {
         if (CommonUtil.isCameraCanUse()) {
             Intent intent = new Intent(activity, CaptureActivity.class);
-            activity.startActivityForResult(intent, REQUEST_CODE);
+            new ActivityResultHandler.Builder().activity(activity).intent(intent).requestCode(ActivityResultHandler.REQUEST_SCAN).build().startActivityForResult();
+
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 activity.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
@@ -279,11 +290,9 @@ public class Presenter {
         this.binding = binding;
     }
 
-
     public void exit(Context context) {
         ExitDialog exitDialog = new ExitDialog(context);
         exitDialog.show();
-
     }
 
 }

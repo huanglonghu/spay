@@ -1,4 +1,4 @@
-package com.example.godcode.ui.view;
+package com.example.godcode.ui.view.customview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -21,7 +21,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.godcode.R;
+import com.example.godcode.ui.view.customview.ClipView;
 import com.example.godcode.utils.FileUtil;
+import com.example.godcode.utils.LogUtil;
 
 import java.io.IOException;
 
@@ -143,6 +145,8 @@ public class ClipViewLayout extends RelativeLayout {
         if (bitmap == null) {
             return;
         }
+        LogUtil.log("=========bitmap========="+bitmap);
+
 
         //竖屏拍照的照片，直接使用的话，会旋转90度，下面代码把角度旋转过来
         int rotation = getExifOrientation(path); //查询旋转角度

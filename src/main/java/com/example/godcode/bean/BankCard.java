@@ -1,5 +1,6 @@
 package com.example.godcode.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ public class BankCard {
 
 
     /**
-     * result : [{"fK_UserID":12,"bankID":0,"bankName":"磁条卡卡号:","bankTime":"2018-07-07T19:17:43.5244006","bankNumber":0,"mobile":"13076737863","bankCardNumber":"621421703107","bindType":4,"bindMoney":0,"userName":"123456","id":5},{"fK_UserID":12,"bankID":0,"bankName":"农业银行-金穗通宝卡(银联卡)-借记卡:","bankTime":"2018-07-09T14:38:37.1804012","bankNumber":0,"mobile":"13076737863","bankCardNumber":"6228480402637874213","bindType":2,"bindMoney":0.1,"userName":"123456","id":10005}]
+     * result : [{"fK_UserID":11,"bankID":0,"bankName":"中国银行","accountName":"虎","bankTime":"2019-02-19T14:05:34.7689628","bankNumber":0,"mobile":"13076737863","bankCardNumber":"6214230031002334236","bindType":3,"bindMoney":0,"userName":"13076737863","area":"天津市天津市","network":"广州","id":138}]
      * targetUrl : null
      * success : true
      * error : null
@@ -73,24 +74,28 @@ public class BankCard {
         this.result = result;
     }
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable {
         /**
-         * fK_UserID : 12
+         * fK_UserID : 11
          * bankID : 0
-         * bankName : 磁条卡卡号:
-         * bankTime : 2018-07-07T19:17:43.5244006
+         * bankName : 中国银行
+         * accountName : 虎
+         * bankTime : 2019-02-19T14:05:34.7689628
          * bankNumber : 0
          * mobile : 13076737863
-         * bankCardNumber : 621421703107
-         * bindType : 4
+         * bankCardNumber : 6214230031002334236
+         * bindType : 3
          * bindMoney : 0.0
-         * userName : 123456
-         * id : 5
+         * userName : 13076737863
+         * area : 天津市天津市
+         * network : 广州
+         * id : 138
          */
 
         private int fK_UserID;
         private int bankID;
         private String bankName;
+        private String accountName;
         private String bankTime;
         private int bankNumber;
         private String mobile;
@@ -98,6 +103,8 @@ public class BankCard {
         private int bindType;
         private double bindMoney;
         private String userName;
+        private String area;
+        private String network;
         private int id;
 
         public int getFK_UserID() {
@@ -122,6 +129,14 @@ public class BankCard {
 
         public void setBankName(String bankName) {
             this.bankName = bankName;
+        }
+
+        public String getAccountName() {
+            return accountName;
+        }
+
+        public void setAccountName(String accountName) {
+            this.accountName = accountName;
         }
 
         public String getBankTime() {
@@ -178,6 +193,22 @@ public class BankCard {
 
         public void setUserName(String userName) {
             this.userName = userName;
+        }
+
+        public String getArea() {
+            return area;
+        }
+
+        public void setArea(String area) {
+            this.area = area;
+        }
+
+        public String getNetwork() {
+            return network;
+        }
+
+        public void setNetwork(String network) {
+            this.network = network;
         }
 
         public int getId() {

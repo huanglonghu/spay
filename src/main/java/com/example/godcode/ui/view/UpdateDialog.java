@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.godcode.R;
 import com.example.godcode.databinding.LayoutUpdateBinding;
 import com.example.godcode.presenter.Presenter;
+import com.example.godcode.utils.SharepreferenceUtil;
 
 public class UpdateDialog extends Dialog {
 
@@ -40,9 +41,12 @@ public class UpdateDialog extends Dialog {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setAction("android.intent.action.VIEW");
-                Uri content_url = Uri.parse("https://gcp.app.d.1qaz.co/?platform=godcode");
-                intent.setData(content_url);
-                context.startActivity(intent);
+                String updateAddress = SharepreferenceUtil.getInstance().getUpdateAddress();
+                if(!TextUtils.isEmpty(updateAddress)){
+                    Uri content_url = Uri.parse(updateAddress);
+                    intent.setData(content_url);
+                    context.startActivity(intent);
+                }
                 dismiss();
             }
         });
@@ -62,13 +66,12 @@ public class UpdateDialog extends Dialog {
     }
 
 
-    public void setDescibe(String descibe,String versionCOde) {
+    public void setDescibe(String descibe, String versionCode) {
         if (!TextUtils.isEmpty(descibe)) {
             String replace = descibe.replace("|", "\n");
             binding.des.setText(replace);
-            binding.setVersionCode(versionCOde);
+            binding.setVersionCode(versionCode);
         }
-
     }
 
 

@@ -95,6 +95,15 @@ public class User {
         private String signature;
         private String address;
         private int id;
+        private double balance;
+
+        public double getBalance() {
+            return balance;
+        }
+
+        public void setBalance(double balance) {
+            this.balance = balance;
+        }
 
         public String getUserName() {
             return userName;

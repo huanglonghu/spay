@@ -15,11 +15,11 @@ import android.widget.ImageView;
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentGatheringBinding;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.BitmapUtil;
 import com.example.godcode.utils.EncryptUtil;
-import com.example.godcode.utils.FormatCheckUtil;
-import com.example.godcode.utils.LogUtil;
+import com.example.godcode.utils.FormatUtil;
+import com.example.godcode.utils.StringUtil;
 import com.google.zxing.encoding.EncodingHandler;
 
 public class GatheringFragment extends BaseFragment implements SetMoneyFragment.MoneyResponse {
@@ -37,7 +37,8 @@ public class GatheringFragment extends BaseFragment implements SetMoneyFragment.
             view = binding.getRoot();
             binding.setPresenter(presenter);
             binding.gatheringToolbar.toolbar2.setBackgroundResource(R.color.theme_color);
-            binding.gatheringToolbar.title.setText("二维码收款");
+            String title = StringUtil.getString(activity, R.string.qrcodeGather);
+            binding.gatheringToolbar.title.setText(title);
             gatheringCode = (ImageView) view.findViewById(R.id.gatheringCode);
             initView();
             initListener();
@@ -73,10 +74,6 @@ public class GatheringFragment extends BaseFragment implements SetMoneyFragment.
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
     public void initView() {
         generatingQrCode();
@@ -126,7 +123,7 @@ public class GatheringFragment extends BaseFragment implements SetMoneyFragment.
     public void setMoney(double money) {
         this.money = money;
         binding.setMoney(money);
-        binding.gatheringMoney.setText(FormatCheckUtil.getInstance().get2double(money));
+        binding.gatheringMoney.setText(FormatUtil.getInstance().get2double(money));
         generatingQrCode();
     }
 

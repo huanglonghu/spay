@@ -2,7 +2,6 @@ package com.example.godcode.ui.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,23 +11,15 @@ import com.example.godcode.R;
 import com.example.godcode.bean.RevenueDivideItem;
 import com.example.godcode.databinding.ItemLvRevenueconfigBinding;
 import com.example.godcode.ui.fragment.deatailFragment.RevenueConfigFragment;
-import com.example.godcode.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RevenueConfigListAdapter extends BaseAdapter {
     private Context context;
-    private final LayoutInflater layoutInflater;
+    private LayoutInflater layoutInflater;
     private ArrayList<RevenueDivideItem> divideList;
     private RevenueConfigFragment fragment;
-
-    public void setAdd(boolean add) {
-        isAdd = add;
-    }
-
-    private boolean isAdd;
-
     private HashMap<Integer, View> viewMap = new HashMap<>();
 
     public RevenueConfigListAdapter(Context context, ArrayList<RevenueDivideItem> divideList, RevenueConfigFragment fragment) {
@@ -63,12 +54,17 @@ public class RevenueConfigListAdapter extends BaseAdapter {
             binding.setPosition(position);
             convertView = binding.getRoot();
             convertView.setTag(binding);
-            if (revenueDivideItem.getId() == null) {
-                binding.etDivide.setVisibility(View.GONE);
-            }
             viewMap.put(position, convertView);
         }
         return viewMap.get(position);
     }
+
+
+    public void refresData(int position){
+        View view = getView(position, null, null);
+        ItemLvRevenueconfigBinding binding = (ItemLvRevenueconfigBinding) view.getTag();
+        binding.setRevenueDivideItem(divideList.get(position));
+    }
+
 
 }

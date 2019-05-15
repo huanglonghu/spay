@@ -7,19 +7,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.PayByBalance;
+import com.example.godcode.bean.SellGoodsOrder;
 import com.example.godcode.bean.YSRecord;
 import com.example.godcode.databinding.FragmentYsjlDetailBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.ui.adapter.HdSellListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
 import com.example.godcode.ui.view.PsdPopupWindow;
 import com.example.godcode.utils.DateUtil;
-import com.example.godcode.utils.FormatCheckUtil;
+import com.example.godcode.utils.FormatUtil;
 
+import com.example.godcode.utils.GsonUtil;
 import com.example.godcode.utils.PayPsdSetting;
+import com.example.godcode.utils.StringUtil;
+
+import java.util.List;
 
 
 public class YSJLDetailFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
@@ -34,7 +41,8 @@ public class YSJLDetailFragment extends BaseFragment implements KeyBoard.PsdLeng
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ysjl_detail, container, false);
             binding.setPresenter(presenter);
             view = binding.getRoot();
-            binding.ysjlDetailToolBar.title.setText("产品收益记录");
+            String title = StringUtil.getString(activity, R.string.cpsyjl);
+            binding.ysjlDetailToolBar.title.setText(title);
             initData();
             initView();
             initListener();
@@ -53,9 +61,22 @@ public class YSJLDetailFragment extends BaseFragment implements KeyBoard.PsdLeng
 
     private void initData() {
         bean = (YSRecord.ResultBean.DataBean) getArguments().getSerializable("ysjlItem");
+        if (FormatUtil.getInstance().isBeginWith4G(bean.getProductNumber())) {
+            HttpUtil.getInstance().getSellGoodsOrderById(bean.getId()).subscribe(
+                    str -> {
+                        SellGoodsOrder sellGoodsOrder = GsonUtil.fromJson(str, SellGoodsOrder.class);
+                        List<SellGoodsOrder.ResultBean> result = sellGoodsOrder.getResult();
+                        if (result != null) {
+                            HdSellListAdapter hdSellListAdapter = new HdSellListAdapter(activity, result, bean.getProductNumber());
+                            binding.hdList.setAdapter(hdSellListAdapter);
+                        }
+                    }
+
+            );
+        }
         binding.setBean(bean);
-        binding.orderMoney.setText(FormatCheckUtil.getInstance().get2double(bean.getSumOrder()));
-        binding.divideMoney.setText(FormatCheckUtil.getInstance().get2double(bean.getDivideMoney()));
+        binding.orderMoney.setText(FormatUtil.getInstance().get2double(bean.getSumOrder()));
+        binding.divideMoney.setText(FormatUtil.getInstance().get2double(bean.getDivideMoney()));
         long stringToDate = DateUtil.getInstance().getStringToDate(bean.getOrderDate(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
         String time = DateUtil.getInstance().formatTime(stringToDate);
         binding.ysjlDetailDate.setText(time);
@@ -63,7 +84,7 @@ public class YSJLDetailFragment extends BaseFragment implements KeyBoard.PsdLeng
 
 
     public void initView() {
-        if (!bean.isIsCapableRefund()||bean.isIsRefund()||!bean.getProductOwnerName().equals(Constant.syNum)) {
+        if (!bean.isIsCapableRefund() || bean.isIsRefund() || !bean.getProductOwnerName().equals(Constant.syNum)) {
             binding.tk.setVisibility(View.GONE);
         }
     }
@@ -104,9 +125,5 @@ public class YSJLDetailFragment extends BaseFragment implements KeyBoard.PsdLeng
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
 }

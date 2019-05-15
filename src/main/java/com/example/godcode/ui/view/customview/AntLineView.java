@@ -1,4 +1,4 @@
-package com.example.godcode.ui.view;
+package com.example.godcode.ui.view.customview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -35,7 +35,6 @@ public class AntLineView extends View {
         reduis=typedArray.getDimensionPixelOffset(R.styleable.AntLineView_circleReduis,20);
         typedArray.recycle();
         initPaint();
-
     }
 
     private void initPaint() {

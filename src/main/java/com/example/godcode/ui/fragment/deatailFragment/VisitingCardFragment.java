@@ -11,17 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.godcode.R;
-import com.example.godcode.bean.ImageBean;
-import com.example.godcode.catche.Creator.RequestCreator;
 import com.example.godcode.catche.Loader.RxImageLoader;
-import com.example.godcode.catche.catcheObservable.MemoryCacheObservable;
 import com.example.godcode.databinding.FragmentVisitingcardBinding;
 import com.example.godcode.greendao.entity.User;
 import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.EncryptUtil;
-import com.example.godcode.utils.LogUtil;
 import com.google.zxing.encoding.EncodingHandler;
 
 public class VisitingCardFragment extends BaseFragment {
@@ -46,21 +42,25 @@ public class VisitingCardFragment extends BaseFragment {
     public void initView() {
         User user = UserOption.getInstance().querryUser(Constant.userId);
         String headImageUrl = user.getHeadImageUrl();
+        initVisitCard();
         if (!TextUtils.isEmpty(headImageUrl)) {
             if (!headImageUrl.contains("http")) {
                 headImageUrl = Constant.baseUrl + headImageUrl;
             }
             RxImageLoader.with(activity).load(user.getHeadImageUrl()).into(binding.ivVisitCard);
-            RxImageLoader.with(activity).getBitmap(user.getHeadImageUrl()).subscribe(
+            RxImageLoader.with(activity).getBitmap(headImageUrl).subscribe(
                     imageBean -> {
                         if (imageBean.getBitmap() != null) {
                             bitmap = imageBean.getBitmap();
                         } else {
                             bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.contact_normal);
                         }
-                        initVisitCard();
+                        binding.ivHead.setImageBitmap(bitmap);
                     }
             );
+        } else {
+            binding.ivHead.setImageResource(R.drawable.contact_normal);
+            binding.ivVisitCard.setImageResource(R.drawable.contact_normal);
         }
         binding.tvUserName.setText(Constant.userName);
     }
@@ -70,7 +70,6 @@ public class VisitingCardFragment extends BaseFragment {
         Bitmap mBitmap = EncodingHandler.createQRCode(qrStr, 2200, 2200, null);
         if (mBitmap != null) {
             binding.visitingcard.setImageBitmap(mBitmap);
-            binding.ivHead.setImageBitmap(bitmap);
         }
     }
 
@@ -95,8 +94,4 @@ public class VisitingCardFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 }

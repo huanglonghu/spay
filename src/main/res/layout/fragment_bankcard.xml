@@ -24,38 +24,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#2d3132"
-            android:padding="10dp"
+            android:background="@color/yzm"
             android:orientation="vertical">
 
             <ListView
                 android:id="@+id/lv_bankcard"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="300dp"
+                android:divider="@null"
+                android:padding="10dp" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/addBankCard"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
-                android:background="#313536"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/add2" />
+                android:background="#fff">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_centerInParent="true"
                     android:text="@string/addBankCard"
-                    android:textColor="#bfbfbf"
                     android:textSize="17sp" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 

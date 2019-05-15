@@ -1,23 +1,31 @@
 package com.example.godcode.http;
 
+import com.example.godcode.bean.AddBankCard;
+import com.example.godcode.bean.BatchSettingBody;
+import com.example.godcode.bean.BindPackage;
 import com.example.godcode.bean.ChangePsd;
+import com.example.godcode.bean.EditBankCard;
+import com.example.godcode.bean.EditGroupItemName;
+import com.example.godcode.bean.EditPackage;
 import com.example.godcode.bean.EditPresonal;
 import com.example.godcode.bean.AddFriend;
 import com.example.godcode.bean.BindBankCard;
-import com.example.godcode.bean.BindProductBody;
+import com.example.godcode.bean.BindProduct;
 import com.example.godcode.bean.CheckPsd;
 import com.example.godcode.bean.ConcurAddFriend;
 import com.example.godcode.bean.CreateDivide;
 import com.example.godcode.bean.CreateOrder;
-import com.example.godcode.bean.EditBankCard;
 import com.example.godcode.bean.EditProduct;
 import com.example.godcode.bean.EditProductPrice;
+import com.example.godcode.bean.EditProductSetting;
 import com.example.godcode.bean.GetVerification;
 import com.example.godcode.bean.Id;
 import com.example.godcode.bean.LoginBody;
 import com.example.godcode.bean.MobileRecharge;
 import com.example.godcode.bean.PayByBalance;
+import com.example.godcode.bean.PresentOption;
 import com.example.godcode.bean.RechargeBody;
+import com.example.godcode.bean.RefreshDiviceToken;
 import com.example.godcode.bean.RefreshToken;
 import com.example.godcode.bean.RegisterBody;
 import com.example.godcode.bean.ReturnEquity;
@@ -29,6 +37,10 @@ import com.example.godcode.bean.Tx;
 import com.example.godcode.bean.UpdateFriend;
 import com.example.godcode.bean.WxPay;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -84,13 +96,19 @@ public interface HttpInterface {
     Call<ResponseBody> updateFriend(@Body UpdateFriend updateFriend);
 
     @POST("api/services/app/MerchantOwner/BindOrRelieveBindMerchantOwner")
-    Call<ResponseBody> bindProduct(@Body BindProductBody body);
+    Call<ResponseBody> bindProduct(@Body BindProduct body);
+
+
+    @POST("api/services/app/MerchantOwner/BindOrRelieveBindMerchantOwner")
+    Call<ResponseBody> bindProduct2(@Body BindProduct bindProduct);
 
     @GET("api/services/app/Balance/GetBalanceByUserIdAsync")
     Call<ResponseBody> queryBalance(@Query("Id") int Id);
 
+
     @GET("api/services/app/RevenueDivide/GetRevenueDivideByPitureIdAsync")
     Call<ResponseBody> getRevenueDivideById(@Query("Id") int Id);
+
 
     @POST("api/services/app/RevenueDivide/CreateOrUpdateRevenueDivide")
     Call<ResponseBody> createRevenueDivide(@Body CreateDivide createDivide);
@@ -141,7 +159,7 @@ public interface HttpInterface {
     Call<ResponseBody> getBankCardsByUserID(@Query("Id") int Id);
 
     @POST("api/services/app/BankCard/PresenBindBankCard")
-    Call<ResponseBody> sendBankCardMsg(@Body EditBankCard editBankCard);
+    Call<ResponseBody> sendBankCardMsg(@Body AddBankCard editBankCard);
 
     @DELETE("api/services/app/RevenueDivide/DeleteRevenueDivide")
     Call<ResponseBody> deleteRevenueDivide(@Query("Id") int Id);
@@ -167,8 +185,9 @@ public interface HttpInterface {
     @POST("api/services/app/CommonPaymentAppServices/TerracePayment")
     Call<ResponseBody> payByBanlance(@Body PayByBalance payByBalance);
 
+
     @GET("api/services/app/Product/GetProductByNumberAsync")
-    Call<ResponseBody> isBind(@Query("ProductNumber") String produceNumber);
+    Call<ResponseBody> querryProduct(@Query("ProductID") Integer ProductID, @Query("ProductNumber") String produceNumber);
 
     @POST("api/services/app/PayOrder/MobilePaymentProduct")
     Call<ResponseBody> getOrderNumber(@Body CreateOrder createOrder);
@@ -227,10 +246,80 @@ public interface HttpInterface {
     @POST("/api/services/app/RechargeRecord/Recharge")
     Call<ResponseBody> mobileRecharge(@Body MobileRecharge mobileRecharge);
 
-
     @GET("/api/services/app/MerchantOwner/GetMobileGroupMerchantOwners")
     Call<ResponseBody> getGroup(@Query("UserId") int userId, @Query("PeriodType") int periodType);
 
     @GET("/api/services/app/MerchantOwner/GetPagedMobileMerchantOwnersOne")
     Call<ResponseBody> getGroupById(@QueryMap Map<String, String> map);
+
+    @POST("/api/services/app/GroupAppellation/CreateOrUpdate")
+    Call<ResponseBody> editGroupItemName(@Body EditGroupItemName editGroupItemName);
+
+    @GET("/api/services/app/ProductSetting/GetByProductId")
+    Call<ResponseBody> getProductSettingMsg(@Query("id") int id);
+
+    @POST("/api/services/app/ProductSetting/CreateOrUpdate")
+    Call<ResponseBody> editProductSetting(@Body EditProductSetting eps);
+
+    @PUT("/api/services/app/User/UpdateDeviceToken")
+    Call<ResponseBody> refreshDiviceToken(@Body RefreshDiviceToken refreshDiviceToken);
+
+    @GET("/api/services/app/Present/GetById")
+    Call<ResponseBody> querryPresentById(@Query("Id") long id);//获取礼品列表
+
+    @GET("/api/services/app/Present/GetPresentPaged")
+    Call<ResponseBody> getPresentList(@Query("UserId") long userId, @Query("page") int page, @Query("limit") int limit);
+
+    @GET("/api/services/app/Present/GetPresentPaged")
+    Call<ResponseBody> searchPresent(@Query("UserId") long userId, @Query("PresentName") String presentName, @Query("page") int page, @Query("limit") int limit);
+
+    @POST("/api/services/app/Present/CreateOrUpdate")
+    Call<ResponseBody> createOrUpdatePresent(@Body PresentOption presentOption);
+
+    @DELETE("/api/services/app/Present/Delete")
+    Call<ResponseBody> deletePresent(@Query("Id") long id);
+
+    @GET("/api/services/app/CommodityRoad/GetPaged")
+    Call<ResponseBody> getCommodityRoadList(@Query("FK_ProductID") long FK_ProductID, @Query("PresentNameOrNumber") String PresentNameOrNumber, @Query("page") int page, @Query("limit") int limit);
+
+    @POST("/api/services/app/CommodityRoad/CreateOrUpdate")
+    Call<ResponseBody> editCommdityRoad(@Body BindProduct.CommodityRoadBeanX commodityRoadBeanX);
+
+    @POST("/api/services/app/BankCard/CreateOrUpdateBankCard")
+    Call<ResponseBody> editBankCard(@Body EditBankCard editBankCard);
+
+
+    @GET("/api/services/app/PayOrder/GetAndroidBoardOrder")
+    Call<ResponseBody> qurryOrderById(@Query("Id") long id);
+
+    @POST("/api/services/app/CommodityRoad/BatchReplenishment")
+    Call<ResponseBody> buHuo(@Query("costNumber") int costNumber, @Body ArrayList<Long> commodityRoadList);
+
+    @GET("/api/services/app/SellGoodsRecord/GetSellGoodsRecordByOrderID")
+    Call<ResponseBody> getSellGoodsOrderById(@Query("Id") long id);
+
+    @POST("/api/services/app/CommodityRoad/BatchPositionSetting")
+    Call<ResponseBody> batchSetting(@Body BatchSettingBody batchSettingBody);
+
+    @GET("/api/services/app/ProductPackage/GetPagedProductPackage")
+    Call<ResponseBody> getPackageList(@Query("FK_UserID") long userId, @Query("FK_ProductCategoryID") long categorId, @Query("page") int page, @Query("limit") int limit);
+
+    @POST("/api/services/app/ProductPackage/CreateOrUpdate")
+    Call<ResponseBody> editPackage(@Body EditPackage editPackage);
+
+    @GET("/api/services/app/ProductPackageSetting/GetListProductPackageSetting")
+    Call<ResponseBody> getPackageSettingList(@Query("FK_ProductID") long FK_ProductID);
+
+    @POST("/api/services/app/ProductPackageSetting/CreateOrUpdate")
+    Call<ResponseBody> bindPackage(@Body BindPackage bindPackage);
+
+    @DELETE("/api/services/app/ProductPackageSetting/Delete")
+    Call<ResponseBody> deletePackageSetting(@Query("Id") long id);
+
+    @DELETE("/api/services/app/ProductPackage/Delete")
+    Call<ResponseBody> deletePackage(@Query("Id") long id);
+
+    @POST("/api/services/app/CommonPaymentAppServices/FreePlay")
+    Call<ResponseBody> freePlay(@Body HashMap<String, String> map);
+
 }

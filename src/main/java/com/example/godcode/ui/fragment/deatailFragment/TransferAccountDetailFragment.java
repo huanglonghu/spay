@@ -19,14 +19,16 @@ import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
 import com.example.godcode.ui.view.MyEditText;
 import com.example.godcode.ui.view.PsdPopupWindow;
 import com.example.godcode.ui.view.TransferAccuntView;
 import com.example.godcode.utils.EncryptUtil;
 import com.example.godcode.utils.LogUtil;
+import com.example.godcode.utils.MoneyTextWatcher;
 import com.example.godcode.utils.PayPsdSetting;
+import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 
 public class TransferAccountDetailFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher, MyEditText.MoneyValueListener {
@@ -52,7 +54,9 @@ public class TransferAccountDetailFragment extends BaseFragment implements KeyBo
 
     private int userId;
     private void initView() {
-        binding.transferdetailToolbar.title.setText("转账");
+        String title = StringUtil.getString(activity, R.string.transfer);
+        binding.transferdetailToolbar.title.setText(title);
+        binding.transferMoney.addTextChangedListener(new MoneyTextWatcher(binding.transferMoney));
         Friend friend = FriendOption.getInstance(activity).querryFriend(friendId);
         if (friend == null) {
             //不是朋友
@@ -142,9 +146,6 @@ public class TransferAccountDetailFragment extends BaseFragment implements KeyBo
         }
     }
 
-    @Override
-    public void refreshData() {
-    }
 
     public void transfer() {
         transferAccuntView.dismiss();

@@ -1,26 +1,24 @@
 package com.example.godcode.ui.fragment.deatailFragment;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.godcode.R;
-import com.example.godcode.bean.WsHeart;
 import com.example.godcode.databinding.FragmentSettingBinding;
 import com.example.godcode.greendao.entity.VersionMsg;
 import com.example.godcode.greendao.option.LoginResultOption;
 import com.example.godcode.greendao.option.VersionMsgOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.UpdateDialog;
+import com.example.godcode.ui.view.widget.LanguageConfigDialog;
+import com.example.godcode.utils.StringUtil;
 
 
 public class SettingFragment extends BaseFragment {
@@ -34,7 +32,8 @@ public class SettingFragment extends BaseFragment {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false);
             binding.setPresenter(presenter);
             view = binding.getRoot();
-            binding.settingToolbar.title.setText("设置");
+            String title = StringUtil.getString(activity, R.string.setting);
+            binding.settingToolbar.title.setText(title);
             initView();
             initListener();
         }
@@ -67,6 +66,14 @@ public class SettingFragment extends BaseFragment {
                 }
             }
         });
+
+//        binding.LanguageConfig.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LanguageConfigDialog languageConfigDialog = new LanguageConfigDialog(activity);
+//                languageConfigDialog.show();
+//            }
+//        });
     }
 
     private void createUpdateDialog(String des, String versionCode) {
@@ -87,11 +94,5 @@ public class SettingFragment extends BaseFragment {
     @Override
     protected void lazyLoad() {
     }
-
-    @Override
-    public void refreshData() {
-
-    }
-
 
 }

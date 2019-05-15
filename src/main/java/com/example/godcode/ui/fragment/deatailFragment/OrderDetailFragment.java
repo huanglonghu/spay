@@ -8,31 +8,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.example.godcode.bean.OrderResult;
+import com.example.godcode.bean.OrderDetail;
 import com.example.godcode.bean.ProductScan;
 import com.example.godcode.catche.Loader.RxImageLoader;
 import com.example.godcode.R;
-import com.example.godcode.bean.OrderDetail;
 import com.example.godcode.bean.PayByBalance;
 import com.example.godcode.databinding.FragmentOrderdetailBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
 import com.example.godcode.ui.view.PsdPopupWindow;
 import com.example.godcode.utils.DateUtil;
-import com.example.godcode.utils.FormatCheckUtil;
+import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.PayPsdSetting;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
 
     private FragmentOrderdetailBinding binding;
     private View view;
-    private OrderResult.ResultBean resultBean;
+    private OrderDetail orderDetail;
+    private ProductScan.ResultBean  productScanResult;
 
 
     @Nullable
@@ -43,41 +39,41 @@ public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLen
             binding.setPresenter(presenter);
             view = binding.getRoot();
             binding.orderDetailToolbar.title.setText("订单详情");
+            initData();
             initView();
-            initListener();
         }
         return view;
     }
 
-    private ProductScan.ResultBean productScan;
 
-    public void initData(OrderResult orderResult, ProductScan.ResultBean productScan) {
-        resultBean = orderResult.getResult();
-        this.productScan = productScan;
+
+    public void initData() {
+        Bundle bundle =getArguments();
+        orderDetail= (OrderDetail) bundle.getSerializable("orderDetail");
+        productScanResult = (ProductScan.ResultBean) bundle.getSerializable("productScanResult");
     }
 
-    private void initListener() {
-        binding.orderPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PayPsdSetting.getInstance().isPayPsdSet("付款", resultBean.getSumOrder(), view, OrderDetailFragment.this, 1);
-            }
-        });
-    }
 
 
     public void initView() {
-        binding.setOrderBean(resultBean);
-        binding.orderMoney.setText(FormatCheckUtil.getInstance().get2double(resultBean.getSumOrder()));
-        long time = DateUtil.getInstance().getStringToDate(resultBean.getOrderDate(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
+        OrderDetail.ResultBean result = orderDetail.getResult();
+        binding.orderNumber.setText(result.getOrderNumber());
+        binding.orderMoney.setText(FormatUtil.getInstance().get2double(result.getSumOrder()));
+        long time = DateUtil.getInstance().getStringToDate(result.getOrderDate(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
         String orderDate = DateUtil.getInstance().formatTime(time);
         binding.orderDate.setText(orderDate);
-        if (!TextUtils.isEmpty(productScan.getThumbnailImgPath())) {
-            String url = productScan.getThumbnailImgPath();
+        if (!TextUtils.isEmpty(productScanResult.getThumbnailImgPath())) {
+            String url = productScanResult.getThumbnailImgPath();
             RxImageLoader.with(activity).load(Constant.baseUrl + url).into(binding.productImage);
         } else {
             binding.productImage.setBackgroundResource(R.drawable.contact_normal);
         }
+        binding.orderPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PayPsdSetting.getInstance().isPayPsdSet("付款", result.getSumOrder(), view, OrderDetailFragment.this, 1);
+            }
+        });
 
     }
 
@@ -90,7 +86,7 @@ public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLen
 
         PayByBalance payByBalance = new PayByBalance();
         payByBalance.setPassword(psd);
-        payByBalance.setPayOrderID(resultBean.getId());
+        payByBalance.setPayOrderID(orderDetail.getResult().getId());
         payByBalance.setUserID(Constant.userId);
         HttpUtil.getInstance().payByBalance(payByBalance)
                 .subscribe(
@@ -102,7 +98,7 @@ public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLen
                                 PsdPopupWindow.getInstance(activity).exit();
                                 PaySuccessFragment paySuccessFragment = new PaySuccessFragment();
                                 presenter.step2Fragment(paySuccessFragment);
-                                paySuccessFragment.initData(productScan.getProductName(), resultBean.getSumOrder());
+                                paySuccessFragment.initData(productScanResult.getProductName(), orderDetail.getResult().getSumOrder());
                             }
                         }
                 );
@@ -119,10 +115,6 @@ public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLen
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
 
 }

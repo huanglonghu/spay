@@ -14,7 +14,7 @@ import com.example.godcode.databinding.ItemLvSearchBinding;
 import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.presenter.Presenter;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.deatailFragment.ContactDetailFragment;
 import com.example.godcode.ui.fragment.deatailFragment.UserFragment;
 

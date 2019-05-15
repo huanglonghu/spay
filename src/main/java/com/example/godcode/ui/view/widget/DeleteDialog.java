@@ -1,29 +1,29 @@
-package com.example.godcode.ui.view;
+package com.example.godcode.ui.view.widget;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.WindowManager;
+import com.example.godcode.interface_.Strategy;
 import com.example.godcode.presenter.Presenter;
 
 public class DeleteDialog extends AlertDialog {
 
-    public DeleteDialog(Context context, String title) {
+    public DeleteDialog(Context context, String title, Strategy strategy) {
         super(context);
         setMessage(title);
         setCancelable(false);
         setButton(AlertDialog.BUTTON_NEGATIVE, "否", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
             }
         });
 
         setButton(AlertDialog.BUTTON_POSITIVE, "是", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                listerer.clickSure();
+                strategy.sure();
             }
         });
     }
@@ -39,13 +39,8 @@ public class DeleteDialog extends AlertDialog {
         getWindow().setAttributes(layoutParams);
     }
 
-    public interface OnClickSureListerer {
-        void clickSure();
-    }
 
-    private OnClickSureListerer listerer;
 
-    public void setListerer(OnClickSureListerer listerer) {
-        this.listerer = listerer;
-    }
+
+
 }

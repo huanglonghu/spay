@@ -4,14 +4,13 @@
     <string name="dencode_qrcode">扫描二维码</string>
     <string name="code_text">请输入生成二维码的文本信息</string>
     <string name="qrcodetext">这里显示扫描结果</string>
-
-
     <string name="jqdz">机器地址:</string>
     <string name="jqzt1">机器状态:正常</string>
     <string name="jqzt2">机器状态:不正常</string>
     <string name="cplb">产品类别:</string>
     <string name="price">¥</string>
     <string name="present">%</string>
+    <string name="ci">次</string>
     <string name="hint">请输入</string>
     <string name="use_money">可用余额</string>
     <string name="description">产品描述:</string>
@@ -27,7 +26,6 @@
     <string name="endDate">结束时间</string>
 
 
-
     <string name="wxdl">微信登录</string>
     <string name="zhdl">账号登录</string>
     <string name="zczh">注册SY新账号</string>
@@ -35,7 +33,8 @@
     <string name="sys">扫一扫</string>
     <string name="sk">收款</string>
     <string name="balance">余额</string>
-    <string name="syygjfw">胜意云管家服务</string>
+    <string name="syygjfw">SY云管家服务</string>
+    <string name="fwtx">服务提醒</string>
     <string name="myAsset">我的资产</string>
     <string name="cpzx">产品中心</string>
     <string name="sjcz">手机充值</string>
@@ -52,7 +51,7 @@
     <string name="revenueSetting">设置营收分成</string>
     <string name="search">搜索</string>
     <string name="jrtb">今日投币(枚):</string>
-    <string name="jrzc">今日纸钞:</string>
+    <string name="jrtl">今日退礼:</string>
     <string name="wdfc">我的分成:</string>
     <string name="sysfq">扫一扫,向我付钱</string>
     <string name="moneySetting">设置金额</string>
@@ -60,6 +59,7 @@
     <string name="savePhoto">保存图片</string>
     <string name="cancle">取消</string>
     <string name="confirm">确定</string>
+    <string name="save">保存</string>
     <string name="details">明细</string>
     <string name="recharge">充值</string>
     <string name="withdraw">提现</string>
@@ -78,15 +78,21 @@
     <string name="cztx">充值提现</string>
     <string name="orderRefund">订单退款</string>
 
+    <string name="checkpaypsd">请输入支付密码,以验证身份</string>
+
     <string name="bindProduct">绑定商品</string>
-    <string name="srbh">请输入编号</string>
-    <string name="srjg">请输入价格</string>
+    <string name="cpbh">产品编号</string>
+    <string name="srbh">请输入产品编号</string>
+    <string name="jg">产品价格</string>
+    <string name="srjg">请输入产品价格</string>
+    <string name="xzlx">选择类型</string>
+    <string name="packageConfig">套餐设置</string>
     <string name="srdz">请输入产品地址</string>
     <string name="srmc">请输入产品名称</string>
     <string name="selectTpe">请选择产品类型</string>
     <string name="mine">我的</string>
     <string name="me">我</string>
-    <string name="smNumber">SY号:</string>
+    <string name="syNumber">SY号:</string>
     <string name="wdsyfc">我的营收分成</string>
     <string name="setting">设置</string>
     <string name="payPsd">支付密码</string>
@@ -104,8 +110,8 @@
 
     <string name="addBankCard">添加银行卡</string>
     <string name="bindBankCard">绑定银行卡</string>
-    <string name="accountName">户名</string>
-    <string name="accountNum">账号</string>
+    <string name="accountName">开户名</string>
+    <string name="accountNum">卡号</string>
     <string name="bankName">开户行</string>
     <string name="bankType">卡类型</string>
     <string name="next">下一步</string>
@@ -120,11 +126,13 @@
     <string name="zhye">账户余额(元)</string>
     <string name="zrsm">昨日扫码:</string>
     <string name="jrsm">今日扫码(元):</string>
-    <string name="sr">收入-</string>
+    <string name="sr">收入</string>
     <string name="tk">退款-</string>
     <string name="cpsyjl">产品收益记录</string>
     <string name="orderNumber">订单号:</string>
     <string name="editDivide">修改资产分成</string>
+    <string name="editPrice">修改价格</string>
+    <string name="editProductInfo">修改商品信息</string>
 
 
     <string name="zrfc">昨日分成(元)</string>
@@ -136,12 +144,78 @@
 
     <string name="sj">售价</string>
     <string name="yuan">元</string>
+    <string name="bi">币</string>
     <string name="fc">分成:</string>
     <string name="sm">扫码:</string>
     <string name="tb">投币:</string>
-    <string name="zc">纸钞:</string>
+    <string name="tl">退礼:</string>
+    <string name="fenc">分成</string>
+
+    <string name="et_voice">音量设置</string>
+    <string name="et_jv">机率调整</string>
+    <string name="et_coin">几币一玩</string>
+    <string name="parameter1">0-10</string>
+    <string name="parameter2">0-255</string>
+    <string name="yjpw">一键配网</string>
+    <string name="newfriend">新的朋友</string>
+    <string name="bankCard">银行卡</string>
+    <string name="binding">绑定</string>
+    <string name="totalYs">总营收(元)</string>
+    <string name="add">添加</string>
+    <string name="unbindAsset">解除资产</string>
 
 
+    <string name="today">今日</string>
+    <string name="yesterday">昨日</string>
+    <string name="week">本周</string>
+    <string name="month">本月</string>
+    <string name="total">总营收</string>
+    <string name="addFriend">添加朋友</string>
+    <string name="dz">产品地址</string>
+    <string name="mc">产品名称</string>
+    <string name="qxzlx">请选择产品类型</string>
+    <string name="selectBankCard">选择银行卡</string>
+    <string name="note">设置备注</string>
+    <string name="area">地区</string>
+    <string name="fcsdje">分成所得金额</string>
+    <string name="fcbl">分成比例</string>
+    <string name="jysj">交易时间</string>
+    <string name="byys">本月营收</string>
+    <string name="sxf">手续费</string>
+    <string name="dzyh">到账银行</string>
+    <string name="txsj">提现时间</string>
+    <string name="zzje">转账金额</string>
+    <string name="payWay">付款方式</string>
+    <string name="friendNum">位好友</string>
+    <string name="tjlp">添加礼品</string>
+
+
+    <string name="spcsjg">商品出售价格:</string>
+    <string name="hddj">货道(游戏)单价:</string>
+    <string name="xykc">现有库存:</string>
+    <string name="hdsphdgl">货道商品获得概率:</string>
+    <string name="hdrl">货道容量:</string>
+
+    <string name="kc">库存</string>
+
+
+    <string name="unit1">元/局</string>
+    <string name="unit2">个</string>
+    <string name="unit3">局/个</string>
+
+    <string name="supply_product">补货</string>
+    <string name="clean_product">清货</string>
+
+    <string name="batch_supply">批量补货</string>
+    <string name="cancle_supply">取消补货</string>
+
+    <string name="batch_clean">批量清货</string>
+    <string name="cancle_clean">取消清货</string>
+
+    <string name="commodityNumber">货道总数:</string>
+    <string name="sumStock">库存总容量:</string>
+    <string name="tlbl">退礼比例(局/个):</string>
+    <string name="currentStock">现有库存:</string>
 
 
 </resources>

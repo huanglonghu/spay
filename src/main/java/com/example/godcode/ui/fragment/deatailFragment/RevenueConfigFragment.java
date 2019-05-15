@@ -3,35 +3,39 @@ package com.example.godcode.ui.fragment.deatailFragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.CreateDivide;
 import com.example.godcode.bean.MyAssetList;
 import com.example.godcode.bean.RevenueDivide;
 import com.example.godcode.bean.RevenueDivideItem;
 import com.example.godcode.bean.TransferDivide;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.databinding.FragmentRevenueconfigBinding;
-import com.example.godcode.databinding.ItemLvRevenueconfigBinding;
 import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.EtStrategy;
 import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.adapter.RevenueConfigListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.ui.view.EtItemDialog;
+import com.example.godcode.ui.view.widget.EtItemDialog;
+import com.example.godcode.utils.LogUtil;
+import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.EtResponse, Presenter.FriendIdResponse {
+public class RevenueConfigFragment extends BaseFragment implements Presenter.FriendIdResponse {
     private FragmentRevenueconfigBinding binding;
     private View view;
     private RevenueConfigListAdapter adapter;
@@ -39,7 +43,6 @@ public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.
     private int fk_productID;
     private int fkUserIDOwner;
     private int mainDivideRate;
-    private EtItemDialog dialog;
     private RevenueDivideItem currentRevenueItem;
     private MyAssetList.ResultBean.DataBean bean;
 
@@ -50,8 +53,9 @@ public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_revenueconfig, container, false);
             bean = (MyAssetList.ResultBean.DataBean) getArguments().getSerializable("bean");
             presenter.setFriendIdResponse(this);
-            initData(bean);
-            binding.revenueconfigToolbar.title.setText("设置营收分成");
+            initData();
+            String title = StringUtil.getString(activity, R.string.revenueSetting);
+            binding.revenueconfigToolbar.title.setText(title);
             binding.setPresenter(presenter);
             view = binding.getRoot();
             revenueDivideList = new ArrayList<>();
@@ -80,16 +84,11 @@ public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-    }
-
-
     private boolean isAdd;
 
     private ArrayList<RevenueDivideItem> revenueDivideList;
 
-    private void initData(MyAssetList.ResultBean.DataBean bean) {
+    private void initData() {
         HttpUtil.getInstance().getRevenueDivideById(bean.getFK_ProductID()).subscribe(
                 revenueDivideStr -> {
                     RevenueDivide revenueDivide = new Gson().fromJson(revenueDivideStr, RevenueDivide.class);
@@ -122,8 +121,6 @@ public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.
                                 revenueDivideList.add(revenueItem);
                             }
                         }
-
-
                         adapter = new RevenueConfigListAdapter(activity, revenueDivideList, RevenueConfigFragment.this);
                         binding.lvRevenueconfig.setAdapter(adapter);
                     }
@@ -135,21 +132,11 @@ public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.
         binding.commitRevenue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View view = adapter.getView(revenueDivideList.size()-1, null, null);
-                ItemLvRevenueconfigBinding binding = (ItemLvRevenueconfigBinding) view.getTag();
-                int divideRate = 0;
-                Editable text = binding.etPresent.getText();
-                if (TextUtils.isEmpty(text)) {
-                    Toast.makeText(activity, "请输入分成", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-                    divideRate = Integer.parseInt(text.toString());
-                }
+                int divideRate = revenueDivideList.get(revenueDivideList.size() - 1).getDivideRate();
                 if (divideRate > mainDivideRate) {
                     Toast.makeText(activity, "超出最大可分成值", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 CreateDivide createDivide = new CreateDivide();
                 CreateDivide.RevenueDivideBean divideBean = getDivideBean(null, currentRevenueItem.getUserId(), divideRate);
                 createDivide.setRevenueDivide(divideBean);
@@ -157,7 +144,7 @@ public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.
                         addRevenueDivideStr -> {
                             isAdd = false;
                             Toast.makeText(activity, "添加成功", Toast.LENGTH_SHORT).show();
-                            initData(bean);
+                            initData();
                             adapter.notifyDataSetChanged();
                         }
                 );
@@ -166,12 +153,18 @@ public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.
     }
 
     public void alertDialog(int position) {
-        type = 1;
         RevenueDivideItem revenueDivideItem = revenueDivideList.get(position);
         int divideRate = revenueDivideItem.getDivideRate();
-        dialog = new EtItemDialog(activity, "修改分成", "分成", "1%-" + (divideRate + mainDivideRate) + "%",1);
-        dialog.setPosition(position);
-        dialog.setEtResponse(this);
+        EtItemDialog dialog = new EtItemDialog.Builder().
+                context(activity).
+                etStragety(new EtDivideStrategy()).
+                title("修改分成").
+                hint("分成").
+                type(1).
+                min(0).
+                max(divideRate + mainDivideRate).
+                position(position).
+                build();
         dialog.show();
     }
 
@@ -185,68 +178,26 @@ public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.
             HttpUtil.getInstance().deleteRevenueDivide(Integer.parseInt(revenueDivideItem.getId())).subscribe(
                     deleteDivideStr -> {
                         Toast.makeText(activity, "删除成功", Toast.LENGTH_SHORT).show();
-                        initData(bean);
+                        initData();
                     }
             );
         }
     }
 
-    private int type;
-
     public void transferDivide(int position) {
-        type = 2;
         RevenueDivideItem revenueDivideItem = revenueDivideList.get(position);
         int divideRate = revenueDivideItem.getDivideRate();
-        dialog = new EtItemDialog(activity, "移交产权", "比例", "0%-" + (divideRate + mainDivideRate) + "%",1);
-        dialog.setPosition(position);
-        dialog.setEtResponse(this);
+        EtItemDialog dialog = new EtItemDialog.Builder().
+                context(activity).
+                etStragety(new TransferEquityStrategy()).
+                title("移交产权").
+                hint("比例").
+                type(1).
+                position(position).
+                min(0).
+                max(divideRate + mainDivideRate).
+                build();
         dialog.show();
-    }
-
-    private void transferEquity(int value, int position) {
-        RevenueDivideItem revenueDivideItem = revenueDivideList.get(position);
-        String parentID = bean.getParentID();
-        if (!TextUtils.isEmpty(parentID)) {
-            if (parentID.contains(revenueDivideItem.getUserId() + "")) {
-                Toast.makeText(activity, "不能向父商家移交产权", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
-        if (value == 0) {
-            Toast.makeText(activity, "请输入移交比例", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (value > revenueDivideItem.getDivideRate() + mainDivideRate) {
-            Toast.makeText(activity, "超出最大可分成值", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        CreateDivide.RevenueDivideBean divideBean = getDivideBean(null, revenueDivideItem.getUserId(), value);
-        CreateDivide createDivide = new CreateDivide();
-        createDivide.setRevenueDivide(divideBean);
-        HttpUtil.getInstance().createDivide(createDivide).subscribe(
-                updateDivideStr -> {
-                    int i = value - revenueDivideItem.getDivideRate();
-                    revenueDivideItem.setDivideRate(value);
-                    adapter.notifyDataSetChanged();
-                    mainDivideRate=mainDivideRate-i;
-                    revenueDivideItem.setDivideRate(value);
-                    binding.setMainPresent(mainDivideRate);
-                    TransferDivide transferDivide = new TransferDivide();
-                    transferDivide.setFK_UserID(revenueDivideItem.getUserId());
-                    transferDivide.setHostMerchantUserID(Constant.userId);
-                    transferDivide.setId(bean.getId());
-                    HttpUtil.getInstance().tranferDivide(transferDivide).subscribe(
-                            transferDivideStr -> {
-                                Toast.makeText(activity, "产权交换成功", Toast.LENGTH_SHORT).show();
-                                AssetFragment assetFragment = (AssetFragment) presenter.getFragment("myAsset");
-                                assetFragment.setIndex(0);
-                                dialog.dismiss();
-                                presenter.back();
-                            }
-                    );
-                }
-        );
     }
 
     public CreateDivide.RevenueDivideBean getDivideBean(String id, int fK_UserIDDivide, int divideRate) {
@@ -270,41 +221,6 @@ public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.
     }
 
     @Override
-    public void hanlderEt(String str, int position) {
-        int value=Integer.parseInt(str);
-        if (type == 1) {
-            updateDivide(value, position);
-        } else if (type == 2) {
-            transferEquity(value, position);
-        }
-    }
-
-    private void updateDivide(int value, int position) {
-        RevenueDivideItem revenueDivideItem = revenueDivideList.get(position);
-        if (value < revenueDivideItem.getDivideRate() + mainDivideRate - 1) {
-            CreateDivide.RevenueDivideBean divideBean = getDivideBean(String.valueOf(revenueDivideItem.getId()), revenueDivideItem.getUserId(), value);
-            CreateDivide createDivide = new CreateDivide();
-            createDivide.setRevenueDivide(divideBean);
-            HttpUtil.getInstance().createDivide(createDivide).subscribe(
-                    updateDivideStr -> {
-                        View view = adapter.getView(position, null, null);
-                        ItemLvRevenueconfigBinding itemBinding = (ItemLvRevenueconfigBinding) view.getTag();
-                        Toast.makeText(activity, "修改成功", Toast.LENGTH_SHORT).show();
-                        int i = value - revenueDivideItem.getDivideRate();
-                        revenueDivideItem.setDivideRate(value);
-                        itemBinding.etPresent.setText(value + "");
-                        mainDivideRate=mainDivideRate-i;
-                        binding.setMainPresent(mainDivideRate);
-                        dialog.dismiss();
-                    }
-            );
-        } else {
-            Toast.makeText(activity, "超出最大可分成值", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    @Override
     public void getFriendId(int friendId) {
         for (RevenueDivideItem revenueDivideItem : revenueDivideList) {
             if (revenueDivideItem.getUserId() == friendId) {
@@ -318,4 +234,68 @@ public class RevenueConfigFragment extends BaseFragment implements EtItemDialog.
         revenueDivideList.add(currentRevenueItem);
         binding.lvRevenueconfig.setAdapter(adapter);
     }
+
+    public class TransferEquityStrategy extends EtStrategy {
+        @Override
+        public void etComplete(String str, int position) {
+            int value = Integer.parseInt(str);
+            RevenueDivideItem revenueDivideItem = revenueDivideList.get(position);
+            String parentID = bean.getParentID();
+            if (!TextUtils.isEmpty(parentID)) {
+                if (parentID.contains(revenueDivideItem.getUserId() + "")) {
+                    Toast.makeText(activity, "不能向父商家移交产权", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            CreateDivide.RevenueDivideBean divideBean = getDivideBean(null, revenueDivideItem.getUserId(), value);
+            CreateDivide createDivide = new CreateDivide();
+            createDivide.setRevenueDivide(divideBean);
+            HttpUtil.getInstance().createDivide(createDivide).subscribe(
+                    updateDivideStr -> {
+                        int i = value - revenueDivideItem.getDivideRate();
+                        revenueDivideItem.setDivideRate(value);
+                        adapter.notifyDataSetChanged();
+                        mainDivideRate = mainDivideRate - i;
+                        revenueDivideItem.setDivideRate(value);
+                        binding.setMainPresent(mainDivideRate);
+                        TransferDivide transferDivide = new TransferDivide();
+                        transferDivide.setFK_UserID(revenueDivideItem.getUserId());
+                        transferDivide.setHostMerchantUserID(Constant.userId);
+                        transferDivide.setId(bean.getId());
+                        HttpUtil.getInstance().tranferDivide(transferDivide).subscribe(
+                                transferDivideStr -> {
+                                    Toast.makeText(activity, "产权交换成功", Toast.LENGTH_SHORT).show();
+                                    presenter.back();
+                                    presenter.back();
+                                }
+                        );
+                    }
+            );
+        }
+    }
+
+    public class EtDivideStrategy extends EtStrategy {
+        @Override
+        public void etComplete(String str, int position) {
+            int value = Integer.parseInt(str);
+            RevenueDivideItem revenueDivideItem = revenueDivideList.get(position);
+            CreateDivide.RevenueDivideBean divideBean = getDivideBean(String.valueOf(revenueDivideItem.getId()), revenueDivideItem.getUserId(), value);
+            CreateDivide createDivide = new CreateDivide();
+            createDivide.setRevenueDivide(divideBean);
+            HttpUtil.getInstance().createDivide(createDivide).subscribe(
+                    updateDivideStr -> {
+                        Toast.makeText(activity, "修改成功", Toast.LENGTH_SHORT).show();
+                        int i = value - revenueDivideItem.getDivideRate();
+                        revenueDivideItem.setDivideRate(value);
+                        revenueDivideList.set(position,revenueDivideItem);
+                        adapter.refresData(position);
+                        mainDivideRate = mainDivideRate - i;
+                        binding.setMainPresent(mainDivideRate);
+                    }
+            );
+        }
+
+    }
+
+
 }

@@ -3,27 +3,35 @@ package com.example.godcode.http;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.example.godcode.bean.ChangePsd;
-import com.example.godcode.bean.EditPresonal;
 import com.example.godcode.bean.AddFriend;
+import com.example.godcode.bean.BatchSettingBody;
 import com.example.godcode.bean.BindBankCard;
-import com.example.godcode.bean.BindProductBody;
+import com.example.godcode.bean.BindPackage;
+import com.example.godcode.bean.BindProduct;
+import com.example.godcode.bean.ChangePsd;
 import com.example.godcode.bean.CheckPsd;
 import com.example.godcode.bean.ConcurAddFriend;
 import com.example.godcode.bean.CreateDivide;
 import com.example.godcode.bean.CreateOrder;
+import com.example.godcode.bean.AddBankCard;
 import com.example.godcode.bean.EditBankCard;
+import com.example.godcode.bean.EditGroupItemName;
+import com.example.godcode.bean.EditPackage;
+import com.example.godcode.bean.EditPresonal;
 import com.example.godcode.bean.EditProduct;
 import com.example.godcode.bean.EditProductPrice;
+import com.example.godcode.bean.EditProductSetting;
 import com.example.godcode.bean.GetVerification;
 import com.example.godcode.bean.Id;
 import com.example.godcode.bean.LoginBody;
-import com.example.godcode.bean.LoginResponse;
 import com.example.godcode.bean.MobileRecharge;
 import com.example.godcode.bean.PayByBalance;
+import com.example.godcode.bean.PresentOption;
 import com.example.godcode.bean.RechargeBody;
+import com.example.godcode.bean.RefreshDiviceToken;
 import com.example.godcode.bean.RefreshToken;
 import com.example.godcode.bean.RegisterBody;
 import com.example.godcode.bean.ReturnEquity;
@@ -34,18 +42,26 @@ import com.example.godcode.bean.TransferDivide;
 import com.example.godcode.bean.Tx;
 import com.example.godcode.bean.UpdateFriend;
 import com.example.godcode.bean.WxPay;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.presenter.Presenter;
-import com.example.godcode.ui.base.Constant;
 import com.example.godcode.ui.view.NetLoading;
+import com.example.godcode.ui.view.widget.ErrorDialog;
 import com.example.godcode.utils.ErrrCodeShow;
 import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.SharepreferenceUtil;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -74,7 +90,6 @@ public class HttpUtil {
     private OkHttpClient client;
     private NetLoading netLoading;
 
-
     private HttpUtil() {
         //打印retrofit日志
         loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
@@ -96,14 +111,6 @@ public class HttpUtil {
                     String loginToken = SharepreferenceUtil.getInstance().getLoginToken();
                     request = builder.addHeader("Authorization", "Bearer " + accessToken).addHeader("LoginToken", loginToken + "&" + Constant.userId).build();
                 }
-
-//                okhttp3.Response proceed = chain.proceed(request);//判断token是否刷新
-//                LogUtil.log("-------code-----" + proceed.code());
-//                if (isTokenExpired(proceed)) {
-//                    String newToken = getNewToken();
-//                    LogUtil.log("-------refreshToken-------" + newToken);
-//                }
-
                 if (path.equals("/MoblieWeChatAuth/MoblieWXAuthToken") || path.equals("/WeChatPay/MoblieWXPayRequest")) {
                     HttpUrl newBaseUrl = HttpUrl.parse("http://godcodepay.joinvalue.com:8901/");
                     HttpUrl newFullUrl = oldHttpUrl
@@ -112,13 +119,14 @@ public class HttpUtil {
                             .host(newBaseUrl.host())
                             .port(newBaseUrl.port())
                             .build();
-                    return chain.proceed(builder.url(newFullUrl).build());
+                    okhttp3.Response response = chain.proceed(builder.url(newFullUrl).build());
+                    return response;
                 } else {
-                    return chain.proceed(request);
+                    okhttp3.Response response = chain.proceed(request);
+                    return response;
                 }
             }
         };
-
 
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         client = new OkHttpClient.Builder()
@@ -132,6 +140,10 @@ public class HttpUtil {
     }
 
 
+
+
+
+
     private String getNewToken() throws IOException {
         Retrofit retrofit = new Retrofit.Builder().client(client).baseUrl(Constant.baseUrl)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -143,6 +155,27 @@ public class HttpUtil {
         return s1;
     }
 
+    public void showErrorDialog() {
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
+                e.onNext(true);
+            }
+        }).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                a -> {
+                    ErrorDialog errorDialog = new ErrorDialog(context);
+                    errorDialog.show();
+                    Timer t = new Timer();
+                    t.schedule(new TimerTask() {
+                        public void run() {
+                            errorDialog.dismiss();
+                            t.cancel();
+                        }
+                    }, 3000);
+                }
+        );
+
+    }
 
     private boolean isTokenExpired(okhttp3.Response response) {
         if (response.code() == 401) {
@@ -150,7 +183,6 @@ public class HttpUtil {
         }
         return false;
     }
-
 
     private static HttpUtil defauleInstance;
 
@@ -165,10 +197,22 @@ public class HttpUtil {
         return httpUtil;
     }
 
+
+    public Observable<String> batchSetting(BatchSettingBody batchSettingBody) {
+        Call<ResponseBody> call = httpInterface.batchSetting(batchSettingBody);
+        return enqueueCall(call);
+    }
+
     private Context context;
 
     public void init(Context context) {
         this.context = context;
+    }
+
+
+    public Observable<String> refreshDiviceToken(RefreshDiviceToken refreshDiviceToken) {
+        Call<ResponseBody> call = httpInterface.refreshDiviceToken(refreshDiviceToken);
+        return enqueueCall(call);
     }
 
     public Observable<String> login(LoginBody body) {
@@ -211,8 +255,13 @@ public class HttpUtil {
         return enqueueCall(call);
     }
 
-    public Observable<String> bindProduct(BindProductBody body) {
+    public Observable<String> bindProduct(BindProduct body) {
         Call<ResponseBody> call = httpInterface.bindProduct(body);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> bindProduct2(BindProduct bindProduct) {
+        Call<ResponseBody> call = httpInterface.bindProduct2(bindProduct);
         return enqueueCall(call);
     }
 
@@ -309,7 +358,7 @@ public class HttpUtil {
         return enqueueCall(call);
     }
 
-    public Observable<String> sendBankCardMsg(EditBankCard editBankCard) {
+    public Observable<String> sendBankCardMsg(AddBankCard editBankCard) {
         Call<ResponseBody> call = httpInterface.sendBankCardMsg(editBankCard);
         return enqueueCall(call);
     }
@@ -365,12 +414,19 @@ public class HttpUtil {
         return enqueueCall(call);
     }
 
-    public Observable<String> isBind(String productNumber) {
-        Call<ResponseBody> call = httpInterface.isBind(productNumber);
+
+    public Observable<String> querryProduct(Integer id, String productNumber) {
+        Call<ResponseBody> call = httpInterface.querryProduct(id, productNumber);
         return enqueueCall(call);
     }
 
-    public Observable<String> getOrderNumber(CreateOrder createOrder) {
+    public Observable<String> getOrderNumber(int productId, double money, Integer cointCount) {
+        CreateOrder createOrder = new CreateOrder();
+        createOrder.setFK_ProductID(productId);
+        createOrder.setFeeType("CNY");
+        createOrder.setSumOrder(money);
+        createOrder.setCoinCount(cointCount);
+        createOrder.setFK_UserID(Constant.userId);
         Call<ResponseBody> call = httpInterface.getOrderNumber(createOrder);
         return enqueueCall(call);
     }
@@ -467,6 +523,121 @@ public class HttpUtil {
         return enqueueCall(call);
     }
 
+    public Observable<String> editGroupItemName(EditGroupItemName editGroupItemName) {
+        Call<ResponseBody> call = httpInterface.editGroupItemName(editGroupItemName);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> getProductSettingMsg(int id) {
+        Call<ResponseBody> call = httpInterface.getProductSettingMsg(id);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> editProductSetting(EditProductSetting.ProductSettingBean psb) {
+        EditProductSetting eps = new EditProductSetting();
+        eps.setProductSetting(psb);
+        Call<ResponseBody> call = httpInterface.editProductSetting(eps);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> getPresentListById() {
+        Call<ResponseBody> call = httpInterface.getPresentList(Constant.userId, 1, 20);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> searchPresent(String presentName) {
+        Call<ResponseBody> call = httpInterface.searchPresent(Constant.userId, presentName, 1, 20);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> querryPresentById(long id) {
+        Call<ResponseBody> call = httpInterface.querryPresentById(id);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> createOrUpdatePresent(PresentOption presentOption) {
+        Call<ResponseBody> call = httpInterface.createOrUpdatePresent(presentOption);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> deletePresent(int id) {
+        Call<ResponseBody> call = httpInterface.deletePresent(id);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> getCommodityRoadList(long productID, String presentNameOrNumber) {
+        Call<ResponseBody> call = httpInterface.getCommodityRoadList(productID, presentNameOrNumber, 1, 100);
+        return enqueueCall(call);
+    }
+
+
+    public Observable<String> editCommdityRoad(BindProduct.CommodityRoadBeanX commodityRoadBeanX) {
+        Call<ResponseBody> call = httpInterface.editCommdityRoad(commodityRoadBeanX);
+        return enqueueCall(call);
+    }
+
+
+    public Observable<String> editBankCard(EditBankCard editBankCard) {
+        Call<ResponseBody> call = httpInterface.editBankCard(editBankCard);
+        return enqueueCall(call);
+    }
+
+
+    public Observable<String> querryOrderById(int id) {
+        Call<ResponseBody> call = httpInterface.qurryOrderById(id);
+        return enqueueCall(call);
+    }
+
+
+    public Observable<String> buhuo(int costNumber, ArrayList<Long> list) {
+        Call<ResponseBody> call = httpInterface.buHuo(costNumber, list);
+        return enqueueCall(call);
+    }
+
+
+    public Observable<String> getSellGoodsOrderById(long id) {
+        Call<ResponseBody> call = httpInterface.getSellGoodsOrderById(id);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> getPackageList(long categoryId) {
+        Call<ResponseBody> call = httpInterface.getPackageList(Constant.userId, categoryId, 1, 10);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> editPackage(EditPackage editPackage) {
+        Call<ResponseBody> call = httpInterface.editPackage(editPackage);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> getPackageSettingList(long productId) {
+        Call<ResponseBody> call = httpInterface.getPackageSettingList(productId);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> bindPackage(BindPackage bindPackage) {
+        Call<ResponseBody> call = httpInterface.bindPackage(bindPackage);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> deletePackageSetting(long id) {
+        Call<ResponseBody> call = httpInterface.deletePackageSetting(id);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> deletePackage(long id) {
+        Call<ResponseBody> call = httpInterface.deletePackage(id);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> freePlay(String productNumber) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("productNumber",productNumber);
+        Call<ResponseBody> call = httpInterface.freePlay(map);
+        return enqueueCall(call);
+    }
+
+
     HashMap<Call<ResponseBody>, NetLoading> map = new HashMap<>();
 
     @NonNull
@@ -525,15 +696,23 @@ public class HttpUtil {
 
             @Override
             public void onFailure(Call<ResponseBody> call1, Throwable t) {
+                String s = t.toString();
                 if (map.get(call) != null) {
                     NetLoading netLoading = map.get(call);
                     netLoading.cancel();
                     map.remove(netLoading);
                 }
 
-                Toast.makeText(context, "网络异常,请重试", Toast.LENGTH_SHORT).show();
+                if (s.contains("java.net.ConnectException")) {
+                    showErrorDialog();
+                } else {
+                    Toast.makeText(context, "网络异常,请重试", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
     }
+
 
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -12,6 +13,10 @@
             name="user"
             type="com.example.godcode.greendao.entity.User" />
 
+        <variable
+            name="title"
+            type="String"/>
+
 
     </data>
 
@@ -20,60 +25,38 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include
+            layout="@layout/layout_toolbar1"
+            bind:title="@{title}" />
+
         <include layout="@layout/layout_divider" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/presenal"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_item"
-            android:paddingLeft="20dp">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="30dp">
 
             <ImageView
                 android:id="@+id/iv_user"
                 android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/contact_normal"
-                />
+                android:layout_height="70dp" />
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/tv_userName"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/iv_user"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tv_userName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#000"
-                    android:textSize="15sp"
-                    android:text="@{user.userName}"
-                    />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_userName"
-                    android:layout_marginTop="5dp"
-                    android:text="@{@string/smNumber+user.syNumber}" />
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_user"
+                android:layout_marginTop="5dp"
+                android:text="@{user.userName}"
+                android:textColor="#000"
+                android:textSize="15sp" />
 
 
-            </RelativeLayout>
-
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:onClick="@{()->presenter.step2Fragment(&quot;visitingcard&quot;)}"
-                android:src="@drawable/qrcode" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <include layout="@layout/layout_divider" />
 

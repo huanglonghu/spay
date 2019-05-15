@@ -1,22 +1,18 @@
 package com.example.godcode.service;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 
-import com.example.godcode.ui.base.Constant;
 import com.example.godcode.utils.LogUtil;
 
-/**
- * Created by Administrator on 2018/9/7.
- */
 
 public class TimeService extends Service {
+
+    private Thread refreshThread;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -25,17 +21,31 @@ public class TimeService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-      AlarmManager  manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long triggerAtTime =  SystemClock.elapsedRealtime()  +(Constant.expireInSeconds-60)*1000;
-        Intent intent1 = new Intent("ELITOR_CLOCK");
-        LogUtil.log("---------timeService-----"+ SystemClock.elapsedRealtime());
-        PendingIntent pi = PendingIntent.getBroadcast(this, 0, intent1, 0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            manager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-        } else {
-            manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-        }
+       LogUtil.log("=======intent====="+intent);
+//        Bundle bundle = intent.getExtras();
+//
+//        if (bundle != null) {
+//            int expired = intent.getExtras().getInt("expired");
+//            int inteverTime = (expired - 180) * 1000;
+//            LogUtil.log(inteverTime + "==============" + expired);
+//            if (refreshThread == null && inteverTime > 0) {
+//                refreshThread = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        while (true) {
+//                            try {
+//                                Intent refreshIntent = new Intent("ELITOR_CLOCK");
+//                                sendBroadcast(refreshIntent);
+//                                Thread.sleep(inteverTime);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                });
+//                refreshThread.start();
+//            }
+//        }
         return super.onStartCommand(intent, flags, startId);
     }
 }

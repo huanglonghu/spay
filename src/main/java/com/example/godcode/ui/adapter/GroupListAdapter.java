@@ -12,8 +12,8 @@ import com.example.godcode.R;
 import com.example.godcode.bean.GroupMsg;
 import com.example.godcode.catche.Loader.RxImageLoader;
 import com.example.godcode.databinding.ItemLvGroupBinding;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.utils.LogUtil;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.ui.view.widget.EditNameDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ public class GroupListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return  groupList.size();
+        return groupList.size();
     }
 
     @Override
@@ -54,9 +54,10 @@ public class GroupListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if (groupList.size()>0&&viewMap.get(position) == null) {
+        if (groupList.size() > 0 && viewMap.get(position) == null) {
             ItemLvGroupBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_lv_group, null, false);
             convertView = binding.getRoot();
+            convertView.setTag(binding);
             binding.setPeriodType(incomeType[periodType - 1]);
             GroupMsg.ResultBean.bean bean = groupList.get(position);
             String headImgUrl = bean.getHeadImgUrl();
@@ -65,8 +66,17 @@ public class GroupListAdapter extends BaseAdapter {
                     headImgUrl = Constant.baseUrl + headImgUrl;
                 }
                 RxImageLoader.with(context).load(headImgUrl).into(binding.ivPhoto);
+            }else {
+                binding.ivPhoto.setImageResource(R.drawable.contact_normal);
             }
             binding.setBean(bean);
+            binding.editGroupName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditNameDialog editNameDialog = new EditNameDialog(context, bean.getFK_UserID(), binding.groupName);
+                    editNameDialog.show();
+                }
+            });
             viewMap.put(position, convertView);
         }
         return viewMap.get(position);
@@ -79,8 +89,21 @@ public class GroupListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public int getGroupId(int position){
+    public int getGroupId(int position) {
         GroupMsg.ResultBean.bean bean = groupList.get(position);
         return bean.getFK_UserID();
+    }
+
+    public String getGroupName(int position) {
+        GroupMsg.ResultBean.bean bean = groupList.get(position);
+        return bean.getUserName();
+    }
+
+
+    public void refreshData(int position, GroupMsg.ResultBean.bean bean) {
+        View view = getView(position, null, null);
+        ItemLvGroupBinding binding = (ItemLvGroupBinding) view.getTag();
+        binding.setBean(bean);
+
     }
 }

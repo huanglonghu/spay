@@ -108,8 +108,4 @@ public class SearchFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 }

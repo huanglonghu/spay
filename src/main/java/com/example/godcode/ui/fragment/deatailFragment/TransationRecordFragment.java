@@ -19,19 +19,17 @@ import com.example.godcode.greendao.option.TransationTypeOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.adapter.TransationRecordListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.ui.view.BottomDialog;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.ui.view.widget.BottomDialog;
 import com.example.godcode.ui.view.MyDatePickerDialog;
 import com.example.godcode.ui.view.MyListView;
+import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class TransationRecordFragment extends BaseFragment implements BottomDialog.TypeSelect, MyListView.RefreshData {
     private FragmentTransactionrecordBinding binding;
@@ -48,8 +46,10 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
             binding.setPresenter(presenter);
             binding.lvTransationrecord.setRefreshData(this);
             view = binding.getRoot();
-            binding.transationrecordToolbar.title.setText("交易记录");
-            binding.transationrecordToolbar.tvOption.setText("筛选");
+            String title = StringUtil.getString(activity, R.string.transactionsDetail);
+            String sx = StringUtil.getString(activity, R.string.sx);
+            binding.transationrecordToolbar.title.setText(title);
+            binding.transationrecordToolbar.tvOption.setText(sx);
             data = new ArrayList<>();
             typeList = new ArrayList<>();
             querryTeansationType();
@@ -121,7 +121,7 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
                     }
                     data.addAll(teansantion.getData());
                     adapter.notifyDataSetChanged();
-                    binding.sz.setText("支出¥ " + teansantion.getPaySumMoney() + "  收入¥ " + teansantion.getIncomeSumMoney());
+                    binding.setTeansation(teansantion);
                 }
         );
     }
@@ -146,7 +146,7 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
 
     public void initView() {
         initTime();
-        adapter = new TransationRecordListAdapter(activity, data);
+        adapter = new TransationRecordListAdapter(activity, data,R.layout.item_lv_transationrecord);
         binding.lvTransationrecord.setAdapter(adapter);
         binding.transationrecordToolbar.option.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,10 +190,6 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
 
     @Override
     protected void lazyLoad() {
-    }
-
-    @Override
-    public void refreshData() {
     }
 
     @Override

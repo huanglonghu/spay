@@ -11,15 +11,11 @@ import com.example.godcode.bean.LoginResponse;
 import com.example.godcode.bean.RegisterBody;
 import com.example.godcode.bean.WxDlMsg;
 import com.example.godcode.greendao.entity.LoginResult;
-import com.example.godcode.greendao.entity.User;
 import com.example.godcode.greendao.option.LoginResultOption;
-import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.activity.MainActivity;
-import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.ui.base.GodCodeApplication;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.loginActivity.RegisterFragment;
 import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.SharepreferenceUtil;
@@ -30,9 +26,6 @@ import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
@@ -51,8 +44,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     }
 
     @Override
-    public void onReq(BaseReq baseReq) {
-    }
+    public void onReq(BaseReq baseReq) {}
 
     //请求回调结果处理
     @Override
@@ -82,6 +74,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         //获取openid
         HttpUtil.getInstance().getOpenId(code).subscribe(
                 wxdlStr -> {
+                    LogUtil.log("=========wxdlstr========="+wxdlStr);
                     WxDlMsg wxDlMsg = new Gson().fromJson(wxdlStr, WxDlMsg.class);
                     WxDlMsg.DataBean data = wxDlMsg.getData();
                     LoginBody loginBody = new LoginBody();
@@ -104,6 +97,9 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                     LoginResponse.ResultBean result = loginResponse.getResult();
                                     LoginResult loginResult = new LoginResult(Constant.uniquenessToken, result.getPayServerUrl(), result.getUserId());
                                     Constant.uniquenessToken = result.getUniquenessToken();
+                                    Constant.balances = result.getBalances();
+                                    Constant.toDayMoney = result.getToDayMoney();
+                                    Constant.yesterDayMoney = result.getYesterDayMoney();
                                     loginResult.setUniquenessToken(Constant.uniquenessToken);
                                     LoginResultOption.getInstance().insertLoginResult(loginResult);
                                     Constant.userId = result.getUserId();

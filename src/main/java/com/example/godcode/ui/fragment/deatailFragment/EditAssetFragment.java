@@ -95,11 +95,6 @@ public class EditAssetFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-
-    }
-
 
     public interface AssetUpdate {
         void assetUpdate(String productName, String adress);

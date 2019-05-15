@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.godcode.R;
-import com.example.godcode.ui.view.ClipViewLayout;
+import com.example.godcode.ui.view.customview.ClipViewLayout;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;

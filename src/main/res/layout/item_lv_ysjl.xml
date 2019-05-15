@@ -36,7 +36,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{isIncome?@string/sr+bean.productName:@string/tk+bean.productName}"
+                android:text='@{isIncome?@string/sr+"-"+bean.productName:@string/tk+"-"+bean.productName}'
                 android:textColor="@{isIncome?@color/picker_title_text_color:@color/c2}"
                 />
 

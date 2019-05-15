@@ -13,9 +13,8 @@ import com.example.godcode.bean.MyAssetList;
 import com.example.godcode.catche.Loader.RxImageLoader;
 import com.example.godcode.databinding.ItemLvMyassetBinding;
 import com.example.godcode.presenter.Presenter;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.utils.FormatCheckUtil;
-import com.example.godcode.utils.LogUtil;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.utils.FormatUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +53,7 @@ public class AssetListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (assetList.size()>0&&viewMap.get(position) == null) {
+        if (viewMap.get(position) == null) {
             ItemLvMyassetBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_lv_myasset, parent, false);
             binding.setPresenter(Presenter.getInstance());
             binding.setPeriodType(incomeType[periodType - 1]);
@@ -79,10 +78,10 @@ public class AssetListAdapter extends BaseAdapter {
             } else {
                 binding.tvJrtb.setVisibility(View.GONE);
             }
-            if ((1 << 1 & purView) != 0) {
-                binding.tvJrzc.setVisibility(View.VISIBLE);
+            if ((1 << 2 & purView) != 0) {
+                binding.tvJrtl.setVisibility(View.VISIBLE);
             } else {
-                binding.tvJrzc.setVisibility(View.GONE);
+                binding.tvJrtl.setVisibility(View.GONE);
             }
             convertView = binding.getRoot();
             convertView.setTag(binding);
@@ -94,7 +93,7 @@ public class AssetListAdapter extends BaseAdapter {
 
     private void initData(ItemLvMyassetBinding binding, MyAssetList.ResultBean.DataBean dataBean) {
         double price = dataBean.getPrice();
-        String priceStr = FormatCheckUtil.getInstance().get2double(price);
+        String priceStr = FormatUtil.getInstance().get2double(price);
         binding.price.setText("¥" + priceStr);
         binding.setAssetBean(dataBean);
     }

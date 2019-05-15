@@ -14,13 +14,8 @@ import com.example.godcode.bean.SetPayPsd;
 import com.example.godcode.databinding.FragmentSetpaypsdBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
-import com.example.godcode.utils.LogUtil;
-import com.example.godcode.utils.PayPsdSetting;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class SetPayPsdFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
@@ -121,9 +116,6 @@ public class SetPayPsdFragment extends BaseFragment implements KeyBoard.PsdLengt
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-    }
 
     private int index;
 

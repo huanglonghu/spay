@@ -1,16 +1,15 @@
 package com.example.godcode.bean;
 
-import com.example.godcode.utils.FormatCheckUtil;
+import com.example.godcode.utils.FormatUtil;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Administrator on 2018/11/9.
  */
 
-public class GroupMsg {
+public class  GroupMsg {
 
     /**
      * result : {"normalCount":0,"errorCount":2,"dividedMoney":0,"coinCount":0,"data":{"ifelse":{"fK_UserID":40,"scanCodeIncome":0,"divideIncome":0,"onlineCount":0,"offlineCount":1},"穷开":{"fK_UserID":11,"scanCodeIncome":0,"divideIncome":0,"onlineCount":0,"offlineCount":1}}}
@@ -85,6 +84,16 @@ public class GroupMsg {
         private double dividedMoney;
         private int coinCount;
         private int count;
+        private int sumAwardCount;
+
+
+        public int getSumAwardCount() {
+            return sumAwardCount;
+        }
+
+        public void setSumAwardCount(int sumAwardCount) {
+            this.sumAwardCount = sumAwardCount;
+        }
 
         private Map<String,bean> data;
 
@@ -113,7 +122,7 @@ public class GroupMsg {
         }
 
         public String getDividedMoney() {
-            String a = FormatCheckUtil.getInstance().get2double(dividedMoney);
+            String a = FormatUtil.getInstance().get2double(dividedMoney);
             return a;
         }
 
@@ -170,7 +179,7 @@ public class GroupMsg {
             }
 
             public String getScanCodeIncome() {
-                String aDouble = FormatCheckUtil.getInstance().get2double(scanCodeIncome);
+                String aDouble = FormatUtil.getInstance().get2double(scanCodeIncome);
                 return aDouble;
             }
 
@@ -179,7 +188,7 @@ public class GroupMsg {
             }
 
             public String getDivideIncome() {
-                String a = FormatCheckUtil.getInstance().get2double(divideIncome);
+                String a = FormatUtil.getInstance().get2double(divideIncome);
                 return a;
             }
 

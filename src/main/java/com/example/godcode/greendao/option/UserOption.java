@@ -1,13 +1,9 @@
 package com.example.godcode.greendao.option;
 
-import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.entity.User;
-import com.example.godcode.greendao.gen.FriendDao;
 import com.example.godcode.greendao.gen.UserDao;
 import com.example.godcode.ui.base.GodCodeApplication;
 import com.example.godcode.utils.LogUtil;
-
-import static com.example.godcode.ui.base.Constant.userName;
 
 /**
  * Created by Administrator on 2018/7/30.

@@ -5,48 +5,32 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.godcode.R;
-import com.example.godcode.bean.EditPresonal;
 import com.example.godcode.bean.MobileRecharge;
 import com.example.godcode.bean.MobileRechargeList;
-import com.example.godcode.bean.UploadResponse;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.databinding.FragmentMobileRechargeBinding;
-import com.example.godcode.greendao.option.UserOption;
+import com.example.godcode.handler.ActivityResultHandler;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.HandlerStrategy;
 import com.example.godcode.ui.adapter.MobileRechargeAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
 import com.example.godcode.ui.view.KeyBoard;
 import com.example.godcode.ui.view.PsdPopupWindow;
-import com.example.godcode.utils.FileUtil;
 import com.example.godcode.utils.GsonUtil;
-import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.PayPsdSetting;
-
-import java.io.File;
-import java.util.ArrayList;
+import com.example.godcode.utils.StringUtil;
 import java.util.List;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-
-import static android.app.Activity.RESULT_OK;
 
 public class MobileRechargeFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
     private FragmentMobileRechargeBinding binding;
@@ -60,7 +44,8 @@ public class MobileRechargeFragment extends BaseFragment implements KeyBoard.Psd
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mobile_recharge, container, false);
             binding.setPresenter(presenter);
-            binding.mobileRechargeToolbar.title.setText("手机充值");
+            String title = StringUtil.getString(activity, R.string.sjcz);
+            binding.mobileRechargeToolbar.title.setText(title);
             view = binding.getRoot();
             initData();
             initView();
@@ -105,26 +90,16 @@ public class MobileRechargeFragment extends BaseFragment implements KeyBoard.Psd
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                activity.startActivityForResult(intent, REQUEST_PHONE);
+                new ActivityResultHandler.Builder().activity(activity).intent(intent).requestCode(ActivityResultHandler.REQUEST_SELECT_CONTACTS).hadlerStrategy(new HandlerStrategy() {
+                    @Override
+                    public void onActivityResult(String text) {
+                        binding.phoneNumber.setText(text);
+                    }
+                }).build().startActivityForResult();
             }
         });
-
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_PHONE:
-                Uri uri = data.getData();
-                String[] contacts = getPhoneContacts(uri);
-                String phoneNum = contacts[1].replace("-", "");
-                binding.phoneNumber.setText(phoneNum);
-                break;
-        }
-    }
-
-
-    private static final int REQUEST_PHONE = 103;
 
     public void initView() {
 
@@ -145,10 +120,6 @@ public class MobileRechargeFragment extends BaseFragment implements KeyBoard.Psd
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
     @Override
     public void toCheck(String psd) {
@@ -172,31 +143,35 @@ public class MobileRechargeFragment extends BaseFragment implements KeyBoard.Psd
 
     }
 
-    private String[] getPhoneContacts(Uri uri) {
-        String[] contact = new String[2];
+    private String getPhoneNumber(Uri uri) {
+        String phoneNum="";
         //得到ContentResolver对象
         ContentResolver cr = activity.getContentResolver();
         //取得电话本中开始一项的光标
-        Cursor cursor = cr.query(uri, null, null, null, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            //取得联系人姓名
-            int nameFieldColumnIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-            contact[0] = cursor.getString(nameFieldColumnIndex);
-            //取得电话号码
-            String ContactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-            Cursor phone = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + ContactId, null, null);
-            if (phone != null) {
-                phone.moveToFirst();
-                contact[1] = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+        try {
+            Cursor cursor = cr.query(uri, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                //取得电话号码
+                String ContactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                Cursor phone = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + ContactId, null, null);
+                if (phone != null) {
+                    phone.moveToFirst();
+                    String number = ContactsContract.CommonDataKinds.Phone.NUMBER;
+                    int columnIndex = phone.getColumnIndex(number);
+                    phoneNum = phone.getString(columnIndex);
+                }
+                phone.close();
+                cursor.close();
+            } else {
+                return null;
             }
-            phone.close();
-            cursor.close();
-        } else {
-            return null;
+        }catch (Exception e){
+
         }
-        return contact;
+
+        return phoneNum;
     }
 
 }

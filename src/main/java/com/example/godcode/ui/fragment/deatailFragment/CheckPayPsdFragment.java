@@ -12,7 +12,7 @@ import com.example.godcode.bean.CheckPsd;
 import com.example.godcode.databinding.FragmentCheckpaypsdBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
 
 public class CheckPayPsdFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
@@ -53,11 +53,6 @@ public class CheckPayPsdFragment extends BaseFragment implements KeyBoard.PsdLen
 
     @Override
     protected void lazyLoad() {
-    }
-
-    @Override
-    public void refreshData() {
-
     }
 
 
@@ -105,6 +100,5 @@ public class CheckPayPsdFragment extends BaseFragment implements KeyBoard.PsdLen
     public void initData(int type) {
         this.type = type;
     }
-
 
 }

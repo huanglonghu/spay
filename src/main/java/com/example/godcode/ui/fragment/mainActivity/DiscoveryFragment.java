@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 
 import com.example.godcode.R;
@@ -37,6 +38,7 @@ public class DiscoveryFragment extends BaseFragment {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_discovery, container, false);
             view = binding.getRoot();
+            binding.setTitle("发现");
             initView();
             initListener();
             registerReceiver();
@@ -51,11 +53,18 @@ public class DiscoveryFragment extends BaseFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 data.clear();
-                HttpUtil.getInstance().getAllNotice(1, 10).subscribe(
+                HttpUtil.getInstance().getAllNotice(1, 100).subscribe(
                         noticesStr -> {
                             Notices notices = GsonUtil.getInstance().fromJson(noticesStr, Notices.class);
-                            data.addAll(notices.getData());
-                            discoveryListAdapter.notifyDataSetChanged();
+                            List<Notices.DataBean> data = notices.getData();
+                            if (data.size() == 0) {
+                                binding.noNews.setVisibility(View.VISIBLE);
+                            } else {
+                                binding.noNews.setVisibility(View.GONE);
+                                DiscoveryFragment.this.data.addAll(data);
+                                discoveryListAdapter.notifyDataSetChanged();
+                            }
+
                         }
                 );
             }
@@ -106,9 +115,5 @@ public class DiscoveryFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
 }

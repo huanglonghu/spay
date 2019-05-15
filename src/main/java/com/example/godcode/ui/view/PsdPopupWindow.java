@@ -12,8 +12,7 @@ import android.widget.PopupWindow;
 import com.example.godcode.R;
 import com.example.godcode.databinding.LayoutInputPsdBinding;
 import com.example.godcode.presenter.Presenter;
-import com.example.godcode.utils.FormatCheckUtil;
-import com.example.godcode.utils.LogUtil;
+import com.example.godcode.utils.FormatUtil;
 
 
 public class PsdPopupWindow extends PopupWindow {
@@ -68,7 +67,7 @@ public class PsdPopupWindow extends PopupWindow {
         this.keyBoard = keyBoard;
         this.view = view;
         binding.setName(name);
-        binding.money.setText(FormatCheckUtil.getInstance().get2double(money));
+        binding.money.setText(FormatUtil.getInstance().get2double(money));
         showAtLocation(view, Gravity.TOP, 0, 300);
         keyBoard.show(view);
         keyBoard.setRefreshPsd(binding.txPayPsdView);

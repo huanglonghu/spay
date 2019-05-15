@@ -20,11 +20,10 @@ import com.example.godcode.databinding.LayoutPaySelectBinding;
 import com.example.godcode.databinding.LayoutTransferaccountBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.presenter.Presenter;
-import com.example.godcode.ui.activity.MainActivity;
 import com.example.godcode.ui.adapter.PayViewPageAdapter;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.deatailFragment.TransferAccountDetailFragment;
-import com.example.godcode.utils.FormatCheckUtil;
+import com.example.godcode.utils.FormatUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ public class TransferAccuntView extends Dialog {
             }
         });
 
-        binding.transferMoney.setText(FormatCheckUtil.getInstance().get2double(transfer.getMoney()));
+        binding.transferMoney.setText(FormatUtil.getInstance().get2double(transfer.getMoney()));
         binding.setTransfer(transfer);
         ArrayList<View> views = new ArrayList<>();
         views.add(binding.getRoot());

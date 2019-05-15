@@ -15,9 +15,9 @@ import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.utils.LogUtil;
-import com.example.godcode.utils.PingYingUtil;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.ui.fragment.mainActivity.FriendFragment;
+import com.example.godcode.utils.StringUtil;
 
 public class RemarkSettingFragment extends BaseFragment {
     private FragmentRemarksettingBinding binding;
@@ -64,13 +64,14 @@ public class RemarkSettingFragment extends BaseFragment {
                                 String remark = binding.remark.getText().toString();
                                 friend.setUserName(remark);
                                 if (!TextUtils.isEmpty(remark)) {
-                                    String firstChar = PingYingUtil.getPingYin(remark).substring(0, 1);
+                                    String firstChar = StringUtil.getPingYin(remark).substring(0, 1);
                                     friend.setFirstChar(firstChar.toUpperCase());
                                 }
                                 FriendOption.getInstance(activity).updateFriend(friend);
                                 //通知其他界面更新昵称
                                 remarkCallBack.remarkUpdate(remark);
-                                activity.notifyFragmentDataChange(presenter.getFragments().get(1));
+                                FriendFragment friendFragment= (FriendFragment) presenter.getFragments().get(3);
+                                friendFragment.refreshData();
                                 presenter.back();
                             }
                     );
@@ -94,10 +95,6 @@ public class RemarkSettingFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
     private Friend friend;
 

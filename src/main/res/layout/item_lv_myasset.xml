@@ -38,7 +38,7 @@
 
         <LinearLayout
             android:id="@+id/ll_right"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
@@ -51,8 +51,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@{assetBean.isValid?@string/normal:@string/abnormal}"
-                android:textColor="@{assetBean.isValid?@color/c9:@color/c2}"
-                android:textSize="15sp" />
+                android:textColor="@{assetBean.isValid?@color/c9:@android:color/holo_red_dark}"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/price"
@@ -150,7 +150,6 @@
                     android:text="@{periodType+@string/sm+assetBean.scanCodeIncome}"
                     android:textSize="12sp" />
 
-
             </LinearLayout>
 
 
@@ -160,12 +159,12 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/tv_jrzc"
+                    android:id="@+id/tv_jrtl"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:text="@{periodType+@string/zc+(int)assetBean.todayBanknote}"
+                    android:text="@{periodType+@string/tl+(int)assetBean.todayAwardCount}"
                     android:textSize="12sp" />
 
                 <TextView

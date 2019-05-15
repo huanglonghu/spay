@@ -1,17 +1,13 @@
-package com.example.godcode.ui.view;
+package com.example.godcode.ui.view.customview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.databinding.BindingAdapter;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.TextView;
-
 import com.example.godcode.R;
-
 
 public class ImageTextView extends TextView {
 

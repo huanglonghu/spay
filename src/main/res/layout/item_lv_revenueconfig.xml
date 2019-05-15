@@ -39,16 +39,16 @@
             android:textColor="#000"
             android:textSize="15sp" />
 
-        <EditText
+        <com.example.godcode.ui.view.customview.LastInputEditText
             android:id="@+id/et_present"
-            android:layout_width="0dp"
+            android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_weight="1"
             android:background="@drawable/bg_et_selector"
-            android:enabled="@{revenueDivideItem.divideRate==0?true:false}"
+            android:enabled="@{revenueDivideItem.id==null?true:false}"
             android:gravity="center"
             android:inputType="number"
-            android:text='@{revenueDivideItem.divideRate>0?revenueDivideItem.divideRate+"":""}' />
+            android:text='@={revenueDivideItem.divideRate+""}'
+            />
 
 
         <LinearLayout
@@ -64,7 +64,9 @@
                 android:layout_height="35dp"
                 android:layout_weight="1"
                 android:onClick="@{()->fragment.alertDialog(position)}"
-                android:src="@drawable/et_config" />
+                android:src="@drawable/et_config"
+                android:visibility="@{revenueDivideItem.id==null?View.INVISIBLE:View.VISIBLE}"
+                />
 
             <ImageView
                 android:id="@+id/deleteDivide"

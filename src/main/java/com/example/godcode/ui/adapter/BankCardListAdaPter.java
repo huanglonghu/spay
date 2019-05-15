@@ -6,13 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.BankCard;
 import com.example.godcode.databinding.ItemLvBankcardBinding;
 import com.example.godcode.ui.fragment.deatailFragment.BankCardFragment;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,17 +62,29 @@ public class BankCardListAdaPter extends BaseAdapter {
                 case "中国银行":
                     bankRes=bankIcon[0];
                     break;
+                case "中国工商银行":
+                    bankRes=bankIcon[1];
+                    break;
                 case "工商银行":
                     bankRes=bankIcon[1];
                     break;
                 case "华夏银行":
                     bankRes=bankIcon[2];
                     break;
+                case "中国建设银行":
+                    bankRes=bankIcon[3];
+                    break;
                 case "建设银行":
                     bankRes=bankIcon[3];
                     break;
+                case "中国农业银行":
+                    bankRes=bankIcon[4];
+                    break;
                 case "农业银行":
                     bankRes=bankIcon[4];
+                    break;
+                case "中国民生银行":
+                    bankRes=bankIcon[5];
                     break;
                 case "民生银行":
                     bankRes=bankIcon[5];

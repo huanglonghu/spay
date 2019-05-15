@@ -3,15 +3,12 @@ package com.example.godcode.ui.fragment.deatailFragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.godcode.bean.EditPresonal;
 import com.example.godcode.R;
 import com.example.godcode.bean.UploadResponse;
@@ -19,24 +16,16 @@ import com.example.godcode.catche.Loader.RxImageLoader;
 import com.example.godcode.databinding.FragmentPersonalBinding;
 import com.example.godcode.greendao.entity.User;
 import com.example.godcode.greendao.option.UserOption;
+import com.example.godcode.handler.ActivityResultHandler;
 import com.example.godcode.http.HttpUtil;
-import com.example.godcode.ui.activity.ClipImageActivity;
+import com.example.godcode.interface_.HandlerStrategy;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.utils.BitmapUtil;
-import com.example.godcode.utils.FileUtil;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.ui.fragment.mainActivity.MineFragment;
 import com.example.godcode.utils.GsonUtil;
-import com.example.godcode.utils.LogUtil;
-
-import java.io.File;
-
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
-import static android.app.Activity.RESULT_OK;
-
-public class PresonalFragment extends BaseFragment implements EditPresonalFragment.PersonalUpdate {
+public class PresonalFragment extends BaseFragment implements EditPresonalFragment.PersonalUpdate{
     private FragmentPersonalBinding binding;
     private View view;
     private User user;
@@ -62,14 +51,18 @@ public class PresonalFragment extends BaseFragment implements EditPresonalFragme
         binding.rlHeadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BitmapUtil.getInstance().fromImg(activity);
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                new ActivityResultHandler.Builder().hadlerStrategy(new HandlerStrategy() {
+                    @Override
+                    public void onActivityResult(MultipartBody.Part filePart, Bitmap bitmap) {
+                        upload(filePart,bitmap);
+                    }
+                }).requestCode(ActivityResultHandler.REQUEST_SELECT_PHOTO).intent(intent).activity(activity).build().startActivityForResult();
             }
         });
     }
 
 
-    private static final int IMAGE_REQUEST_CODE = 0;
-    private static final int RESIZE_REQUEST_CODE = 2;
 
 
     private void initView() {
@@ -79,6 +72,8 @@ public class PresonalFragment extends BaseFragment implements EditPresonalFragme
                 headImageUrl = Constant.baseUrl + headImageUrl;
             }
             RxImageLoader.with(activity).load(headImageUrl).into(binding.ivUser);
+        } else {
+            binding.ivUser.setImageResource(R.drawable.contact_normal);
         }
 
     }
@@ -87,9 +82,6 @@ public class PresonalFragment extends BaseFragment implements EditPresonalFragme
     protected void lazyLoad() {
     }
 
-    @Override
-    public void refreshData() {
-    }
 
     private int type;
 
@@ -125,56 +117,24 @@ public class PresonalFragment extends BaseFragment implements EditPresonalFragme
     }
 
 
-    public void gotoClipActivity(Uri uri) {
-        if (uri == null) {
-            return;
-        }
-        Intent intent = new Intent();
-        intent.setClass(activity, ClipImageActivity.class);
-        intent.putExtra("type", 2);//
-        intent.setData(uri);
-        activity.startActivityForResult(intent, REQUEST_CROP_PHOTO);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case 0:
-                gotoClipActivity(data.getData());
-                break;
-            case REQUEST_CROP_PHOTO:
-                if (resultCode == RESULT_OK) {
-                    final Uri uri = data.getData();
-                    if (uri == null) {
-                        return;
-                    }
-                    String cropImagePath = FileUtil.getRealFilePathFromUri(activity, uri);
-                    Bitmap bitMap = BitmapFactory.decodeFile(cropImagePath);
-                    binding.ivUser.setImageBitmap(bitMap);
-                    File file = new File(cropImagePath);
-                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file));
-                    HttpUtil.getInstance().upload(filePart, 2).subscribe(
-                            uploadStr -> {
-                                UploadResponse uploadResponse = GsonUtil.getInstance().fromJson(uploadStr, UploadResponse.class);
-                                String headUrl = uploadResponse.getResult().get(0);
-                                EditPresonal editPresonal = new EditPresonal();
-                                editPresonal.setId(Constant.userId);
-                                editPresonal.setHeadImgUrl(Constant.baseUrl + headUrl);
-                                HttpUtil.getInstance().editPresonal(editPresonal).subscribe(
-                                        editSuccess -> {
-                                            user.setHeadImageUrl(Constant.baseUrl + headUrl);
-                                            UserOption.getInstance().updateUser(user);
-                                            activity.notifyFragmentDataChange(presenter.getFragments().get(3));
-                                        }
-                                );
+    public void upload(MultipartBody.Part filePart, Bitmap bitmap) {
+        binding.ivUser.setImageBitmap(bitmap);
+        HttpUtil.getInstance().upload(filePart, 2).subscribe(
+                uploadStr -> {
+                    UploadResponse uploadResponse = GsonUtil.getInstance().fromJson(uploadStr, UploadResponse.class);
+                    String headUrl = uploadResponse.getResult().get(0);
+                    EditPresonal editPresonal = new EditPresonal();
+                    editPresonal.setId(Constant.userId);
+                    editPresonal.setHeadImgUrl(Constant.baseUrl + headUrl);
+                    HttpUtil.getInstance().editPresonal(editPresonal).subscribe(
+                            editSuccess -> {
+                                user.setHeadImageUrl(Constant.baseUrl + headUrl);
+                                UserOption.getInstance().updateUser(user);
+                                MineFragment mineFragment= (MineFragment) presenter.getFragments().get(3);
+                                mineFragment.refreshData();
                             }
                     );
                 }
-                break;
-        }
+        );
     }
-
-
-    private static final int REQUEST_CROP_PHOTO = 102;
-
 }

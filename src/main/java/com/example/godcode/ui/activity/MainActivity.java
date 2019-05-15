@@ -1,33 +1,41 @@
 package com.example.godcode.ui.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.Toast;
+
 import com.example.godcode.R;
-import com.example.godcode.bean.CreateOrder;
-import com.example.godcode.bean.OrderResult;
-import com.example.godcode.bean.ProductScan;
+import com.example.godcode.bean.RefreshDiviceToken;
+import com.example.godcode.bean.WsHeart;
 import com.example.godcode.databinding.ActivityMainBinding;
-import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
+import com.example.godcode.greendao.option.VersionMsgOption;
+import com.example.godcode.handler.ActivityResultHandler;
+import com.example.godcode.handler.WebSocketNewsHandler;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.EtStrategy;
+import com.example.godcode.observable.WebSocketNewsObservable;
+import com.example.godcode.observable.WebSocketNewsObserver;
 import com.example.godcode.presenter.Presenter;
-import com.example.godcode.service.TimeService;
+import com.example.godcode.service.NetStateReceiver;
 import com.example.godcode.service.WebSocketService;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.ui.base.GodCodeApplication;
+import com.example.godcode.ui.fragment.bindproduct.BindProductFragment;
 import com.example.godcode.ui.fragment.deatailFragment.AddBankCardFragment;
-import com.example.godcode.ui.fragment.deatailFragment.AssetFragment;
-import com.example.godcode.ui.fragment.deatailFragment.BindingProductFragment;
-import com.example.godcode.ui.fragment.deatailFragment.ContactDetailFragment;
+import com.example.godcode.ui.fragment.deatailFragment.Asset_1_Fragment;
 import com.example.godcode.ui.fragment.deatailFragment.MobileRechargeFragment;
 import com.example.godcode.ui.fragment.deatailFragment.NoticeDetailFragment;
 import com.example.godcode.ui.fragment.deatailFragment.OrderDetailFragment;
@@ -37,23 +45,24 @@ import com.example.godcode.ui.fragment.deatailFragment.RechargeFragment;
 import com.example.godcode.ui.fragment.deatailFragment.TransationRecordDetailFragment;
 import com.example.godcode.ui.fragment.deatailFragment.TransferAccountDetailFragment;
 import com.example.godcode.ui.fragment.deatailFragment.TxFragment;
-import com.example.godcode.ui.fragment.deatailFragment.UserFragment;
 import com.example.godcode.ui.fragment.deatailFragment.YSJLDetailFragment;
 import com.example.godcode.ui.fragment.mainActivity.MainFragment;
 import com.example.godcode.ui.view.PsdPopupWindow;
-import com.example.godcode.utils.EncryptUtil;
-import com.example.godcode.utils.GsonUtil;
-import com.example.godcode.utils.LogUtil;
+import com.example.godcode.ui.view.UpdateDialog;
+import com.example.godcode.ui.view.widget.NetStateDialog;
 import com.example.godcode.utils.PayPsdSetting;
+import com.example.godcode.utils.SharepreferenceUtil;
+
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
     private FragmentManager supportFragmentManager;
     private WebSocketService.MyBinder myBinder;
+    private DeviceTokenReceiver deviceTokenReceiver;
+    private WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void init() {
         HttpUtil.getInstance().init(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         MainFragment mainFragment = new MainFragment();
@@ -61,23 +70,80 @@ public class MainActivity extends BaseActivity {
         Presenter.getInstance().initFragmentManager(this, supportFragmentManager, 1);
         supportFragmentManager.beginTransaction().replace(R.id.mainActivity_fragmentContainer, mainFragment).addToBackStack("main").commit();
         PayPsdSetting.getInstance().initContext(this);
+        webSocketNewsObservable = new WebSocketNewsObservable<WebSocketNewsHandler>();
         //开启websocket服务
         Intent intent = new Intent(this, WebSocketService.class);
         bindService(intent, serviceConnection, BIND_AUTO_CREATE);
-        Intent intent1 = new Intent(this, TimeService.class);
-        startService(intent1);
+
+        if (deviceTokenReceiver == null) {
+            deviceTokenReceiver = new DeviceTokenReceiver();
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("refreshDeviceToken");
+            registerReceiver(deviceTokenReceiver, intentFilter);
+        }
+
+        WebSocketNewsObserver<WebSocketNewsHandler> observer = new WebSocketNewsObserver<WebSocketNewsHandler>() {
+            @Override
+            public void onUpdate(WebSocketNewsObservable<WebSocketNewsHandler> observable, WebSocketNewsHandler data) {
+                int handlerType = data.getHandlerType();
+                switch (handlerType) {
+                    case 2:
+                        Presenter.getInstance().exit(MainActivity.this);
+                        break;
+                    case 3:
+                        int id = data.getWebSocketNews4().getData().getRelatedKey();
+                        FriendOption.getInstance(MainActivity.this).deleteFriend(id);
+                        break;
+                    case 4:
+                        Presenter.getInstance().showNew(1);
+                        break;
+                    case 7:
+                        WsHeart wsHeart = data.getWsHeart();
+                        String androidVer = wsHeart.getData().getAndroidVer();
+                        try {
+                            String versionName = GodCodeApplication.getInstance().getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+                            int version1 = Integer.parseInt(versionName.replace(".", ""));
+                            int version2 = Integer.parseInt(androidVer.replace(".", ""));
+                            if (version2 > version1) {
+                                createUpdateDialog(wsHeart);
+                            }
+                        } catch (PackageManager.NameNotFoundException e1) {
+                            e1.printStackTrace();
+                        }
+                        break;
+                }
+
+            }
+        };
+        webSocketNewsObservable.register(observer);
     }
+
+
+    private void createUpdateDialog(WsHeart wsHeart) {
+        wsHeart.getData().getAndroidVerDes();
+        String androidVerDes = wsHeart.getData().getAndroidVerDes();
+        String androidVer = wsHeart.getData().getAndroidVer();
+        VersionMsgOption.getInstance().updateVersion(androidVer, androidVerDes);
+        UpdateDialog updateDialog = new UpdateDialog(this);
+        updateDialog.show();
+        String updateAddress = wsHeart.getData().getUpdateAddress();
+        SharepreferenceUtil.getInstance().setUpdateAddress(updateAddress);
+        updateDialog.setDescibe(androidVerDes, androidVer);
+    }
+
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            if(myBinder == null){
+            if (myBinder == null) {
                 myBinder = (WebSocketService.MyBinder) service;
             }
-            myBinder.connectWebSocket(MainActivity.this);
+            myBinder.connectWebSocket(MainActivity.this, webSocketNewsObservable);
         }
+
         @Override
-        public void onServiceDisconnected(ComponentName name) {}
+        public void onServiceDisconnected(ComponentName name) {
+        }
     };
 
     @Override
@@ -99,8 +165,8 @@ public class MainActivity extends BaseActivity {
                     || fragment instanceof TxFragment || fragment instanceof TransferAccountDetailFragment
                     || fragment instanceof OrderDetailFragment || fragment instanceof YSJLDetailFragment
                     || fragment instanceof PresonalFragment || fragment instanceof OrderDetailFragment
-                    || fragment instanceof AssetFragment||fragment instanceof PaySuccessFragment||fragment instanceof MobileRechargeFragment
-                    ) {
+                    || fragment instanceof Asset_1_Fragment || fragment instanceof PaySuccessFragment || fragment instanceof MobileRechargeFragment
+                    || fragment instanceof BindProductFragment) {
                 fragment.onKeyDown();
                 return true;
             }
@@ -108,124 +174,19 @@ public class MainActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private int RESULT_OK = 0xA1;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        LogUtil.log(resultCode + "------zzzzzzzz------" + requestCode + "==================");
-        Fragment fragment = supportFragmentManager.findFragmentById(R.id.mainActivity_fragmentContainer);
-        if (resultCode != -1) {
-            if (resultCode == RESULT_OK) {
-                Bundle bundle = data.getExtras();
-                String scanResult = bundle.getString("qr_scan_result");
-                LogUtil.log("-------scan-------" + scanResult);
-                //如果是收款信息则跳转 付款界面 如果是产品信息 则跳转绑定产品界面 如果是好友信息 则跳转好友详情界面
-                if (scanResult.contains("productNumber")) {
-                    handlerProduct(fragment, scanResult);
-                } else {
-                    handlerContact(scanResult);
-                }
-            }
-        } else {
-            fragment.onActivityResult(requestCode, resultCode, data);
-        }
+        new ActivityResultHandler.Builder().build2(this);
+        ActivityResultHandler.getInstance().handler(requestCode, resultCode, data);
     }
 
-    private void handlerProduct(Fragment fragment, String scanResult) {
-        String[] split = scanResult.split("=");
-        String productNumber = split[split.length - 1];
-        if (!(fragment instanceof BindingProductFragment)) {
-            HttpUtil.getInstance().isBind(productNumber)
-                    .subscribe(isBindStr -> {
-                                if (isBindStr.contains("\"success\":true")) {
-                                    ProductScan productScan = GsonUtil.getInstance().fromJson(isBindStr, ProductScan.class);
-                                    if (productScan.getResult().isIsBind()) {
-                                        //去支付  1.生成订单号 跳转扫码支付界面
-                                        if (productScan.getResult().isIsValid()) {
-                                            ProductScan.ResultBean result = productScan.getResult();
-                                            CreateOrder createOrder = new CreateOrder();
-                                            createOrder.setFK_ProductID(result.getId());
-                                            createOrder.setFeeType("CNY");
-                                            createOrder.setSumOrder(result.getMoney());
-                                            createOrder.setFK_UserID(Constant.userId);
-                                            HttpUtil.getInstance().getOrderNumber(createOrder)
-                                                    .subscribe(getOrderNumberStr -> {
-                                                                OrderResult orderResult = GsonUtil.getInstance().fromJson(getOrderNumberStr, OrderResult.class);
-                                                                OrderDetailFragment orderDetailFragment = new OrderDetailFragment();
-                                                                orderDetailFragment.initData(orderResult, result);
-                                                                supportFragmentManager.beginTransaction()
-                                                                        .replace(R.id.mainActivity_fragmentContainer, orderDetailFragment)
-                                                                        .addToBackStack("orderDetail")
-                                                                        .commitAllowingStateLoss();
-                                                            }
-                                                    );
-                                        } else {
-                                            Toast.makeText(this, "设备出现故障无法运行", Toast.LENGTH_SHORT).show();
-                                        }
 
-                                    } else {
-                                        //去绑定
-                                        toBindProduct(productNumber);
-                                    }
-                                } else {
-                                    //去绑定
-                                    toBindProduct(productNumber);
-                                }
-                            }
-                    );
-        } else {
-            ((BindingProductFragment) fragment).handlerScanStr(productNumber);
-        }
+    public WebSocketNewsObservable<WebSocketNewsHandler> getWebSocketNewsObservable() {
+        return webSocketNewsObservable;
     }
 
-    private void handlerContact(String scanResult) {
-        try {
-            if (scanResult.contains("WeChatPay")) {
-                String cipherText = scanResult.substring(scanResult.indexOf("Ciphertext=") + "Ciphertext=".length());
-                cipherText = cipherText.replaceAll("~", "\\+").replaceAll("!", "/").replaceAll("-", "=");
-                String s = EncryptUtil.aesDecrypt(cipherText, "87a4d115c0956912b495d6bb8b7c0013");
-                LogUtil.log("------decrypt-------" + s);
-                String[] split = s.split("\\|");
-                TransferAccountDetailFragment tadf = new TransferAccountDetailFragment();
-                double money = Double.parseDouble(split[2]);
-                int userId = Integer.parseInt(split[1]);
-                tadf.initData(userId, money, 3);
-                supportFragmentManager.beginTransaction().replace(R.id.mainActivity_fragmentContainer, tadf).addToBackStack("tadf").
-                        commitAllowingStateLoss();
-            } else {
-                String a = scanResult.replaceAll("~", "\\+").replaceAll("!", "/").replaceAll("-", "=");
-                String s = EncryptUtil.aesDecrypt(a, "87a4d115c0956912b495d6bb8b7c0013");
-                String[] split = s.split("\\|");
-                int id = Integer.parseInt(split[1]);
-                Friend friend = FriendOption.getInstance(this).querryFriend(id);
-                if (friend == null) {
-                    UserFragment userFragment = new UserFragment();
-                    userFragment.initData(id);
-                    supportFragmentManager.beginTransaction().replace(R.id.mainActivity_fragmentContainer, userFragment).addToBackStack("user").
-                            commitAllowingStateLoss();
-                } else {
-                    ContactDetailFragment cdf = new ContactDetailFragment();
-                    cdf.initData(id);
-                    supportFragmentManager.beginTransaction().replace(R.id.mainActivity_fragmentContainer, cdf).addToBackStack("cdf").
-                            commitAllowingStateLoss();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void toBindProduct(String productNumber) {
-        BindingProductFragment bindingProductFragment = new BindingProductFragment();
-        Bundle b = new Bundle();
-        b.putString("productNumber", productNumber);
-        bindingProductFragment.setArguments(b);
-        supportFragmentManager.beginTransaction().replace(R.id.mainActivity_fragmentContainer, bindingProductFragment).addToBackStack("bindProduct").commitAllowingStateLoss();
-    }
-
-    @Override
-    public void notifyFragmentDataChange(BaseFragment fragment) {
-        fragment.refreshData();
+    public void setWebSocketNewsObservable(WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable) {
+        this.webSocketNewsObservable = webSocketNewsObservable;
     }
 
     @Override
@@ -283,6 +244,23 @@ public class MainActivity extends BaseActivity {
         Presenter.getInstance().step2Fragment(trdf1, "transationDetail");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (deviceTokenReceiver != null) {
+            unregisterReceiver(deviceTokenReceiver);
+        }
+    }
 
-
+    class DeviceTokenReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("refreshDeviceToken")) {
+                RefreshDiviceToken refreshDiviceToken = new RefreshDiviceToken();
+                refreshDiviceToken.setDeviceToken(Constant.diviceToken);
+                refreshDiviceToken.setUserID(Constant.userId);
+                HttpUtil.getInstance().refreshDiviceToken(refreshDiviceToken).subscribe();
+            }
+        }
+    }
 }

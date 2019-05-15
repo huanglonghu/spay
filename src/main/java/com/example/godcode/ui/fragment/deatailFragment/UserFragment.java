@@ -17,7 +17,7 @@ import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.GsonUtil;
 
 public class UserFragment extends BaseFragment {
@@ -92,12 +92,6 @@ public class UserFragment extends BaseFragment {
     @Override
     protected void lazyLoad() {
     }
-
-    @Override
-    public void refreshData() {
-
-    }
-
 
     private int id;
 

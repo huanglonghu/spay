@@ -8,10 +8,11 @@ import java.io.Serializable;
 
 public class WebSocketNews1 implements Serializable{
 
+
     /**
      * EventType : 19
-     * Data : {"ProductNumber":"SY155","CoinCount":0,"PaperMoney":0,"ScanQRMoney":1}
-     * Flag : 78c0d03d-83f8-4129-bdd3-26224e30b1ec
+     * Data : {"ProductNumber":"SY1AC","CoinCount":1,"PaperMoney":2,"ScanQRMoney":0,"DivedeMoney":0,"MerchantUserIds":"29","AwardPosition":"3","AwardCount":"4"}
+     * Flag : f7a59513-3d6a-4dfc-b047-3d45e48515a6
      */
 
     private int EventType;
@@ -44,16 +45,24 @@ public class WebSocketNews1 implements Serializable{
 
     public static class DataBean {
         /**
-         * ProductNumber : SY155
-         * CoinCount : 0
-         * PaperMoney : 0.0
-         * ScanQRMoney : 1.0
+         * ProductNumber : SY1AC
+         * CoinCount : 1
+         * PaperMoney : 2.0
+         * ScanQRMoney : 0.0
+         * DivedeMoney : 0.0
+         * MerchantUserIds : 29
+         * AwardPosition : 3
+         * AwardCount : 4
          */
 
         private String ProductNumber;
         private int CoinCount;
         private double PaperMoney;
         private double ScanQRMoney;
+        private double DivedeMoney;
+        private String MerchantUserIds;
+        private String AwardPosition;
+        private String AwardCount;
 
         public String getProductNumber() {
             return ProductNumber;
@@ -85,6 +94,38 @@ public class WebSocketNews1 implements Serializable{
 
         public void setScanQRMoney(double ScanQRMoney) {
             this.ScanQRMoney = ScanQRMoney;
+        }
+
+        public double getDivedeMoney() {
+            return DivedeMoney;
+        }
+
+        public void setDivedeMoney(double DivedeMoney) {
+            this.DivedeMoney = DivedeMoney;
+        }
+
+        public String getMerchantUserIds() {
+            return MerchantUserIds;
+        }
+
+        public void setMerchantUserIds(String MerchantUserIds) {
+            this.MerchantUserIds = MerchantUserIds;
+        }
+
+        public String getAwardPosition() {
+            return AwardPosition;
+        }
+
+        public void setAwardPosition(String AwardPosition) {
+            this.AwardPosition = AwardPosition;
+        }
+
+        public String getAwardCount() {
+            return AwardCount;
+        }
+
+        public void setAwardCount(String AwardCount) {
+            this.AwardCount = AwardCount;
         }
     }
 }

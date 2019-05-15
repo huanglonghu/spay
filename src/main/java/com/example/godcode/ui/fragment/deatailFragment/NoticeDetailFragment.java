@@ -15,7 +15,7 @@ import android.webkit.WebViewClient;
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentNoticeDetailBinding;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.ui.base.Constant;
+import com.example.godcode.constant.Constant;
 
 public class NoticeDetailFragment extends BaseFragment {
     private FragmentNoticeDetailBinding binding;
@@ -99,10 +99,6 @@ public class NoticeDetailFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void refreshData() {
-
-    }
 
 
 }

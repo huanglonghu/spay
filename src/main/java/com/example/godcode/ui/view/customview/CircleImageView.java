@@ -1,4 +1,4 @@
-package com.example.godcode.ui.view;
+package com.example.godcode.ui.view.customview;
 
 import android.content.Context;
 import android.content.res.TypedArray;

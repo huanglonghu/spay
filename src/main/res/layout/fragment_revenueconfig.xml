@@ -28,6 +28,7 @@
             layout="@layout/layout_toolbar2"
             bind:presenter="@{presenter}" />
 
+
         <RelativeLayout
             android:id="@+id/rl_top"
             android:layout_width="match_parent"
@@ -85,13 +86,13 @@
             <Button
                 android:id="@+id/addRevenue"
                 style="@style/btn2"
-                android:text="添加" />
+                android:text="@string/add" />
 
             <Button
                 android:id="@+id/commit_revenue"
                 style="@style/btn1"
                 android:layout_marginTop="20dp"
-                android:text="确定"
+                android:text="@string/confirm"
                 />
 
         </LinearLayout>

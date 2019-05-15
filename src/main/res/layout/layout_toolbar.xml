@@ -4,25 +4,23 @@
     <data>
 
         <variable
-            name="titleArray"
-            type="String[]" />
+            name="title"
+            type="String" />
+        <import type="android.view.View"/>
 
-        <variable
-            name="position"
-            type="int" />
     </data>
 
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#232429">
+        android:background="@color/bg5">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@{titleArray[position]}"
+            android:text="@{title}"
             android:textColor="#fff"
             android:textSize="20sp" />
 
@@ -34,7 +32,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:src="@drawable/add3" />
+            android:src="@drawable/add3"
+            />
 
         <ImageView
             android:id="@+id/iv_mine"
@@ -43,7 +42,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@id/iv_more"
-            android:src="@drawable/mine" />
+            android:src="@drawable/mine"
+            />
 
     </RelativeLayout>
 </layout>

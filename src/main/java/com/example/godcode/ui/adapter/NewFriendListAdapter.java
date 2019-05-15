@@ -5,64 +5,35 @@ import android.databinding.DataBindingUtil;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.ApplyFriend;
+import com.example.godcode.bean.ConcurAddFriend;
+import com.example.godcode.bean.ConcurAddFriendResponse;
 import com.example.godcode.catche.Loader.RxImageLoader;
 import com.example.godcode.databinding.ItemLvNewfriendBinding;
-import com.example.godcode.ui.base.Constant;
-import com.example.godcode.ui.fragment.deatailFragment.NewFriendFragment;
-
-import java.util.HashMap;
+import com.example.godcode.constant.Constant;
+import com.example.godcode.http.HttpUtil;
+import com.example.godcode.presenter.Presenter;
+import com.example.godcode.ui.fragment.deatailFragment.ContactDetailFragment;
+import com.google.gson.Gson;
 import java.util.List;
 
-/**
- * Created by Administrator on 2018/6/14.
- */
-
-public class NewFriendListAdapter extends BaseAdapter {
-    private Context context;
-    private final LayoutInflater layoutInflater;
-    private List<ApplyFriend.ResultBean.ItemsBean> items;
-    private NewFriendFragment newFriendFragment;
-
-    public NewFriendListAdapter(Context context, List<ApplyFriend.ResultBean.ItemsBean> items, NewFriendFragment newFriendFragment) {
-        this.context = context;
-        layoutInflater = LayoutInflater.from(context);
-        this.items = items;
-        this.newFriendFragment = newFriendFragment;
+public class NewFriendListAdapter extends BaseListAdapter {
+    public NewFriendListAdapter(Context context, List<ApplyFriend.ResultBean.ItemsBean> datas, int res) {
+        super(context, datas, res);
     }
 
     @Override
-    public int getCount() {
-        return items == null ? 0 : items.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return items.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ItemLvNewfriendBinding binding;
-        if (convertView == null) {
-            binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_lv_newfriend, parent, false);
-            convertView = binding.getRoot();
-            convertView.setTag(binding);
-        } else {
-            binding = (ItemLvNewfriendBinding) convertView.getTag();
-        }
-        ApplyFriend.ResultBean.ItemsBean itemsBean = items.get(position);
+    View initView(LayoutInflater layoutInflater, int res, List datas, int position) {
+        ItemLvNewfriendBinding binding = DataBindingUtil.inflate(layoutInflater, res, null, false);
+        ApplyFriend.ResultBean.ItemsBean itemsBean = (ApplyFriend.ResultBean.ItemsBean) datas.get(position);
         binding.setItem(itemsBean);
-        binding.setFragment(newFriendFragment);
+        binding.btnAcceptfriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                acceptFriend(itemsBean);
+            }
+        });
         String friendImgPath = itemsBean.getFriendImgPath();
         if (!TextUtils.isEmpty(friendImgPath)) {
             if (!friendImgPath.contains("http")) {
@@ -72,6 +43,23 @@ public class NewFriendListAdapter extends BaseAdapter {
         } else {
             binding.itemNewfriendPhoto.setImageResource(R.drawable.contact_normal);
         }
-        return convertView;
+        return binding.getRoot();
+    }
+
+
+    public void acceptFriend(ApplyFriend.ResultBean.ItemsBean bean) {
+        ConcurAddFriend concurAddFriend = new ConcurAddFriend();
+        concurAddFriend.setIsConcur(true);
+        concurAddFriend.setId(bean.getId());
+        HttpUtil.getInstance().concurAddFriend(concurAddFriend).subscribe(
+                concurAddFriendStr -> {
+                    ConcurAddFriendResponse concurAddFriendResponse = new Gson().fromJson(concurAddFriendStr, ConcurAddFriendResponse.class);
+                    if (concurAddFriendResponse.isSuccess()) {
+                        ContactDetailFragment cdf = new ContactDetailFragment();
+                        cdf.initData(bean.getFK_UserID());
+                        Presenter.getInstance().step2Fragment(cdf, "cdf");
+                    }
+                }
+        );
     }
 }
