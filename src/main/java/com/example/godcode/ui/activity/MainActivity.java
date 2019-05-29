@@ -46,6 +46,7 @@ import com.example.godcode.ui.fragment.deatailFragment.TransationRecordDetailFra
 import com.example.godcode.ui.fragment.deatailFragment.TransferAccountDetailFragment;
 import com.example.godcode.ui.fragment.deatailFragment.TxFragment;
 import com.example.godcode.ui.fragment.deatailFragment.YSJLDetailFragment;
+import com.example.godcode.ui.fragment.mainActivity.HomeFragment;
 import com.example.godcode.ui.fragment.mainActivity.MainFragment;
 import com.example.godcode.ui.view.PsdPopupWindow;
 import com.example.godcode.ui.view.UpdateDialog;
@@ -67,6 +68,7 @@ public class MainActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         MainFragment mainFragment = new MainFragment();
         supportFragmentManager = getSupportFragmentManager();
+        supportFragmentManager.addOnBackStackChangedListener(getListener());
         Presenter.getInstance().initFragmentManager(this, supportFragmentManager, 1);
         supportFragmentManager.beginTransaction().replace(R.id.mainActivity_fragmentContainer, mainFragment).addToBackStack("main").commit();
         PayPsdSetting.getInstance().initContext(this);
@@ -116,6 +118,29 @@ public class MainActivity extends BaseActivity {
             }
         };
         webSocketNewsObservable.register(observer);
+    }
+
+
+    private FragmentManager.OnBackStackChangedListener getListener() {
+        FragmentManager.OnBackStackChangedListener result = new FragmentManager.OnBackStackChangedListener() {
+            public void onBackStackChanged() {
+                FragmentManager manager = getSupportFragmentManager();
+                if (manager != null) {
+                    BaseFragment currFrag = (BaseFragment) manager.findFragmentById(R.id.mainActivity_fragmentContainer);
+                    if (currFrag instanceof MainFragment) {
+                        MainFragment mainFragment = (MainFragment) currFrag;
+                        int position = mainFragment.getBinding().getPosition();
+                        if (position == 0) {
+                            HomeFragment homeFragment = (HomeFragment) Presenter.getInstance().getFragments().get(0);
+                            homeFragment.refreshDivideIncome();
+                        }
+
+                    }
+                }
+            }
+        };
+
+        return result;
     }
 
 

@@ -19,6 +19,7 @@ import com.example.godcode.ui.adapter.MyViewPagerAdapter;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.view.MenuWindow;
+import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 
@@ -28,6 +29,7 @@ public class MainFragment extends BaseFragment {
     private FragmentMainBinding binding;
     private ArrayList<BaseFragment> fragments;
     private View view;
+
 
 
     public FragmentMainBinding getBinding() {

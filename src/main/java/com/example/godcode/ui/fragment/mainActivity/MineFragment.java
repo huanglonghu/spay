@@ -21,6 +21,7 @@ import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.deatailFragment.PresonalFragment;
+import com.example.godcode.utils.LogUtil;
 
 public class MineFragment extends BaseFragment {
     private boolean isPrepared;
@@ -55,18 +56,22 @@ public class MineFragment extends BaseFragment {
         });
 
 
-
     }
 
 
     private boolean isVisible;
 
     @Override
-    protected void lazyLoad() {
-        if (!isVisible) {
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isVisible()) {
             setHeadImage();
-            isVisible = true;
         }
+    }
+
+    @Override
+    protected void lazyLoad() {
+
     }
 
     private void setHeadImage() {
@@ -81,8 +86,9 @@ public class MineFragment extends BaseFragment {
                 RxImageLoader.with(activity).getBitmap(headImageUrl).subscribe(
                         imageBean -> {
                             if (imageBean.getBitmap() != null) {
+                                LogUtil.log("======HHHHHHHHEEEEEEEEEEE==========");
                                 Bitmap bitmap = imageBean.getBitmap();
-                                RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(getResources(),bitmap);
+                                RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
                                 roundedBitmapDrawable.setCircular(true);
                                 binding.ivUser.setImageDrawable(roundedBitmapDrawable);
                             }

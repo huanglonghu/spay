@@ -59,9 +59,7 @@ public class AddFriendFragment extends BaseFragment {
 
     @Override
     protected void lazyLoad() {
-        if (!isPrepared || !isVisible) {
-            return;
-        }
+
     }
 
 

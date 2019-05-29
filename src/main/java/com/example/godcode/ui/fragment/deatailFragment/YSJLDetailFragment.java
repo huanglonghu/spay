@@ -77,8 +77,7 @@ public class YSJLDetailFragment extends BaseFragment implements KeyBoard.PsdLeng
         binding.setBean(bean);
         binding.orderMoney.setText(FormatUtil.getInstance().get2double(bean.getSumOrder()));
         binding.divideMoney.setText(FormatUtil.getInstance().get2double(bean.getDivideMoney()));
-        long stringToDate = DateUtil.getInstance().getStringToDate(bean.getOrderDate(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
-        String time = DateUtil.getInstance().formatTime(stringToDate);
+        String time = DateUtil.getInstance().formatDate(bean.getOrderDate());
         binding.ysjlDetailDate.setText(time);
     }
 

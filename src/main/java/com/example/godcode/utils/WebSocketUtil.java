@@ -72,7 +72,7 @@ public class WebSocketUtil {
                         if (subscribe == null) {
                             synchronized (WebSocketUtil.class) {
                                 if (subscribe == null) {
-                                    subscribe = Observable.interval(0, 2, TimeUnit.SECONDS).subscribe(
+                                    subscribe = Observable.interval(0, 5, TimeUnit.SECONDS).subscribe(
                                             s -> {
                                                 if (s == 1) {
                                                     mSocketClient.reconnect();

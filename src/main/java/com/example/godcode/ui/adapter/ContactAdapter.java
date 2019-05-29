@@ -15,6 +15,7 @@ import com.example.godcode.databinding.ItemHeadBinding;
 import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.presenter.Presenter;
 import com.example.godcode.constant.Constant;
+import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.StringUtil;
 import java.util.HashMap;
 import java.util.List;
@@ -85,10 +86,12 @@ public class ContactAdapter extends BaseAdapter {
             if (charcterMap2.get(firstChar) == friend) {
                 binding.setCharacter(firstChar);
             }
+
             if (!TextUtils.isEmpty(headImageUrl)) {
                 if (!headImageUrl.contains("http")) {
                     headImageUrl = Constant.baseUrl + headImageUrl;
                 }
+                LogUtil.log(headImageUrl+"=========headurl=========="+friend.getUserName());
                 RxImageLoader.with(context).load(headImageUrl).into(binding.friendPhoto);
             } else {
                 binding.friendPhoto.setBackgroundResource(R.drawable.contact_normal);

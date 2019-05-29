@@ -56,8 +56,8 @@ public class DiscoveryListAdapter extends BaseAdapter {
                 String url = dataBean.getTitlePageImgUrl().replace("\\", "/");
                 RxImageLoader.with(context).load(url).into(binding.titleImage);
             }
-            long stringToDate = DateUtil.getInstance().getStringToDate(dataBean.getPublishTime(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
-            String s = DateUtil.getInstance().formatTime(stringToDate);
+            String s = DateUtil.getInstance().formatDate(dataBean.getPublishTime());
+
             binding.time.setText(s);
             convertView = binding.getRoot();
             viewMap.put(position, convertView);

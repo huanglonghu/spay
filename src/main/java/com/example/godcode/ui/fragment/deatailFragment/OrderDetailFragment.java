@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.example.godcode.bean.OrderDetail;
 import com.example.godcode.bean.ProductScan;
 import com.example.godcode.catche.Loader.RxImageLoader;
@@ -28,7 +29,7 @@ public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLen
     private FragmentOrderdetailBinding binding;
     private View view;
     private OrderDetail orderDetail;
-    private ProductScan.ResultBean  productScanResult;
+    private ProductScan.ResultBean productScanResult;
 
 
     @Nullable
@@ -46,21 +47,18 @@ public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLen
     }
 
 
-
     public void initData() {
-        Bundle bundle =getArguments();
-        orderDetail= (OrderDetail) bundle.getSerializable("orderDetail");
+        Bundle bundle = getArguments();
+        orderDetail = (OrderDetail) bundle.getSerializable("orderDetail");
         productScanResult = (ProductScan.ResultBean) bundle.getSerializable("productScanResult");
     }
-
 
 
     public void initView() {
         OrderDetail.ResultBean result = orderDetail.getResult();
         binding.orderNumber.setText(result.getOrderNumber());
         binding.orderMoney.setText(FormatUtil.getInstance().get2double(result.getSumOrder()));
-        long time = DateUtil.getInstance().getStringToDate(result.getOrderDate(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
-        String orderDate = DateUtil.getInstance().formatTime(time);
+        String orderDate = DateUtil.getInstance().formatDate(result.getOrderDate());
         binding.orderDate.setText(orderDate);
         if (!TextUtils.isEmpty(productScanResult.getThumbnailImgPath())) {
             String url = productScanResult.getThumbnailImgPath();
@@ -114,7 +112,6 @@ public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLen
         }
 
     }
-
 
 
 }

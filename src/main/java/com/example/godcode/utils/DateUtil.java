@@ -40,6 +40,15 @@ public class DateUtil {
     }
 
 
+    public String formatDate(String date){
+        String[] split = date.split("\\.");
+        System.out.println(split.length);
+        long stringToDate = DateUtil.getInstance().getStringToDate(split[0], "yyyy-MM-dd'T'HH:mm:ss");
+        String s1 = DateUtil.getInstance().formatTime(stringToDate);
+        return s1;
+    }
+
+
     public String formatTime(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formatTime = sdf.format(new Date(time));

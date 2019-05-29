@@ -27,8 +27,7 @@ public class YsjlListAdapter extends BaseListAdapter {
         }
         String money = FormatUtil.getInstance().get2double(bean.getDivideMoney());
         binding.setMoney(money);
-        long stringToDate = DateUtil.getInstance().getStringToDate(bean.getOrderDate(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
-        String time = DateUtil.getInstance().formatTime(stringToDate);
+        String time  = DateUtil.getInstance().formatDate(bean.getOrderDate());
         binding.ysjlDate.setText(time);
         return    binding.getRoot();
     }

@@ -36,8 +36,7 @@ public class TransationRecordListAdapter extends BaseListAdapter {
             transationName = TransationOption.getInstance().getTransationName(transactionType);
         }
         binding.setType(transationName);
-        long stringToDate = DateUtil.getInstance().getStringToDate(dataBean.getAddTime(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
-        String time = DateUtil.getInstance().formatTime(stringToDate);
+        String time = DateUtil.getInstance().formatDate(dataBean.getAddTime());
         binding.setTime(time);
         binding.setBean(dataBean);
         return binding.getRoot();

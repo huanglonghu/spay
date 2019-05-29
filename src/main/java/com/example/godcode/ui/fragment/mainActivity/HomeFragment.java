@@ -53,7 +53,7 @@ public class HomeFragment extends BaseFragment {
                     if (handlerType == 1 || handlerType == 4 || handlerType == 6) {
                         refreshData();
                         if (handlerType == 6) {
-                            initData();
+                            refreshDivideIncome();
                         }
                     }
                 }
@@ -72,6 +72,11 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initData() {
+        refreshDivideIncome();
+
+    }
+
+    public void refreshDivideIncome() {
         HttpUtil.getInstance().getDivideIncome(Constant.userId).subscribe(
                 divideStr -> {
                     DivideIncome divideIncome = GsonUtil.getInstance().fromJson(divideStr, DivideIncome.class);
@@ -82,7 +87,6 @@ public class HomeFragment extends BaseFragment {
                     initBalanceMsg();
                 }
         );
-
     }
 
 
@@ -104,7 +108,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void netChange(boolean isConnect) {
                 if (isConnect) {
-                    initData();
+                    refreshDivideIncome();
                 } else {
                     NetStateDialog netStateDialog = new NetStateDialog(getContext());
                     netStateDialog.show();
@@ -171,6 +175,16 @@ public class HomeFragment extends BaseFragment {
     public void refreshData() {
         initView();
         binding.setShowNews(true);
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isVisible()) {
+            LogUtil.log("WWWWWWWWW============home可见===========");
+            refreshDivideIncome();
+        }
     }
 
 

@@ -91,9 +91,7 @@ public class BankCardFragment extends BaseFragment {
 
     @Override
     protected void lazyLoad() {
-        if (!isPrepared || !isVisible) {
-            return;
-        }
+
     }
 
 

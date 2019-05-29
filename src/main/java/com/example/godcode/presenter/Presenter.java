@@ -58,7 +58,6 @@ public class Presenter {
 
     private static Presenter defaultInstance;
 
-
     public interface FriendIdResponse {
         void getFriendId(int friendId);
     }
@@ -125,7 +124,10 @@ public class Presenter {
 
     private FragmentMainBinding binding;
 
+    private int index;
+
     public void togglePager(int index) {
+        this.index=index;
         binding.setPosition(index);
         binding.mainViewPager.setCurrentItem(index, false);
     }

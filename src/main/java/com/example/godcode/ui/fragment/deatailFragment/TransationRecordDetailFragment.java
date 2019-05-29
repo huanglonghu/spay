@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.MobileRechargeRecord;
 import com.example.godcode.bean.QRPay;
@@ -25,6 +26,7 @@ import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.utils.DateUtil;
 import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.GsonUtil;
+
 import java.text.DecimalFormat;
 
 public class TransationRecordDetailFragment extends BaseFragment {
@@ -33,7 +35,7 @@ public class TransationRecordDetailFragment extends BaseFragment {
     private int id;
     private int relatedKey;
     private int transactionType;
-    private String[] typeArray = {"", "转账支出", "二维码收款", "二维码付款", "商户消费", "充值", "提现", "退款", "转账收入", "产品营收","手机充值"};
+    private String[] typeArray = {"", "转账支出", "二维码收款", "二维码付款", "商户消费", "充值", "提现", "退款", "转账收入", "产品营收", "手机充值"};
     private DecimalFormat decimalFormat;
 
     @Nullable
@@ -55,7 +57,7 @@ public class TransationRecordDetailFragment extends BaseFragment {
     }
 
     private void initData() {
-       // String transferExpense = StringUtil.getString(activity, R.string.transferExpense);
+        // String transferExpense = StringUtil.getString(activity, R.string.transferExpense);
         TransationDetail transationDetail = new TransationDetail();
         transationDetail.setRelatedKey(relatedKey);
         transationDetail.setId(id);
@@ -161,14 +163,13 @@ public class TransationRecordDetailFragment extends BaseFragment {
 
 
     public String changeDate(String dateStr) {
-        long stringToDate = DateUtil.getInstance().getStringToDate(dateStr, "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
-        String time = DateUtil.getInstance().formatTime(stringToDate);
+        String time = DateUtil.getInstance().formatDate(dateStr);
         return time;
     }
 
     private String[] payWay = {"微信", "支付宝", "余额", "银行卡"};
 
-    private String[] payType = {"消费支出", "转账支出","", "盈利分成", "扫码支出"};
+    private String[] payType = {"消费支出", "转账支出", "", "盈利分成", "扫码支出"};
     private String[] txStatus = {"未审核", "正在处理", "提现成功", "提现失败", "审核不通过"};
     private String[] incomeType = {"消费收入", "退款收入", "转账收入", "扫码收入", "盈利分成"};
 
