@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="dialog"
+            type="com.example.godcode.ui.view.widget.LanguageConfigDialog" />
+
+        <variable
+            name="isChinese"
+            type="boolean" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bklc"
+        android:orientation="vertical">
+
+
+        <com.example.godcode.ui.view.customview.ImageTextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:onClick="@{()->dialog.selectLanguage(0)}"
+            android:padding="10dp"
+            android:text="中文"
+            android:textColor="#000"
+            app:direcation="2"
+            app:drawable="@{isChinese?@drawable/radiobutton_select:@drawable/radiobutton_unselect}"
+            app:drawableHeight="8dp"
+            app:drawableWidth="8dp" />
+
+        <include layout="@layout/layout_divider3" />
+
+
+        <com.example.godcode.ui.view.customview.ImageTextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:onClick="@{()->dialog.selectLanguage(1)}"
+            app:drawable="@{isChinese?@drawable/radiobutton_unselect:@drawable/radiobutton_select}"
+            android:padding="10dp"
+            android:text="英文"
+            android:textColor="#000"
+            app:direcation="2"
+            app:drawableHeight="8dp"
+            app:drawableWidth="8dp" />
+
+
+        <include layout="@layout/layout_divider3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:divider="@drawable/divider2"
+            android:showDividers="middle">
+
+            <TextView
+                android:id="@+id/cancle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/c1"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sure"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="保存"
+                android:textColor="@color/theme_color"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
