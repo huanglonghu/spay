@@ -7,6 +7,8 @@ import com.example.godcode.bean.WebSocketNews3;
 import com.example.godcode.bean.WebSocketNews4;
 import com.example.godcode.bean.WsHeart;
 import com.example.godcode.handler.WebSocketNewsHandler;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.observable.WebSocketNewsObservable;
 import com.example.godcode.ui.activity.BaseActivity;
 import com.example.godcode.ui.view.UpdateDialog;
@@ -146,6 +148,7 @@ public class WebSocketUtil {
                 break;
             case "19":
                 builder.handlerType(5);
+                RxBus.getInstance().post(new RxEvent(1));
                 break;
             case "4": case "5": case "6": case "8": case "10": case "11":
                 builder.handlerType(6);

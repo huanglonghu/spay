@@ -14,6 +14,8 @@ import com.example.godcode.bean.SellGoodsOrder;
 import com.example.godcode.bean.YSRecord;
 import com.example.godcode.databinding.FragmentYsjlDetailBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.adapter.HdSellListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
@@ -25,6 +27,8 @@ import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.GsonUtil;
 import com.example.godcode.utils.PayPsdSetting;
 import com.example.godcode.utils.StringUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -106,6 +110,7 @@ public class YSJLDetailFragment extends BaseFragment implements KeyBoard.PsdLeng
                     } else {
                         Toast.makeText(activity, "退款成功", Toast.LENGTH_SHORT).show();
                         PsdPopupWindow.getInstance(activity).exit();
+                        RxBus.getInstance().post(new RxEvent(1));
                         presenter.back();
                     }
                 }

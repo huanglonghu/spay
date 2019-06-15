@@ -12,6 +12,8 @@ import com.example.godcode.R;
 import com.example.godcode.bean.YSRecord;
 import com.example.godcode.databinding.FragmentYsjlBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.adapter.YsjlListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.view.MyListView;
@@ -21,14 +23,21 @@ import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public class YSJLFragment extends BaseFragment implements MyListView.RefreshData, SelectTimeFragment.TimeSelect {
     private FragmentYsjlBinding binding;
     private View view;
     private List<YSRecord.ResultBean.DataBean> data;
     private YsjlListAdapter ysjlListAdapter;
+    private CompositeDisposable compositeDisposable;
 
 
     @Nullable
@@ -44,7 +53,6 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
             initView();
             initListener();
             binding.lvYsjl.setPage(1);
-            LogUtil.log("===========BBBBBBBBBBBBB==========");
             querryYsjl();
         }
 
@@ -65,7 +73,7 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
             String title = StringUtil.getString(activity, R.string.totalYs);
             binding.ysjlToolbar.title.setText(title);
         }
-        ysjlListAdapter = new YsjlListAdapter(activity, data,R.layout.item_lv_ysjl);
+        ysjlListAdapter = new YsjlListAdapter(activity, data, R.layout.item_lv_ysjl);
         binding.lvYsjl.setAdapter(ysjlListAdapter);
     }
 
@@ -90,11 +98,37 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
                 presenter.step2Fragment(selectTimeFragment, "selectTime");
             }
         });
+        compositeDisposable = new CompositeDisposable();
+        RxBus.getInstance().toObservable(RxEvent.class).subscribe(new Observer<RxEvent>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(RxEvent rxEvent) {
+                //处理事件
+                LogUtil.log("============收到事件=============");
+                if (rxEvent.getEventType() == 1) {
+                    data.clear();
+                    ysjlListAdapter.clearView();
+                    querryYsjl();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
     }
 
-    private void initData() {
-
-    }
 
     private void querryYsjl() {
         HttpUtil.getInstance().getYSRecord(time1, time2, binding.lvYsjl.getPage()).subscribe(
@@ -108,10 +142,10 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
                     if (list.size() > 0) {
                         data.addAll(list);
                         binding.lvYsjl.setLoading(true);
+                        ysjlListAdapter.notifyDataSetChanged();
                     } else {
                         binding.lvYsjl.setLoading(false);
                     }
-                    ysjlListAdapter.notifyDataSetChanged();
                 }
         );
 
@@ -151,7 +185,6 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
 
     @Override
     public void refreshData(int page) {
-        LogUtil.log("===========CCCCCCCCCCCCCCCCCCCCCC==========");
         querryYsjl();
     }
 
@@ -161,7 +194,16 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
         this.time2 = date2;
         binding.tvDate1.setText(time1);
         binding.tvDate2.setText(time2);
-        LogUtil.log("===========AAAAAAAAAAAAAAA==========");
+        data.clear();
+        ysjlListAdapter.clearView();
         querryYsjl();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
     }
 }

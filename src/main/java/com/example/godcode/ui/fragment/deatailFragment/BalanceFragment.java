@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.BalanceResponse;
 import com.example.godcode.bean.DivideIncome;
@@ -22,7 +21,6 @@ import com.example.godcode.utils.DateUtil;
 import com.example.godcode.utils.GsonUtil;
 import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
-
 import java.text.DecimalFormat;
 
 
@@ -43,12 +41,12 @@ public class BalanceFragment extends BaseFragment {
             view = binding.getRoot();
             MainActivity activity = (MainActivity) this.activity;
             WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable = activity.getWebSocketNewsObservable();
-            WebSocketNewsObserver<WebSocketNewsHandler> observer=new WebSocketNewsObserver<WebSocketNewsHandler>() {
+            WebSocketNewsObserver<WebSocketNewsHandler> observer = new WebSocketNewsObserver<WebSocketNewsHandler>() {
                 @Override
                 public void onUpdate(WebSocketNewsObservable<WebSocketNewsHandler> observable, WebSocketNewsHandler data) {
                     int handlerType = data.getHandlerType();
-                    if(handlerType==6){
-                        qurryBalance();
+                    if (handlerType == 6 || handlerType == 5) {
+                        querryDivide();
                     }
                 }
             };
@@ -60,6 +58,9 @@ public class BalanceFragment extends BaseFragment {
         querryDivide();
         return view;
     }
+
+
+
 
 
     private void querryDivide() {
@@ -127,13 +128,6 @@ public class BalanceFragment extends BaseFragment {
         binding.setYesterDay(yesterDaty);
     }
 
-    public double getWithdrawRate() {
-        return withdrawRate;
-    }
-
-    public void setWithdrawRate(double withdrawRate) {
-        this.withdrawRate = withdrawRate;
-    }
 
     public void qurryBalance() {
         HttpUtil.getInstance().querryBalance(Constant.userId).subscribe(

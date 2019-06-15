@@ -55,6 +55,8 @@ public class HomeFragment extends BaseFragment {
                         if (handlerType == 6) {
                             refreshDivideIncome();
                         }
+                    } else if (handlerType == 5) {
+                        refreshDivideIncome();
                     }
                 }
             };
@@ -71,10 +73,6 @@ public class HomeFragment extends BaseFragment {
         binding.yesterdayDivide.setText(FormatUtil.getInstance().get2double(Constant.yesterDayMoney));
     }
 
-    private void initData() {
-        refreshDivideIncome();
-
-    }
 
     public void refreshDivideIncome() {
         HttpUtil.getInstance().getDivideIncome(Constant.userId).subscribe(
