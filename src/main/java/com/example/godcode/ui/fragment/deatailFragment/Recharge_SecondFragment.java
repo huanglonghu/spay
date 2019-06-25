@@ -22,7 +22,7 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class Recharge_SecondFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
+public class Recharge_SecondFragment extends BaseFragment {
 
     private FragmentRechargeSecondBinding binding;
     private View view;
@@ -70,7 +70,7 @@ public class Recharge_SecondFragment extends BaseFragment implements KeyBoard.Ps
                     //去设置绑定银行卡
                     presenter.step2Fragment("bankCard");
                 } else {
-                    PayPsdSetting.getInstance().isPayPsdSet("充值",parentFragment.getMoney(),view,Recharge_SecondFragment.this,2);
+                 //   PayPsdSetting.getInstance().isPayPsdSet("充值",parentFragment.getMoney(),view,Recharge_SecondFragment.this,2);
                 }
             }
         });
@@ -115,25 +115,25 @@ public class Recharge_SecondFragment extends BaseFragment implements KeyBoard.Ps
 
     }
 
-    @Override
-    public void toCheck(String psd) {
-
-            RechargeBody rechargeBody = new RechargeBody();
-            RechargeBody.PayMoneyBean payMoneyBean = new RechargeBody.PayMoneyBean();
-            payMoneyBean.setFeeType("CNY");
-            payMoneyBean.setFK_UserID(Constant.userId);
-            payMoneyBean.setSumTotal(parentFragment.getMoney());
-            rechargeBody.setPayMoney(payMoneyBean);
-            HttpUtil.getInstance().recharge(rechargeBody).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                    rechargeStr -> {
-                        PsdPopupWindow.getInstance(activity).exit();
-                        parentFragment.setBank(binding.tvRechargeWay.getText().toString());
-                        parentFragment.toggle(2);
-                    }
-            );
-
-
-    }
+//    @Override
+//    public void toCheck(String psd) {
+//
+//            RechargeBody rechargeBody = new RechargeBody();
+//            RechargeBody.PayMoneyBean payMoneyBean = new RechargeBody.PayMoneyBean();
+//            payMoneyBean.setFeeType("CNY");
+//            payMoneyBean.setFK_UserID(Constant.userId);
+//            payMoneyBean.setSumTotal(parentFragment.getMoney());
+//            rechargeBody.setPayMoney(payMoneyBean);
+//            HttpUtil.getInstance().recharge(rechargeBody).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+//                    rechargeStr -> {
+//                        PsdPopupWindow.getInstance(activity).exit();
+//                        parentFragment.setBank(binding.tvRechargeWay.getText().toString());
+//                        parentFragment.toggle(2);
+//                    }
+//            );
+//
+//
+//    }
 
 
 

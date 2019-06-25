@@ -22,6 +22,7 @@ import com.example.godcode.constant.Constant;
 import com.example.godcode.databinding.FragmentMobileRechargeBinding;
 import com.example.godcode.handler.ActivityResultHandler;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.interface_.HandlerStrategy;
 import com.example.godcode.ui.adapter.MobileRechargeAdapter;
 import com.example.godcode.ui.base.BaseFragment;
@@ -32,7 +33,7 @@ import com.example.godcode.utils.PayPsdSetting;
 import com.example.godcode.utils.StringUtil;
 import java.util.List;
 
-public class MobileRechargeFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
+public class MobileRechargeFragment extends BaseFragment {
     private FragmentMobileRechargeBinding binding;
     private View view;
     private List<MobileRechargeList.ResultBean> result;
@@ -81,8 +82,28 @@ public class MobileRechargeFragment extends BaseFragment implements KeyBoard.Psd
                 }
                 resultBean = result.get(position);
                 if (resultBean.isIsEnable()) {
-                    PayPsdSetting.getInstance().isPayPsdSet("手机充值", resultBean.getSellAmount(), view, MobileRechargeFragment.this, 2);
+                    double money = resultBean.getSellAmount();
+                    PayPsdSetting.getInstance().chackPwd(money, new ClickSureListener() {
+                        @Override
+                        public void isPwdExit(boolean isPwdExit) {
+                            if(isPwdExit){
+                                KeyBoard keyBoard = new KeyBoard(activity, new ClickSureListener() {
+                                    @Override
+                                    public void checkPwd(String pwd) {
+                                        toCheck(pwd);
+                                    }
+                                });
+                                PsdPopupWindow.getInstance(activity).show("手机充值", money, view, keyBoard);
+                            }else {
+
+                            }
+                        }
+                    });
                 }
+
+
+
+
             }
         });
 
@@ -121,7 +142,6 @@ public class MobileRechargeFragment extends BaseFragment implements KeyBoard.Psd
     }
 
 
-    @Override
     public void toCheck(String psd) {
         if (resultBean != null) {
 

@@ -21,11 +21,13 @@ import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.EtStrategy;
 import com.example.godcode.observable.WebSocketNewsObservable;
 import com.example.godcode.observable.WebSocketNewsObserver;
+import com.example.godcode.presenter.Presenter;
 import com.example.godcode.service.NetStateReceiver;
 import com.example.godcode.ui.activity.MainActivity;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.deatailFragment.MobileRechargeFragment;
+import com.example.godcode.ui.fragment.dm.MyScore;
 import com.example.godcode.ui.view.widget.NetStateDialog;
 import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.GsonUtil;
@@ -160,6 +162,14 @@ public class HomeFragment extends BaseFragment {
                     binding.todayDivide.setInputType(128);
                     binding.yesterdayDivide.setInputType(128);
                 }
+            }
+        });
+
+        binding.dm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyScore myScore = new MyScore();
+                presenter.step2Fragment(myScore, "myScore");
             }
         });
 

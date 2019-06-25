@@ -18,6 +18,7 @@ import com.example.godcode.databinding.FragmentTransferaccountDetailBinding;
 import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
@@ -31,11 +32,10 @@ import com.example.godcode.utils.PayPsdSetting;
 import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 
-public class TransferAccountDetailFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher, MyEditText.MoneyValueListener {
+public class TransferAccountDetailFragment extends BaseFragment implements  MyEditText.MoneyValueListener {
     private FragmentTransferaccountDetailBinding binding;
     private View view;
     private Transfer transfer;
-    private TransferAccuntView transferAccuntView;
     private String key;
 
     @Nullable
@@ -88,7 +88,6 @@ public class TransferAccountDetailFragment extends BaseFragment implements KeyBo
         transfer.setFK_UserIDDisburs(Constant.userId);
         transfer.setIncomeGenreType(type);
         transfer.setFK_UserIDIncome(userId);
-        LogUtil.log("-----money------"+money);
         transfer.setMoney(money);
         binding.setTransfer(transfer);
     }
@@ -147,13 +146,6 @@ public class TransferAccountDetailFragment extends BaseFragment implements KeyBo
     }
 
 
-    public void transfer() {
-        transferAccuntView.dismiss();
-
-        PayPsdSetting.getInstance().isPayPsdSet("转账", transfer.getMoney(), view, this, 1);
-    }
-
-    @Override
     public void toCheck(String psd) {
         TransferBody transferBody = new TransferBody();
         transfer.setPassword(psd);
@@ -185,8 +177,23 @@ public class TransferAccountDetailFragment extends BaseFragment implements KeyBo
                     PublicKey publicKey = new Gson().fromJson(publicKeyStr, PublicKey.class);
                     key = publicKey.getResult().getXmlKey();
                     initTransfer(userId);
-                    transferAccuntView = new TransferAccuntView(activity, transfer, TransferAccountDetailFragment.this);
-                    transferAccuntView.show();
+                    PayPsdSetting.getInstance().chackPwd(money, new ClickSureListener() {
+                        @Override
+                        public void isPwdExit(boolean isPwdExit) {
+                            if(isPwdExit){
+                                KeyBoard keyBoard = new KeyBoard(activity, new ClickSureListener() {
+                                    @Override
+                                    public void checkPwd(String pwd) {
+                                        toCheck(pwd);
+                                    }
+                                });
+                                PsdPopupWindow.getInstance(activity).show("转账", money, view, keyBoard);
+                            }else {
+
+                            }
+                        }
+                    });
+
                 }
         );
     }

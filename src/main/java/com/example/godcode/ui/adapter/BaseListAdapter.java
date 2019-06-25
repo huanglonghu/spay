@@ -42,13 +42,13 @@ public  abstract class BaseListAdapter<T> extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(viewMap.get(position) == null){
-            View view = initView(layoutInflater,res,datas,position);
+            View view = initView(layoutInflater,res,datas,position,parent);
             viewMap.put(position,view);
         }
         return viewMap.get(position);
     }
 
-     abstract View initView(LayoutInflater layoutInflater,int res,List<T> datas,int position);
+   abstract View initView(LayoutInflater layoutInflater,int res,List<T> datas,int position,ViewGroup parent);
 
 
     public void clearView(){

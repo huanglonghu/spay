@@ -18,9 +18,11 @@ public class User {
     private int userId;
     private String syNumber;
     private String phoneNumer;
-    @Generated(hash = 2131904150)
+    private boolean setPwd;
+    @Generated(hash = 1112252507)
     public User(Long id, String area, String sex, String headImageUrl,
-            String userName, int userId, String syNumber, String phoneNumer) {
+            String userName, int userId, String syNumber, String phoneNumer,
+            boolean setPwd) {
         this.id = id;
         this.area = area;
         this.sex = sex;
@@ -29,6 +31,7 @@ public class User {
         this.userId = userId;
         this.syNumber = syNumber;
         this.phoneNumer = phoneNumer;
+        this.setPwd = setPwd;
     }
     @Generated(hash = 586692638)
     public User() {
@@ -81,6 +84,14 @@ public class User {
     public void setPhoneNumer(String phoneNumer) {
         this.phoneNumer = phoneNumer;
     }
+    public boolean getSetPwd() {
+        return this.setPwd;
+    }
+    public void setSetPwd(boolean setPwd) {
+        this.setPwd = setPwd;
+    }
+
+
 
     
 

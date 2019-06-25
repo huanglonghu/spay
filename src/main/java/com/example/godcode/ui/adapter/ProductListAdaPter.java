@@ -4,10 +4,13 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
 import com.example.godcode.catche.Loader.RxImageLoader;
 import com.example.godcode.bean.ProductList;
 import com.example.godcode.databinding.ItemLvProductcenterBinding;
 import com.example.godcode.constant.Constant;
+
 import java.util.List;
 
 public class ProductListAdaPter extends BaseListAdapter {
@@ -18,8 +21,8 @@ public class ProductListAdaPter extends BaseListAdapter {
 
 
     @Override
-    View initView(LayoutInflater layoutInflater, int res, List datas, int position) {
-        ItemLvProductcenterBinding binding = DataBindingUtil.inflate(layoutInflater, res, null, false);
+    View initView(LayoutInflater layoutInflater, int res, List datas, int position, ViewGroup parent) {
+        ItemLvProductcenterBinding binding = DataBindingUtil.inflate(layoutInflater, res, parent, false);
         ProductList.DataBean dataBean = (ProductList.DataBean) datas.get(position);
         binding.setBean(dataBean);
         String url = dataBean.getThumbnailImgPath();

@@ -16,6 +16,7 @@ import com.example.godcode.R;
 import com.example.godcode.bean.PayByBalance;
 import com.example.godcode.databinding.FragmentOrderdetailBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
@@ -24,7 +25,7 @@ import com.example.godcode.utils.DateUtil;
 import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.PayPsdSetting;
 
-public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
+public class OrderDetailFragment extends BaseFragment{
 
     private FragmentOrderdetailBinding binding;
     private View view;
@@ -69,7 +70,23 @@ public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLen
         binding.orderPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PayPsdSetting.getInstance().isPayPsdSet("付款", result.getSumOrder(), view, OrderDetailFragment.this, 1);
+                double money = result.getSumOrder();
+                PayPsdSetting.getInstance().chackPwd(money, new ClickSureListener() {
+                    @Override
+                    public void isPwdExit(boolean isPwdExit) {
+                        if(isPwdExit){
+                            KeyBoard keyBoard = new KeyBoard(activity, new ClickSureListener() {
+                                @Override
+                                public void checkPwd(String pwd) {
+                                    toCheck(pwd);
+                                }
+                            });
+                            PsdPopupWindow.getInstance(activity).show("付款", money, view, keyBoard);
+                        }else {
+
+                        }
+                    }
+                });
             }
         });
 
@@ -79,7 +96,7 @@ public class OrderDetailFragment extends BaseFragment implements KeyBoard.PsdLen
     protected void lazyLoad() {
     }
 
-    @Override
+
     public void toCheck(String psd) {
 
         PayByBalance payByBalance = new PayByBalance();

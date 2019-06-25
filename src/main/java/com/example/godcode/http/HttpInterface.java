@@ -36,13 +36,9 @@ import com.example.godcode.bean.TransferDivide;
 import com.example.godcode.bean.Tx;
 import com.example.godcode.bean.UpdateFriend;
 import com.example.godcode.bean.WxPay;
-
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -321,5 +317,11 @@ public interface HttpInterface {
 
     @POST("/api/services/app/CommonPaymentAppServices/FreePlay")
     Call<ResponseBody> freePlay(@Body HashMap<String, String> map);
+
+    @GET("/api/services/app/MCMerchantOwner/GetMobileGroupMCMerchantOwners")
+    Call<ResponseBody> getDmMsg(@Query("UserID") int userId);
+
+    @POST("/api/services/app/CommonPaymentAppServices/RechargeMCFraction")
+    Call<ResponseBody> buyScore(@Body HashMap<String,Object> map);
 
 }

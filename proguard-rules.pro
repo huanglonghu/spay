@@ -34,9 +34,6 @@
 # RxJava RxAndroid
 
 
-
-
-
 #zxing
 -keep class com.google.zxing.** {*;}
 -dontwarn com.google.zxing.**
@@ -73,13 +70,19 @@
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
 
--keep class org.greenrobot.greendao.**{*;}
+
+# greendao
 -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
 public static java.lang.String TABLENAME;
 }
 -keep class **$Properties
+# If you do not use SQLCipher:
+-dontwarn org.greenrobot.greendao.database.**
+# If you do not use Rx:
+-dontwarn rx.**
 
 
+-dontwarn java.lang.invoke.**
 #weixin
 -keep class com.tencent.mm.opensdk.** {
 *;

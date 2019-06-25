@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
-
 import com.example.godcode.R;
 import com.example.godcode.databinding.LayoutInputPsdBinding;
 import com.example.godcode.presenter.Presenter;
@@ -16,7 +15,6 @@ import com.example.godcode.utils.FormatUtil;
 
 
 public class PsdPopupWindow extends PopupWindow {
-
     private LayoutInputPsdBinding binding;
     private Activity activity;
     private static PsdPopupWindow defaultInstance;

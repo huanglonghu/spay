@@ -65,13 +65,13 @@ public class MainActivity extends BaseActivity {
     @Override
     public void init() {
         HttpUtil.getInstance().init(this);
+        PayPsdSetting.getInstance().initContext(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         MainFragment mainFragment = new MainFragment();
         supportFragmentManager = getSupportFragmentManager();
         supportFragmentManager.addOnBackStackChangedListener(getListener());
         Presenter.getInstance().initFragmentManager(this, supportFragmentManager, 1);
         supportFragmentManager.beginTransaction().replace(R.id.mainActivity_fragmentContainer, mainFragment).addToBackStack("main").commit();
-        PayPsdSetting.getInstance().initContext(this);
         webSocketNewsObservable = new WebSocketNewsObservable<WebSocketNewsHandler>();
         //开启websocket服务
         Intent intent = new Intent(this, WebSocketService.class);

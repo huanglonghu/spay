@@ -14,6 +14,7 @@ import com.example.godcode.bean.SellGoodsOrder;
 import com.example.godcode.bean.YSRecord;
 import com.example.godcode.databinding.FragmentYsjlDetailBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.adapter.HdSellListAdapter;
@@ -33,7 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 
 
-public class YSJLDetailFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
+public class YSJLDetailFragment extends BaseFragment {
     private FragmentYsjlDetailBinding binding;
     private View view;
     private YSRecord.ResultBean.DataBean bean;
@@ -58,7 +59,23 @@ public class YSJLDetailFragment extends BaseFragment implements KeyBoard.PsdLeng
         binding.tk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PayPsdSetting.getInstance().isPayPsdSet("退款", bean.getSumOrder(), view, YSJLDetailFragment.this, 1);
+                double money = bean.getSumOrder();
+                PayPsdSetting.getInstance().chackPwd(money, new ClickSureListener() {
+                    @Override
+                    public void isPwdExit(boolean isPwdExit) {
+                        if(isPwdExit){
+                            KeyBoard keyBoard = new KeyBoard(activity, new ClickSureListener() {
+                                @Override
+                                public void checkPwd(String pwd) {
+                                    toCheck(pwd);
+                                }
+                            });
+                            PsdPopupWindow.getInstance(activity).show("退款", money, view, keyBoard);
+                        }else {
+
+                        }
+                    }
+                });
             }
         });
     }
@@ -96,7 +113,7 @@ public class YSJLDetailFragment extends BaseFragment implements KeyBoard.PsdLeng
     protected void lazyLoad() {
     }
 
-    @Override
+
     public void toCheck(String psd) {
         PayByBalance payByBalance = new PayByBalance();
         payByBalance.setUserID(Constant.userId);

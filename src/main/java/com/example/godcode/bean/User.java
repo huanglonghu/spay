@@ -96,6 +96,15 @@ public class User {
         private String address;
         private int id;
         private double balance;
+        private boolean isMakeCode;
+
+        public boolean isMakeCode() {
+            return isMakeCode;
+        }
+
+        public void setMakeCode(boolean makeCode) {
+            isMakeCode = makeCode;
+        }
 
         public double getBalance() {
             return balance;

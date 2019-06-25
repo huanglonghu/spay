@@ -80,8 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#000"
-                    android:textSize="20sp"
-                    />
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -379,8 +378,45 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/bg1"
+                    android:divider="@drawable/divider2"
+                    android:orientation="horizontal"
+                    android:showDividers="middle|end"
+                    android:weightSum="3">
+
+                    <LinearLayout
+                        android:id="@+id/dm"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/bindproduct" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="打码系统"
+                            android:textColor="#000" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
 
             </LinearLayout>
+
+
         </com.southernbox.springscrollview.SpringScrollView>
 
 

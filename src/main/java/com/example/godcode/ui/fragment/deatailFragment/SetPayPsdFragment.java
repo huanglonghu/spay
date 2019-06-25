@@ -7,18 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.ChangePsd;
 import com.example.godcode.bean.SetPayPsd;
 import com.example.godcode.databinding.FragmentSetpaypsdBinding;
+import com.example.godcode.greendao.entity.User;
+import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
 
-
-public class SetPayPsdFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
+public class SetPayPsdFragment extends BaseFragment {
     private FragmentSetpaypsdBinding binding;
     private View view;
     private String psd1;
@@ -34,7 +35,8 @@ public class SetPayPsdFragment extends BaseFragment implements KeyBoard.PsdLengt
             if(getArguments()!=null){
                 originalPayPass = getArguments().getString("OriginalPayPass");
             }
-            if (Constant.isPayPsdSet) {
+            User user = UserOption.getInstance().querryUser(Constant.userId);
+            if (user.getSetPwd()) {
                 binding.setPsdTitle.setText("请设置新的支付密码");
             } else {
                 binding.setPsdTitle.setText("请设置支付密码");
@@ -56,11 +58,11 @@ public class SetPayPsdFragment extends BaseFragment implements KeyBoard.PsdLengt
                 }
             }
         });
-
+        User user = UserOption.getInstance().querryUser(Constant.userId);
         binding.btnSetPsd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Constant.isPayPsdSet) {
+                if (user.getSetPwd()) {
                     ChangePsd changePsd = new ChangePsd();
                     changePsd.setfK_UserID(Constant.userId);
                     changePsd.setOriginalPayPass(originalPayPass);
@@ -83,7 +85,6 @@ public class SetPayPsdFragment extends BaseFragment implements KeyBoard.PsdLengt
                     HttpUtil.getInstance().setPayPsd(setPayPsd).subscribe(
                             setPsdStr -> {
                                 Toast.makeText(activity, "支付密码设置成功", Toast.LENGTH_SHORT).show();
-                                Constant.isPayPsdSet = true;
                                 //跳进绑定银行卡界面
                                 if (type == 2) {
                                     AddBankCardFragment addBankCardFragment = new AddBankCardFragment();
@@ -106,8 +107,25 @@ public class SetPayPsdFragment extends BaseFragment implements KeyBoard.PsdLengt
     private KeyBoard keyBoard;
 
     public void initView() {
-        keyBoard = new KeyBoard(activity);
-        keyBoard.setPsdLengthWatcher(this);
+        keyBoard = new KeyBoard(activity, new ClickSureListener() {
+            @Override
+            public void checkPwd(String pwd) {
+                if (index == 0) {
+                    psd1 = keyBoard.getPsd();
+                    binding.setPayPsdPsdView.setPsLength(0);
+                    keyBoard.clearPsd();
+                    binding.setPsdTitle.setText("请再次填写以确认");
+                } else if (index >= 1) {
+                    if (psd1.equals(keyBoard.getPsd())) {
+                        binding.btnSetPsd.setEnabled(true);
+                    } else {
+                        Toast.makeText(activity, "两次输入的密码不一致,请重新输入", Toast.LENGTH_SHORT).show();
+                        binding.setPayPsdPsdView.setPsLength(0);
+                    }
+                }
+                index++;
+            }
+        });
         keyBoard.setRefreshPsd(binding.setPayPsdPsdView);
         keyBoard.show(view);
     }
@@ -118,25 +136,6 @@ public class SetPayPsdFragment extends BaseFragment implements KeyBoard.PsdLengt
 
 
     private int index;
-
-    @Override
-    public void toCheck(String psd) {
-        if (index == 0) {
-            psd1 = keyBoard.getPsd();
-            binding.setPayPsdPsdView.setPsLength(0);
-            keyBoard.clearPsd();
-            binding.setPsdTitle.setText("请再次填写以确认");
-        } else if (index >= 1) {
-            if (psd1.equals(keyBoard.getPsd())) {
-                binding.btnSetPsd.setEnabled(true);
-            } else {
-                Toast.makeText(activity, "两次输入的密码不一致,请重新输入", Toast.LENGTH_SHORT).show();
-                binding.setPayPsdPsdView.setPsLength(0);
-            }
-        }
-        index++;
-
-    }
 
     @Override
     public void onStop() {

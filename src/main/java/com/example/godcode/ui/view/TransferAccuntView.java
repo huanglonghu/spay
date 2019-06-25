@@ -19,6 +19,7 @@ import com.example.godcode.bean.Transfer;
 import com.example.godcode.databinding.LayoutPaySelectBinding;
 import com.example.godcode.databinding.LayoutTransferaccountBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.adapter.PayViewPageAdapter;
 import com.example.godcode.constant.Constant;
@@ -33,18 +34,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class TransferAccuntView extends Dialog {
-    private Transfer transfer;
-    private final LayoutInflater layoutInflater;
+    private LayoutInflater layoutInflater;
     private LayoutTransferaccountBinding binding;
     private Activity activity;
-    private TransferAccountDetailFragment fragment;
     private LayoutPaySelectBinding binding1;
+    private ClickSureListener clickSureListener;
+    private double money;
 
-    public TransferAccuntView(@NonNull Activity activity, Transfer transfer, TransferAccountDetailFragment fragment) {
+    public TransferAccuntView(@NonNull Activity activity, double money, ClickSureListener clickSureListener) {
         super(activity, R.style.dialog2);
         this.activity = activity;
-        this.transfer = transfer;
-        this.fragment = fragment;
+        this.money = money;
+        this.clickSureListener = clickSureListener;
         layoutInflater = LayoutInflater.from(activity);
         initView();
     }
@@ -72,16 +73,21 @@ public class TransferAccuntView extends Dialog {
         });
 
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.layout_transferaccount, null, false);
-        binding.setFragment(fragment);
+
         binding.closeInputDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
         });
-
-        binding.transferMoney.setText(FormatUtil.getInstance().get2double(transfer.getMoney()));
-        binding.setTransfer(transfer);
+        binding.pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                clickSureListener.clickSure();
+            }
+        });
+        binding.transferMoney.setText(FormatUtil.getInstance().get2double(money));
         ArrayList<View> views = new ArrayList<>();
         views.add(binding.getRoot());
         views.add(binding1.getRoot());

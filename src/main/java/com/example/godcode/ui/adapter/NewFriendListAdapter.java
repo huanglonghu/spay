@@ -5,6 +5,8 @@ import android.databinding.DataBindingUtil;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.ApplyFriend;
 import com.example.godcode.bean.ConcurAddFriend;
@@ -24,8 +26,8 @@ public class NewFriendListAdapter extends BaseListAdapter {
     }
 
     @Override
-    View initView(LayoutInflater layoutInflater, int res, List datas, int position) {
-        ItemLvNewfriendBinding binding = DataBindingUtil.inflate(layoutInflater, res, null, false);
+    View initView(LayoutInflater layoutInflater, int res, List datas, int position, ViewGroup parent) {
+        ItemLvNewfriendBinding binding = DataBindingUtil.inflate(layoutInflater, res, parent, false);
         ApplyFriend.ResultBean.ItemsBean itemsBean = (ApplyFriend.ResultBean.ItemsBean) datas.get(position);
         binding.setItem(itemsBean);
         binding.btnAcceptfriend.setOnClickListener(new View.OnClickListener() {

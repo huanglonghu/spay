@@ -53,7 +53,7 @@ public class MainFragment extends BaseFragment {
             initData();
             initFragments();
             initListener();
-            MyViewPagerAdapter adapter = new MyViewPagerAdapter(getActivity().getSupportFragmentManager(), fragments);
+            MyViewPagerAdapter adapter = new MyViewPagerAdapter(getChildFragmentManager(), fragments);
             binding.mainViewPager.setAdapter(adapter);
             binding.mainViewPager.setOffscreenPageLimit(3);
         }

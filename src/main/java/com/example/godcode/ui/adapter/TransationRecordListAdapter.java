@@ -4,6 +4,8 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
 import com.example.godcode.bean.Teansantion;
 import com.example.godcode.databinding.ItemLvTransationrecordBinding;
 import com.example.godcode.greendao.option.TransationOption;
@@ -18,8 +20,8 @@ public class TransationRecordListAdapter extends BaseListAdapter {
     }
 
     @Override
-    View initView(LayoutInflater layoutInflater, int res, List datas, int position) {
-        ItemLvTransationrecordBinding binding = DataBindingUtil.inflate(layoutInflater, res, null, false);
+    View initView(LayoutInflater layoutInflater, int res, List datas, int position, ViewGroup parent) {
+        ItemLvTransationrecordBinding binding = DataBindingUtil.inflate(layoutInflater, res, parent, false);
         Teansantion.DataBean dataBean = (Teansantion.DataBean) datas.get(position);
         int transactionType = dataBean.getTransactionType();
         if (transactionType == 1 || transactionType == 3 || transactionType == 4 || transactionType == 6 || transactionType == 10) {

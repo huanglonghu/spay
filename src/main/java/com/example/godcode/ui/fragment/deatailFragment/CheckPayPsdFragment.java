@@ -11,11 +11,12 @@ import com.example.godcode.R;
 import com.example.godcode.bean.CheckPsd;
 import com.example.godcode.databinding.FragmentCheckpaypsdBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
 
-public class CheckPayPsdFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher {
+public class CheckPayPsdFragment extends BaseFragment{
 
     private FragmentCheckpaypsdBinding binding;
     private View view;
@@ -45,8 +46,35 @@ public class CheckPayPsdFragment extends BaseFragment implements KeyBoard.PsdLen
     }
 
     public void initView() {
-        keyBoard = new KeyBoard(activity);
-        keyBoard.setPsdLengthWatcher(this);
+        keyBoard = new KeyBoard(activity, new ClickSureListener() {
+            @Override
+            public void checkPwd(String pwd) {
+                CheckPsd checkPsd = new CheckPsd();
+                checkPsd.setFK_UserID(Constant.userId);
+                checkPsd.setPayPass(pwd);
+                HttpUtil.getInstance().checkPsyPsd(checkPsd).subscribe(
+                        back -> {
+                            if (back.contains("\"success\":false")) {
+                                keyBoard.clearPsd();
+                                binding.checkPsdPsdView.setPsLength(0);
+                                Toast.makeText(activity, "密码输入错误，请重新输入", Toast.LENGTH_SHORT).show();
+                            } else {
+                                if (type == 2) {
+                                    AddBankCardFragment addBankCardFragment = new AddBankCardFragment();
+                                    presenter.step2Fragment(addBankCardFragment);
+                                } else if (type == 1) {
+                                    PayPsdFragment paypsd = (PayPsdFragment) presenter.getFragment("paypsd");
+                                    SetPayPsdFragment fragment = (SetPayPsdFragment) paypsd.getFragments().get(1);
+                                    Bundle bundl = new Bundle();
+                                    bundl.putString("OriginalPayPass", pwd);
+                                    fragment.setArguments(bundl);
+                                    paypsd.toggle(1);
+                                }
+                            }
+                        }
+                );
+            }
+        });
         keyBoard.setRefreshPsd(binding.checkPsdPsdView);
         keyBoard.show(view);
     }
@@ -56,35 +84,6 @@ public class CheckPayPsdFragment extends BaseFragment implements KeyBoard.PsdLen
     }
 
 
-    @Override
-    public void toCheck(String psd) {
-
-        CheckPsd checkPsd = new CheckPsd();
-        checkPsd.setFK_UserID(Constant.userId);
-        checkPsd.setPayPass(psd);
-        HttpUtil.getInstance().checkPsyPsd(checkPsd).subscribe(
-                back -> {
-                    if (back.contains("\"success\":false")) {
-                        keyBoard.clearPsd();
-                        binding.checkPsdPsdView.setPsLength(0);
-                        Toast.makeText(activity, "密码输入错误，请重新输入", Toast.LENGTH_SHORT).show();
-                    } else {
-                        if (type == 2) {
-                            AddBankCardFragment addBankCardFragment = new AddBankCardFragment();
-                            presenter.step2Fragment(addBankCardFragment);
-                        } else if (type == 1) {
-                            PayPsdFragment paypsd = (PayPsdFragment) presenter.getFragment("paypsd");
-                            SetPayPsdFragment fragment = (SetPayPsdFragment) paypsd.getFragments().get(1);
-                            Bundle bundl = new Bundle();
-                            bundl.putString("OriginalPayPass", psd);
-                            fragment.setArguments(bundl);
-                            paypsd.toggle(1);
-                        }
-                    }
-                }
-        );
-
-    }
 
     @Override
     public void onStop() {

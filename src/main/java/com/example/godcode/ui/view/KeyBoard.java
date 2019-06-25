@@ -11,12 +11,15 @@ import android.widget.PopupWindow;
 
 import com.example.godcode.R;
 import com.example.godcode.databinding.LayoutKeyboardBinding;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.utils.LogUtil;
 
 public class KeyBoard extends PopupWindow {
+    private ClickSureListener clickSureListener;
 
 
-    public KeyBoard(Context context) {
+    public KeyBoard(Context context, ClickSureListener clickSureListener) {
+        this.clickSureListener = clickSureListener;
         LayoutKeyboardBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.layout_keyboard, null, false);
         binding.setKeyBoard(this);
         setContentView(binding.getRoot());
@@ -70,21 +73,10 @@ public class KeyBoard extends PopupWindow {
             if (currentIndex == 6) {
                 //验证密码 进入绑定银行卡界面
                 //通知fragment
-                psdLengthWatcher.toCheck(getPsd());
+                clickSureListener.checkPwd(getPsd());
             }
         }
     }
-
-
-    public interface PsdLengthWatcher {
-        void toCheck(String psd);
-    }
-
-    public void setPsdLengthWatcher(PsdLengthWatcher psdLengthWatcher) {
-        this.psdLengthWatcher = psdLengthWatcher;
-    }
-
-    private PsdLengthWatcher psdLengthWatcher;
 
 
     public String getPsd() {

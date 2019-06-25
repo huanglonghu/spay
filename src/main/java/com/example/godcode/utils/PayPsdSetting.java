@@ -1,15 +1,12 @@
 package com.example.godcode.utils;
 
-import android.view.View;
-
+import com.example.godcode.greendao.entity.User;
+import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.http.HttpUtil;
-import com.example.godcode.presenter.Presenter;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.ui.activity.BaseActivity;
 import com.example.godcode.constant.Constant;
-import com.example.godcode.ui.fragment.deatailFragment.SetPayPsdFragment;
-import com.example.godcode.ui.view.KeyBoard;
-import com.example.godcode.ui.view.PsdPopupWindow;
-
+import com.example.godcode.ui.view.TransferAccuntView;
 
 public class PayPsdSetting {
 
@@ -37,50 +34,31 @@ public class PayPsdSetting {
         this.activity = activity;
     }
 
-
-    public void isPayPsdSet(String title, double money, View view, KeyBoard.PsdLengthWatcher watcher,int type) {
-        if (PayPsdSetting.getInstance().isCheckPsd()) {
-            if (Constant.isPayPsdSet) {
-                inputPsd(title, money, view, watcher);
-            } else {
-                step2SetPsd(type);
-            }
-        } else {
-            HttpUtil.getInstance().hasPsd(Constant.userId).subscribe(
-                    isPayPsdSetStr -> {
-                        isCheckPsd = true;
-                        if (isPayPsdSetStr.equals("no")) {
-                            step2SetPsd(type);
-                        } else {
-                            Constant.isPayPsdSet = true;
-                            inputPsd(title, money, view, watcher);
-                        }
-                    }
-            );
-        }
-    }
-
-    private void step2SetPsd(int type) {
-        LogUtil.log("------PsdSetting---------");
-        SetPayPsdFragment setPayPsdFragment = new SetPayPsdFragment();
-        setPayPsdFragment.initData(type);
-        Presenter.getInstance().step2Fragment(setPayPsdFragment, "setPayPsd");
-    }
-
     private BaseActivity activity;
 
-    public void inputPsd(String title, double money, View view, KeyBoard.PsdLengthWatcher watcher) {
-        KeyBoard keyBoard = new KeyBoard(activity);
-        keyBoard.setPsdLengthWatcher(watcher);
-        PsdPopupWindow.getInstance(activity).show(title, money, view, keyBoard);
+    public void chackPwd(double money, ClickSureListener clickSureListener) {
+        TransferAccuntView transferAccuntView = new TransferAccuntView(activity, money, new ClickSureListener() {
+            @Override
+            public void clickSure() {
+                User user = UserOption.getInstance().querryUser(Constant.userId);
+                boolean setPwd = user.getSetPwd();
+                if (setPwd) {
+                    clickSureListener.isPwdExit(true);
+                } else {
+                    HttpUtil.getInstance().hasPsd(Constant.userId).subscribe(
+                            isPayPsdSetStr -> {
+                                if (isPayPsdSetStr.equals("no")) {
+                                    clickSureListener.isPwdExit(false);
+                                } else {
+                                    clickSureListener.isPwdExit(true);
+                                }
+                            }
+                    );
+
+                }
+            }
+        });
+        transferAccuntView.show();
     }
-
-
-    private boolean isCheckPsd;
-
-    public boolean isCheckPsd() {
-        return isCheckPsd;
-    }
-
 
 }

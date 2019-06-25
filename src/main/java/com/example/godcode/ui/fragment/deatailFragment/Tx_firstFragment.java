@@ -19,6 +19,7 @@ import com.example.godcode.bean.Tx;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.databinding.FragmentTxFirstBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.interface_.Strategy;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.view.KeyBoard;
@@ -40,7 +41,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class Tx_firstFragment extends BaseFragment implements KeyBoard.PsdLengthWatcher, MyEditText.MoneyValueListener {
+public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyValueListener {
 
     private FragmentTxFirstBinding binding;
     private View view;
@@ -158,7 +159,23 @@ public class Tx_firstFragment extends BaseFragment implements KeyBoard.PsdLength
             if (money > parentFragment.getBalance()) {
                 Toast.makeText(activity, "超出本次可提现金额", Toast.LENGTH_SHORT).show();
             } else {
-                PayPsdSetting.getInstance().isPayPsdSet("提现", money, view, Tx_firstFragment.this, 2);
+                PayPsdSetting.getInstance().chackPwd(money, new ClickSureListener() {
+                    @Override
+                    public void isPwdExit(boolean isPwdExit) {
+                        if(isPwdExit){
+                            KeyBoard keyBoard = new KeyBoard(activity, new ClickSureListener() {
+                                @Override
+                                public void checkPwd(String pwd) {
+                                    toCheck(pwd);
+                                }
+                            });
+                            PsdPopupWindow.getInstance(activity).show("提现", money, view, keyBoard);
+                        }else {
+
+                        }
+                    }
+                });
+
             }
         }
     }
@@ -168,6 +185,7 @@ public class Tx_firstFragment extends BaseFragment implements KeyBoard.PsdLength
         rate = parentFragment.getWithdrawRate();
         binding.txRate.setText("(收取" + FormatUtil.getInstance().get2double(rate * 100) + "%服务费)");
         binding.setTx(true);
+        LogUtil.log("======txMoney==========="+parentFragment.getBalance());
         binding.useBalance.setText("可用余额" + parentFragment.getBalance());
     }
 
@@ -209,7 +227,7 @@ public class Tx_firstFragment extends BaseFragment implements KeyBoard.PsdLength
         super.onDestroy();
     }
 
-    @Override
+
     public void toCheck(String psd) {
         Tx tx = new Tx();
         tx.setPassword(psd);

@@ -13,6 +13,7 @@ import com.example.godcode.greendao.gen.DaoSession;
 import com.example.godcode.service.PushIntentService;
 import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.RemberPsd;
+import com.example.godcode.utils.RudenessScreenHelper;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
@@ -31,6 +32,8 @@ public class GodCodeApplication extends Application {
         setDatabase();
         initWindowSize();
         initUmeng();
+        int designWidth =1080;
+        new RudenessScreenHelper(this, designWidth).activate();
     }
 
     private void requestPermission() {

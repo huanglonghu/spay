@@ -140,10 +140,6 @@ public class HttpUtil {
     }
 
 
-
-
-
-
     private String getNewToken() throws IOException {
         Retrofit retrofit = new Retrofit.Builder().client(client).baseUrl(Constant.baseUrl)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -632,8 +628,21 @@ public class HttpUtil {
 
     public Observable<String> freePlay(String productNumber) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("productNumber",productNumber);
+        map.put("productNumber", productNumber);
         Call<ResponseBody> call = httpInterface.freePlay(map);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> getDmMsg(int userId) {
+        Call<ResponseBody> call = httpInterface.getDmMsg(userId);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> buyScore(int userId, String encryptStr) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userID", userId);
+        map.put("encryptStr", encryptStr);
+        Call<ResponseBody> call = httpInterface.buyScore(map);
         return enqueueCall(call);
     }
 

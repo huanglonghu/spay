@@ -3,7 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'org.greenrobot.greendao'
 
 greendao {
-    schemaVersion 1//指定数据库版本号，更新操作会用到;
+    schemaVersion 2//指定数据库版本号，更新操作会用到;
     daoPackage 'com.example.godcode.greendao.gen'//自动生成的dao的包名，包名默认是entity所在的包；
     targetGenDir 'src/main/java'//生成数据库文件的目录
 }
@@ -49,6 +49,8 @@ android {
     sourceSets {
         main {
             res.srcDirs += "src/main/res_bg"
+            res.srcDirs +=  'src/main/res/layout/dm'
+            res.srcDirs +=  'src/main/res/layout/main'
         }
     }
     buildTypes {
@@ -74,7 +76,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.3.0'
     annotationProcessor 'com.android.databinding:compiler:2.3.0'
-    compile 'com.alibaba:fastjson:1.2.22'
     compile "io.reactivex.rxjava2:rxjava:2.0.8"
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
