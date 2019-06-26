@@ -29,7 +29,7 @@ import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.view.KeyBoard;
 import com.example.godcode.ui.view.PsdPopupWindow;
 import com.example.godcode.utils.GsonUtil;
-import com.example.godcode.utils.PayPsdSetting;
+import com.example.godcode.utils.PayPwdSetting;
 import com.example.godcode.utils.StringUtil;
 import java.util.List;
 
@@ -83,7 +83,7 @@ public class MobileRechargeFragment extends BaseFragment {
                 resultBean = result.get(position);
                 if (resultBean.isIsEnable()) {
                     double money = resultBean.getSellAmount();
-                    PayPsdSetting.getInstance().chackPwd(money, new ClickSureListener() {
+                    PayPwdSetting.getInstance().checkPwd(money, new ClickSureListener() {
                         @Override
                         public void isPwdExit(boolean isPwdExit) {
                             if(isPwdExit){
@@ -94,8 +94,6 @@ public class MobileRechargeFragment extends BaseFragment {
                                     }
                                 });
                                 PsdPopupWindow.getInstance(activity).show("手机充值", money, view, keyBoard);
-                            }else {
-
                             }
                         }
                     });

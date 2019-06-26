@@ -7,7 +7,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.godcode.bean.AddFriend;
+import com.example.godcode.bean.BatchReturn;
 import com.example.godcode.bean.BatchSettingBody;
+import com.example.godcode.bean.BatchTransfer;
 import com.example.godcode.bean.BindBankCard;
 import com.example.godcode.bean.BindPackage;
 import com.example.godcode.bean.BindProduct;
@@ -40,6 +42,7 @@ import com.example.godcode.bean.TransationDetail;
 import com.example.godcode.bean.TransferBody;
 import com.example.godcode.bean.TransferDivide;
 import com.example.godcode.bean.Tx;
+import com.example.godcode.bean.UnLockMc;
 import com.example.godcode.bean.UpdateFriend;
 import com.example.godcode.bean.WxPay;
 import com.example.godcode.constant.Constant;
@@ -646,6 +649,37 @@ public class HttpUtil {
         return enqueueCall(call);
     }
 
+    public Observable<String> getDmMsgDetail(int userId, int groupId, int page) {
+        Call<ResponseBody> call = httpInterface.getDmMsgDetail(userId, groupId, page, 10);
+        return enqueueCall(call);
+    }
+
+
+    public Observable<String> batchTransfer(BatchTransfer batchTransfer) {
+        Call<ResponseBody> call = httpInterface.batchTransfer(batchTransfer);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> batchReturn(BatchReturn batchReturn) {
+        Call<ResponseBody> call = httpInterface.batchReturn(batchReturn);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> getPriceScale(int userId) {
+        Call<ResponseBody> call = httpInterface.getPriceScale(userId);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> unLockMc(UnLockMc unLockMc) {
+        Call<ResponseBody> call = httpInterface.unlock(unLockMc);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> getMcUnLockDetail(int userId, Integer productId, int page) {
+        Call<ResponseBody> call = httpInterface.getMcUnLockDetail(userId, productId, page, 10);
+        return enqueueCall(call);
+    }
+
 
     HashMap<Call<ResponseBody>, NetLoading> map = new HashMap<>();
 
@@ -680,11 +714,12 @@ public class HttpUtil {
                         LogUtil.log("--success---" + body);
                     } else {
                         String errorBody = response.errorBody().string();
+                        LogUtil.log("=======VVVVVVVVVVVVVVV============" + errorBody);
                         if (!TextUtils.isEmpty(errorBody) && errorBody.contains("message")) {
                             String errorCodeStr = errorBody.substring(errorBody.indexOf("\"code\":") + "\"code\":".length(), errorBody.indexOf(",\"message\""));
                             int errorCode = Integer.parseInt(errorCodeStr.trim());
                             LogUtil.log(errorBody + "--unsuccess---" + errorCodeStr);
-                            if (errorCode == 2008 || errorCode == 2000 || errorCode == 3002 || errorCode == 4006) {
+                            if (errorCode == 2008 || errorCode == 2000 || errorCode == 3002 || errorCode == 4006 || errorCode == 6004) {
                                 if (errorCode == 4006) {
                                     Presenter.getInstance().exit(context);
                                 } else {

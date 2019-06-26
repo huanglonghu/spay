@@ -1,4 +1,4 @@
-package com.example.godcode.ui.fragment.deatailFragment;
+package com.example.godcode.ui.fragment.pwd;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,13 +11,13 @@ import com.example.godcode.R;
 import com.example.godcode.bean.ChangePsd;
 import com.example.godcode.bean.SetPayPsd;
 import com.example.godcode.databinding.FragmentSetpaypsdBinding;
-import com.example.godcode.greendao.entity.User;
-import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.ClickSureListener;
+import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
+import com.example.godcode.utils.PayPwdSetting;
 
 public class SetPayPsdFragment extends BaseFragment {
     private FragmentSetpaypsdBinding binding;
@@ -32,19 +32,14 @@ public class SetPayPsdFragment extends BaseFragment {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setpaypsd, container, false);
             binding.setPresenter(presenter);
             view = binding.getRoot();
-            if(getArguments()!=null){
+            if (getArguments() != null) {
                 originalPayPass = getArguments().getString("OriginalPayPass");
-            }
-            User user = UserOption.getInstance().querryUser(Constant.userId);
-            if (user.getSetPwd()) {
-                binding.setPsdTitle.setText("请设置新的支付密码");
-            } else {
-                binding.setPsdTitle.setText("请设置支付密码");
+                String title = getArguments().getString("title");
+                binding.setPsdTitle.setText(title);
             }
             initView();
             initListener();
         }
-
 
         return view;
     }
@@ -58,51 +53,41 @@ public class SetPayPsdFragment extends BaseFragment {
                 }
             }
         });
-        User user = UserOption.getInstance().querryUser(Constant.userId);
         binding.btnSetPsd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user.getSetPwd()) {
-                    ChangePsd changePsd = new ChangePsd();
-                    changePsd.setfK_UserID(Constant.userId);
-                    changePsd.setOriginalPayPass(originalPayPass);
-                    changePsd.setPayPass(psd1);
-                    HttpUtil.getInstance().changePsd(changePsd).subscribe(
-                            changePsdStr->{
-                                Toast.makeText(activity,"密码修改成功",Toast.LENGTH_SHORT).show();
-                                if (type == 2) {
-                                    AddBankCardFragment addBankCardFragment = new AddBankCardFragment();
-                                    presenter.step2Fragment(addBankCardFragment);
-                                } else if (type == 1) {
-                                    presenter.back();
-                                }
-                            }
-                    );
-                } else {
-                    SetPayPsd setPayPsd = new SetPayPsd();
-                    setPayPsd.setFK_UserID(Constant.userId);
-                    setPayPsd.setPayPass(psd1);
-                    HttpUtil.getInstance().setPayPsd(setPayPsd).subscribe(
-                            setPsdStr -> {
-                                Toast.makeText(activity, "支付密码设置成功", Toast.LENGTH_SHORT).show();
-                                //跳进绑定银行卡界面
-                                if (type == 2) {
-                                    AddBankCardFragment addBankCardFragment = new AddBankCardFragment();
-                                    presenter.step2Fragment(addBankCardFragment);
-                                } else if (type == 1) {
-                                    presenter.back();
-                                }
-
-                            }, throwable -> {
-                            }
-                    );
-                }
+                PayPwdSetting.getInstance().verifyPwd(new ClickSureListener() {
+                    @Override
+                    public void isPwdExit(boolean isPwdExit) {
+                        if (isPwdExit) {
+                            ChangePsd changePsd = new ChangePsd();
+                            changePsd.setfK_UserID(Constant.userId);
+                            changePsd.setOriginalPayPass(originalPayPass);
+                            changePsd.setPayPass(psd1);
+                            HttpUtil.getInstance().changePsd(changePsd).subscribe(
+                                    changePsdStr -> {
+                                        Toast.makeText(activity, "密码修改成功", Toast.LENGTH_SHORT).show();
+                                        Presenter.getInstance().back();
+                                    }
+                            );
+                        } else {
+                            SetPayPsd setPayPsd = new SetPayPsd();
+                            setPayPsd.setFK_UserID(Constant.userId);
+                            setPayPsd.setPayPass(psd1);
+                            HttpUtil.getInstance().setPayPsd(setPayPsd).subscribe(
+                                    setPsdStr -> {
+                                        Toast.makeText(activity, "支付密码设置成功", Toast.LENGTH_SHORT).show();
+                                        Presenter.getInstance().back();
+                                    }, throwable -> {
+                                    }
+                            );
+                        }
+                    }
+                });
 
             }
         });
-
     }
-
 
     private KeyBoard keyBoard;
 
@@ -136,21 +121,6 @@ public class SetPayPsdFragment extends BaseFragment {
 
 
     private int index;
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (keyBoard.isShowing()) {
-            keyBoard.dismiss();
-        }
-    }
-
-
-    private int type;
-
-    public void initData(int type) {
-        this.type = type;
-    }
 
 
 }

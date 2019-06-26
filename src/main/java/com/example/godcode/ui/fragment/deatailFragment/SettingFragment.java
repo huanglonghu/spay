@@ -8,17 +8,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentSettingBinding;
 import com.example.godcode.greendao.entity.VersionMsg;
 import com.example.godcode.greendao.option.LoginResultOption;
 import com.example.godcode.greendao.option.VersionMsgOption;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
+import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
+import com.example.godcode.ui.fragment.pwd.CheckPayPsdFragment;
+import com.example.godcode.ui.fragment.pwd.SetPayPsdFragment;
 import com.example.godcode.ui.view.UpdateDialog;
 import com.example.godcode.ui.view.widget.LanguageConfigDialog;
+import com.example.godcode.utils.LogUtil;
+import com.example.godcode.utils.PayPwdSetting;
 import com.example.godcode.utils.StringUtil;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 
 public class SettingFragment extends BaseFragment {
@@ -41,6 +53,23 @@ public class SettingFragment extends BaseFragment {
     }
 
     private void initListener() {
+
+        binding.pwdRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PayPwdSetting.getInstance().verifyPwd(new ClickSureListener() {
+                    @Override
+                    public void isPwdExit(boolean isPwdExit) {
+                        if (isPwdExit) {
+                            LogUtil.log("============WWWWWWWWWWWWWW===========");
+                            CheckPayPsdFragment checkPayPsdFragment = new CheckPayPsdFragment();
+                            Presenter.getInstance().step2Fragment(checkPayPsdFragment, "checkPwd");
+                        }
+                    }
+                });
+            }
+        });
+
         binding.exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +96,32 @@ public class SettingFragment extends BaseFragment {
             }
         });
 
+        RxBus.getInstance().toObservable(RxEvent.class).subscribe(new Observer<RxEvent>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(RxEvent rxEvent) {
+                //处理事件
+                if (rxEvent.getEventType() == 2) {
+                    SetPayPsdFragment setPayPsdFragment = new SetPayPsdFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", "请设置新密码");
+                    setPayPsdFragment.setArguments(bundle);
+                    Presenter.getInstance().step2Fragment(setPayPsdFragment, "setPwd");
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
+
 //        binding.LanguageConfig.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -74,6 +129,8 @@ public class SettingFragment extends BaseFragment {
 //                languageConfigDialog.show();
 //            }
 //        });
+
+
     }
 
     private void createUpdateDialog(String des, String versionCode) {

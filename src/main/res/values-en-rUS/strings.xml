@@ -215,4 +215,7 @@
     <string name="currentStock">现有库存</string>
     <string name="bi">币</string>
 
+    <string name="myScore">我的积分</string>
+    <string name="unLock">解锁</string>
+
 </resources>

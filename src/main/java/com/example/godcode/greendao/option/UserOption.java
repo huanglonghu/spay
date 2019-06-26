@@ -40,7 +40,6 @@ public class UserOption {
         User user = userDao.queryBuilder()
                 .where(UserDao.Properties.UserId.eq(userId))
                 .unique();
-        LogUtil.log(user+"----------querryUser-------------------"+userId);
         return user;
     }
 

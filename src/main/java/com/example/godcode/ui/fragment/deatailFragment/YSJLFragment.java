@@ -108,7 +108,6 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
             @Override
             public void onNext(RxEvent rxEvent) {
                 //处理事件
-                LogUtil.log("============收到事件=============");
                 if (rxEvent.getEventType() == 1) {
                     data.clear();
                     ysjlListAdapter.clearView();

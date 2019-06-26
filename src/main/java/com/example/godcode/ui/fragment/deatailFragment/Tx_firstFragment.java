@@ -29,15 +29,12 @@ import com.example.godcode.ui.view.widget.TxReminderDialog;
 import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.MoneyTextWatcher;
-import com.example.godcode.utils.PayPsdSetting;
+import com.example.godcode.utils.PayPwdSetting;
 import com.google.gson.Gson;
-import com.tencent.mm.opensdk.utils.Log;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -159,7 +156,7 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
             if (money > parentFragment.getBalance()) {
                 Toast.makeText(activity, "超出本次可提现金额", Toast.LENGTH_SHORT).show();
             } else {
-                PayPsdSetting.getInstance().chackPwd(money, new ClickSureListener() {
+                PayPwdSetting.getInstance().checkPwd(money, new ClickSureListener() {
                     @Override
                     public void isPwdExit(boolean isPwdExit) {
                         if(isPwdExit){
@@ -170,8 +167,6 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
                                 }
                             });
                             PsdPopupWindow.getInstance(activity).show("提现", money, view, keyBoard);
-                        }else {
-
                         }
                     }
                 });

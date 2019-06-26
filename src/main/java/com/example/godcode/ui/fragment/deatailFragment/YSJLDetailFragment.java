@@ -26,10 +26,8 @@ import com.example.godcode.utils.DateUtil;
 import com.example.godcode.utils.FormatUtil;
 
 import com.example.godcode.utils.GsonUtil;
-import com.example.godcode.utils.PayPsdSetting;
+import com.example.godcode.utils.PayPwdSetting;
 import com.example.godcode.utils.StringUtil;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -60,7 +58,7 @@ public class YSJLDetailFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 double money = bean.getSumOrder();
-                PayPsdSetting.getInstance().chackPwd(money, new ClickSureListener() {
+                PayPwdSetting.getInstance().checkPwd(money, new ClickSureListener() {
                     @Override
                     public void isPwdExit(boolean isPwdExit) {
                         if(isPwdExit){
@@ -71,8 +69,6 @@ public class YSJLDetailFragment extends BaseFragment {
                                 }
                             });
                             PsdPopupWindow.getInstance(activity).show("退款", money, view, keyBoard);
-                        }else {
-
                         }
                     }
                 });

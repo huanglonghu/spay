@@ -31,9 +31,9 @@
             android:showDividers="middle">
 
             <RelativeLayout
+                android:id="@+id/pwdRl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{()->presenter.step2Fragment(&quot;paypsd&quot;)}"
                 >
 
                 <TextView

@@ -8,14 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.godcode.R;
 import com.example.godcode.bean.BankCard;
-import com.example.godcode.bean.RechargeBody;
 import com.example.godcode.databinding.FragmentRechargeSecondBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
-import com.example.godcode.ui.view.KeyBoard;
-import com.example.godcode.ui.view.PsdPopupWindow;
-import com.example.godcode.utils.PayPsdSetting;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +66,7 @@ public class Recharge_SecondFragment extends BaseFragment {
                     //去设置绑定银行卡
                     presenter.step2Fragment("bankCard");
                 } else {
-                 //   PayPsdSetting.getInstance().isPayPsdSet("充值",parentFragment.getMoney(),view,Recharge_SecondFragment.this,2);
+                 //   PayPwdSetting.getInstance().isPayPsdSet("充值",parentFragment.getMoney(),view,Recharge_SecondFragment.this,2);
                 }
             }
         });

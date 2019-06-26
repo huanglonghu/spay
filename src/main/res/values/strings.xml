@@ -26,6 +26,8 @@
     <string name="endDate">结束时间</string>
 
 
+
+
     <string name="wxdl">微信登录</string>
     <string name="zhdl">账号登录</string>
     <string name="zczh">注册SY新账号</string>
@@ -216,6 +218,9 @@
     <string name="sumStock">库存总容量:</string>
     <string name="tlbl">退礼比例(局/个):</string>
     <string name="currentStock">现有库存:</string>
+
+    <string name="myScore">我的积分</string>
+    <string name="unLock">解锁</string>
 
 
 </resources>

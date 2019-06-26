@@ -24,11 +24,10 @@ import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
 import com.example.godcode.ui.view.MyEditText;
 import com.example.godcode.ui.view.PsdPopupWindow;
-import com.example.godcode.ui.view.TransferAccuntView;
 import com.example.godcode.utils.EncryptUtil;
 import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.MoneyTextWatcher;
-import com.example.godcode.utils.PayPsdSetting;
+import com.example.godcode.utils.PayPwdSetting;
 import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
 
@@ -177,7 +176,7 @@ public class TransferAccountDetailFragment extends BaseFragment implements  MyEd
                     PublicKey publicKey = new Gson().fromJson(publicKeyStr, PublicKey.class);
                     key = publicKey.getResult().getXmlKey();
                     initTransfer(userId);
-                    PayPsdSetting.getInstance().chackPwd(money, new ClickSureListener() {
+                    PayPwdSetting.getInstance().checkPwd(money, new ClickSureListener() {
                         @Override
                         public void isPwdExit(boolean isPwdExit) {
                             if(isPwdExit){
@@ -188,8 +187,6 @@ public class TransferAccountDetailFragment extends BaseFragment implements  MyEd
                                     }
                                 });
                                 PsdPopupWindow.getInstance(activity).show("转账", money, view, keyBoard);
-                            }else {
-
                             }
                         }
                     });

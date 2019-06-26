@@ -7,21 +7,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.BankCard;
 import com.example.godcode.bean.BindBankCard;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.databinding.FragmentBankcardBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.interface_.EtStrategy;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
+import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.adapter.BankCardListAdaPter;
 import com.example.godcode.ui.base.BaseFragment;
+import com.example.godcode.ui.fragment.pwd.CheckPayPsdFragment;
+import com.example.godcode.ui.fragment.pwd.SetPayPsdFragment;
 import com.example.godcode.ui.view.widget.BankConfigDialog;
 import com.example.godcode.ui.view.widget.EtItemDialog;
+import com.example.godcode.utils.PayPwdSetting;
 import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
+
 import java.util.List;
+
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class BankCardFragment extends BaseFragment {
@@ -69,21 +81,42 @@ public class BankCardFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 //验证是否有支付密码
-                HttpUtil.getInstance().hasPsd(Constant.userId).subscribe(
-                        str -> {
-                            if (str.contains("payPass")) {
-                                CheckPayPsdFragment checkPayPsdFragment = new CheckPayPsdFragment();
-                                checkPayPsdFragment.initData(2);
-                                presenter.step2Fragment(checkPayPsdFragment, "checkPsd");
-                            } else {
-                                SetPayPsdFragment setPayPsdFragment = new SetPayPsdFragment();
-                                setPayPsdFragment.initData(2);
-                                presenter.step2Fragment(setPayPsdFragment, "setPayPsd");
-                            }
+                PayPwdSetting.getInstance().verifyPwd(new ClickSureListener() {
+                    @Override
+                    public void isPwdExit(boolean isPwdExit) {
+                        if (isPwdExit) {
+                            CheckPayPsdFragment checkPayPsdFragment = new CheckPayPsdFragment();
+                            presenter.step2Fragment(checkPayPsdFragment, "checkPsd");
                         }
-                );
+                    }
+                });
             }
         });
+
+
+        RxBus.getInstance().toObservable(RxEvent.class).subscribe(new Observer<RxEvent>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(RxEvent rxEvent) {
+                //处理事件
+                if (rxEvent.getEventType() == 2) {
+                    AddBankCardFragment addBankCardFragment = new AddBankCardFragment();
+                    presenter.step2Fragment(addBankCardFragment);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
+
     }
 
     public void initView() {
@@ -137,7 +170,7 @@ public class BankCardFragment extends BaseFragment {
 
         @Override
         public void etComplete(String str, int position) {
-            double value= Double.parseDouble(str);
+            double value = Double.parseDouble(str);
             BindBankCard bindBankCard = new BindBankCard();
             bindBankCard.setMoney(value);
             bindBankCard.setBankCardId(result.get(position).getId());

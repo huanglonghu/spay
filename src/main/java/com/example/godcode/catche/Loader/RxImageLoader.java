@@ -4,10 +4,8 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.widget.ImageView;
-
 import com.example.godcode.catche.Creator.RequestCreator;
 import com.example.godcode.bean.ImageBean;
-
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;

@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
+
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentMainBinding;
 import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.handler.ActivityResultHandler;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.observable.WebSocketNewsObservable;
 import com.example.godcode.ui.activity.BaseActivity;
 import com.example.godcode.ui.base.BaseFragment;
@@ -22,11 +25,10 @@ import com.example.godcode.ui.fragment.deatailFragment.ContactDetailFragment;
 import com.example.godcode.ui.fragment.deatailFragment.GatheringFragment;
 import com.example.godcode.ui.fragment.deatailFragment.NewFriendFragment;
 import com.example.godcode.ui.fragment.deatailFragment.PayMentFragment;
-import com.example.godcode.ui.fragment.deatailFragment.PayPsdFragment;
 import com.example.godcode.ui.fragment.deatailFragment.PresonalFragment;
 import com.example.godcode.ui.fragment.deatailFragment.ProductCenterFragment;
 import com.example.godcode.ui.fragment.deatailFragment.ServiceRemainderFragment;
-import com.example.godcode.ui.fragment.deatailFragment.SetPayPsdFragment;
+import com.example.godcode.ui.fragment.pwd.SetPayPsdFragment;
 import com.example.godcode.ui.fragment.deatailFragment.SettingFragment;
 import com.example.godcode.ui.fragment.deatailFragment.TransationRecordFragment;
 import com.example.godcode.ui.fragment.deatailFragment.TransferAccountDetailFragment;
@@ -38,7 +40,6 @@ import com.example.godcode.ui.view.widget.ExitDialog;
 import com.example.godcode.ui.view.QrcodeDialog;
 import com.example.godcode.utils.CommonUtil;
 import com.google.zxing.activity.CaptureActivity;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -71,7 +72,12 @@ public class Presenter {
     public void clickItem(int type, Friend friend) {
         switch (type) {
             case 2:
-                friendIdResponse.getFriendId(friend.getUserId());
+                if (friendIdResponse != null) {
+                    friendIdResponse.getFriendId(friend.getUserId());
+                }
+                RxEvent rxEvent = new RxEvent(3);
+                rxEvent.setId(friend.getUserId());
+                RxBus.getInstance().post(rxEvent);
                 back();
                 break;
             case 3:
@@ -127,7 +133,7 @@ public class Presenter {
     private int index;
 
     public void togglePager(int index) {
-        this.index=index;
+        this.index = index;
         binding.setPosition(index);
         binding.mainViewPager.setCurrentItem(index, false);
     }
@@ -164,7 +170,8 @@ public class Presenter {
 
 
     private WebSocketNewsObservable<Integer> kucunObservable;
-    public void initObservable(){
+
+    public void initObservable() {
         kucunObservable = new WebSocketNewsObservable<Integer>();
     }
 
@@ -244,9 +251,6 @@ public class Presenter {
                     break;
                 case "setPayPsd":
                     fragment = new SetPayPsdFragment();
-                    break;
-                case "paypsd":
-                    fragment = new PayPsdFragment();
                     break;
                 case "bindProduct":
                     fragment = new BindProductFragment();

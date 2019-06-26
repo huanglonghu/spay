@@ -1,7 +1,9 @@
 package com.example.godcode.http;
 
 import com.example.godcode.bean.AddBankCard;
+import com.example.godcode.bean.BatchReturn;
 import com.example.godcode.bean.BatchSettingBody;
+import com.example.godcode.bean.BatchTransfer;
 import com.example.godcode.bean.BindPackage;
 import com.example.godcode.bean.ChangePsd;
 import com.example.godcode.bean.EditBankCard;
@@ -34,11 +36,14 @@ import com.example.godcode.bean.TransationDetail;
 import com.example.godcode.bean.TransferBody;
 import com.example.godcode.bean.TransferDivide;
 import com.example.godcode.bean.Tx;
+import com.example.godcode.bean.UnLockMc;
 import com.example.godcode.bean.UpdateFriend;
 import com.example.godcode.bean.WxPay;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -322,6 +327,26 @@ public interface HttpInterface {
     Call<ResponseBody> getDmMsg(@Query("UserID") int userId);
 
     @POST("/api/services/app/CommonPaymentAppServices/RechargeMCFraction")
-    Call<ResponseBody> buyScore(@Body HashMap<String,Object> map);
+    Call<ResponseBody> buyScore(@Body HashMap<String, Object> map);
 
+    @GET("/api/services/app/MCMerchantOwner/GetMobileMCMerchantOwners")
+    Call<ResponseBody> getDmMsgDetail(@Query("UserID") int userId, @Query("CurrentGroupUserID") int groupId, @Query("page") int page, @Query("limit") int limit);
+
+
+    @POST("/api/services/app/MakeCodeProduct/MCProductBatchTransfer")
+    Call<ResponseBody> batchTransfer(@Body BatchTransfer batchTransfer);
+
+
+    @POST("/api/services/app/MakeCodeProduct/MCProductBatchReturn")
+    Call<ResponseBody> batchReturn(@Body BatchReturn batchReturn);
+
+    @POST("/api/services/app/MCFraction/GetBuyFractionPriceByUserId")
+    Call<ResponseBody> getPriceScale(@Query("Id") int userId);//积分换算比例
+
+
+    @POST("/api/services/app/MakeCodeProduct/MCProductUnlock")
+    Call<ResponseBody> unlock(@Body UnLockMc unLockMc);
+
+    @GET("/api/services/app/MCProductUnlockRecord/GetPaged")
+    Call<ResponseBody> getMcUnLockDetail(@Query("UserID") int userId, @Query("MCProductID") Integer productId, @Query("page") int page, @Query("limit") int limit);
 }
