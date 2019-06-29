@@ -68,4 +68,10 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
     }
 
 
+    public View getView(int position) {
+        View view = getView(position, null, null);
+        return view;
+    }
+
+
 }

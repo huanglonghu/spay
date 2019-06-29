@@ -23,7 +23,6 @@ public class TypeSelect extends Dialog {
         super(context, R.style.dialog3);
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.layout_bank_type_select, null, false);
-        LogUtil.log("======binding========"+binding);
         binding.typePicker.setDisplayedValues(data);
         binding.typePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         binding.typePicker.setMinValue(0);

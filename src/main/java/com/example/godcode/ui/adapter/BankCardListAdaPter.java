@@ -13,10 +13,6 @@ import com.example.godcode.ui.fragment.deatailFragment.BankCardFragment;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Administrator on 2018/7/9.
- */
-
 public class BankCardListAdaPter extends BaseAdapter {
 
     private final LayoutInflater layoutInflater;

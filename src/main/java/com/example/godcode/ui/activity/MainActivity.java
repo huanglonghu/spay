@@ -24,6 +24,8 @@ import com.example.godcode.greendao.option.VersionMsgOption;
 import com.example.godcode.handler.ActivityResultHandler;
 import com.example.godcode.handler.WebSocketNewsHandler;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.observable.WebSocketNewsObservable;
 import com.example.godcode.observable.WebSocketNewsObserver;
 import com.example.godcode.presenter.Presenter;
@@ -86,6 +88,9 @@ public class MainActivity extends BaseActivity {
             public void onUpdate(WebSocketNewsObservable<WebSocketNewsHandler> observable, WebSocketNewsHandler data) {
                 int handlerType = data.getHandlerType();
                 switch (handlerType) {
+                    case 0:
+                        FriendOption.getInstance(MainActivity.this).querryFriendList(1, true);
+                        break;
                     case 2:
                         Presenter.getInstance().exit(MainActivity.this);
                         break;
@@ -109,6 +114,13 @@ public class MainActivity extends BaseActivity {
                         } catch (PackageManager.NameNotFoundException e1) {
                             e1.printStackTrace();
                         }
+                        break;
+                    case 8:
+                        //获取到申请积分通知
+                        RxBus.getInstance().post(new RxEvent(6));
+                        break;
+                    case 9://刷新积分
+                        RxBus.getInstance().post(new RxEvent(7));
                         break;
                 }
 

@@ -120,10 +120,9 @@ public class FriendOption {
 
 
     public void querryFriendList(int page, boolean isConcur) {
+        LogUtil.log("============ZZZZZZZZZZZZZ====================");
         clear();
         HashMap<String, String> urlMap = new HashMap<>();
-        urlMap.put("page", page + "");
-        urlMap.put("limit", "50");
         urlMap.put("UserId", Constant.userId + "");
         urlMap.put("isConcur", isConcur + "");
         HttpUtil.getInstance().getFriendList(urlMap).subscribe(

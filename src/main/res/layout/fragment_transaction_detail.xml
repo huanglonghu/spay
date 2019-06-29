@@ -91,7 +91,6 @@
 
             </RelativeLayout>
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -110,6 +109,28 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:text="@{msg.bankName}"
+                    android:textColor="#000" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:visibility="@{msg.fraction==null?View.GONE:View.VISIBLE}">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="购买积分" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@{msg.fraction}"
                     android:textColor="#000" />
 
             </RelativeLayout>

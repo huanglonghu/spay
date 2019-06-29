@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.godcode.R;
+import com.example.godcode.bean.BankBean;
 import com.example.godcode.bean.BankCard;
 import com.example.godcode.bean.Tx;
 import com.example.godcode.constant.Constant;
@@ -21,6 +22,8 @@ import com.example.godcode.databinding.FragmentTxFirstBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.interface_.Strategy;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.view.KeyBoard;
 import com.example.godcode.ui.view.MyEditText;
@@ -36,7 +39,11 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyValueListener {
 
@@ -44,8 +51,8 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
     private View view;
     private double money;
     private TxFragment parentFragment;
-    private BankCard.ResultBean resultBean;
     private double rate;
+    private HashMap<String, Integer> resMap;
 
     @Nullable
     @Override
@@ -56,17 +63,17 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
             binding.etMoney.setMoneyValueListener(this);
             binding.setBalance(parentFragment.getBalance());
             view = binding.getRoot();
-            initData();
             initView();
             initListener();
         }
+        initData();
         return view;
     }
 
     private void initData() {
+
         getBankList();
     }
-
 
     private void isEffectiveDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -95,7 +102,6 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
         });
         requestQueue.add(stringRequest);
     }
-
 
     private void initListener() {
         binding.btnTx.setOnClickListener(new View.OnClickListener() {
@@ -140,13 +146,42 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
             public void onClick(View v) {
                 if (bankList.size() > 0) {
                     BankSelectFragment bankSelectFragment = new BankSelectFragment();
+                    bankSelectFragment.setBankMsg(bankList, bankIndex);
                     presenter.step2Fragment(bankSelectFragment, "bankSelect");
+
                 } else {
                     presenter.step2Fragment("bankCard");
                 }
             }
         });
+
+        RxBus.getInstance().toObservable(RxEvent.class).subscribe(new Observer<RxEvent>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(RxEvent rxEvent) {
+                //处理事件
+                if (rxEvent.getEventType() == 5) {
+                    bankIndex = rxEvent.getId();
+                    BankBean bankBean = bankList.get(bankIndex);
+                    binding.txBank.setText(bankBean.getBankName() + "(" + bankBean.getLastfourNum() + ")");
+                    binding.iconBank.setImageResource(bankBean.getBankIconRes());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
     }
+
+    private int bankIndex;
 
     private void tx() {
         if (bankList.size() == 0) {
@@ -159,7 +194,7 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
                 PayPwdSetting.getInstance().checkPwd(money, new ClickSureListener() {
                     @Override
                     public void isPwdExit(boolean isPwdExit) {
-                        if(isPwdExit){
+                        if (isPwdExit) {
                             KeyBoard keyBoard = new KeyBoard(activity, new ClickSureListener() {
                                 @Override
                                 public void checkPwd(String pwd) {
@@ -176,17 +211,33 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
     }
 
     public void initView() {
+        resMap = new HashMap<>();
+        resMap.put("中国银行", R.drawable.icon_zg);
+        resMap.put("中国农业银行", R.drawable.icon_ny);
+        resMap.put("中国工商银行", R.drawable.icon_gs);
+        resMap.put("中国建设银行", R.drawable.icon_js);
+        resMap.put("交通银行", R.drawable.icon_jt);
+        resMap.put("招商银行", R.drawable.icon_zs);
+        resMap.put("广发银行", R.drawable.icon_gf);
+        resMap.put("中国民生银行", R.drawable.icon_ms);
+        resMap.put("浦发银行", R.drawable.icon_pf);
+        resMap.put("中国光大银行", R.drawable.icon_gd);
+        resMap.put("中国邮政", R.drawable.icon_yz);
+        resMap.put("中信银行", R.drawable.icon_zx);
+        resMap.put("兴业银行", R.drawable.icon_xy);
+        resMap.put("汇丰中国银行", R.drawable.icon_hf);
         binding.etMoney.addTextChangedListener(new MoneyTextWatcher(binding.etMoney));
         rate = parentFragment.getWithdrawRate();
         binding.txRate.setText("(收取" + FormatUtil.getInstance().get2double(rate * 100) + "%服务费)");
         binding.setTx(true);
-        LogUtil.log("======txMoney==========="+parentFragment.getBalance());
+        LogUtil.log("======txMoney===========" + parentFragment.getBalance());
         binding.useBalance.setText("可用余额" + parentFragment.getBalance());
     }
 
-    private ArrayList<BankCard.ResultBean> bankList = new ArrayList<>();
+    private ArrayList<BankBean> bankList = new ArrayList<>();
 
     private void getBankList() {
+
         HttpUtil.getInstance().getBankCardsByUserID(Constant.userId).subscribe(
                 bankListStr -> {
                     BankCard bankCard = new Gson().fromJson(bankListStr, BankCard.class);
@@ -197,16 +248,22 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
                     for (int i = 0; i < result.size(); i++) {
                         BankCard.ResultBean resultBean = result.get(i);
                         if (resultBean.getBindType() == 3) {
-                            bankList.add(resultBean);
+                            BankBean bankBean = new BankBean();
+                            String bankName = resultBean.getBankName();
+                            bankBean.setBankName(bankName);
+                            bankBean.setBankIconRes(resMap.get(bankName));
+                            bankBean.setId(resultBean.getId());
+                            String last4Num = FormatUtil.getInstance().getLast4Num(resultBean.getBankCardNumber());
+                            bankBean.setLastfourNum(last4Num);
+                            bankList.add(bankBean);
                         }
                     }
                     if (bankList.size() == 0) {
                         binding.txBank.setText("添加新卡提现");
                     } else {
-                        resultBean = bankList.get(0);
-                        String bankName = resultBean.getBankName();
-                        String last4Num = FormatUtil.getInstance().getLast4Num(resultBean.getBankCardNumber());
-                        binding.txBank.setText(bankName + "(" + last4Num + ")");
+                        BankBean bankBean = bankList.get(0);
+                        binding.txBank.setText(bankBean.getBankName() + "(" + bankBean.getLastfourNum() + ")");
+                        binding.iconBank.setImageResource(bankBean.getBankIconRes());
                     }
                 }
         );
@@ -230,7 +287,7 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
         putMoneyDtoBean.setFeeType("CNY");
         putMoneyDtoBean.setFK_UserID(Constant.userId);
         putMoneyDtoBean.setSumTotal(money);
-        putMoneyDtoBean.setFK_BankCardID(resultBean.getId());
+        putMoneyDtoBean.setFK_BankCardID(bankList.get(bankIndex).getId());
         tx.setPutMoneyDto(putMoneyDtoBean);
         HttpUtil.getInstance().tx(tx).subscribe(
                 txStr -> {

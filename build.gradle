@@ -3,7 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'org.greenrobot.greendao'
 
 greendao {
-    schemaVersion 2//指定数据库版本号，更新操作会用到;
+    schemaVersion 3//指定数据库版本号，更新操作会用到;
     daoPackage 'com.example.godcode.greendao.gen'//自动生成的dao的包名，包名默认是entity所在的包；
     targetGenDir 'src/main/java'//生成数据库文件的目录
 }
@@ -31,7 +31,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "2.5.1"
+        versionName "2.5.3"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -51,6 +51,7 @@ android {
             res.srcDirs += "src/main/res_bg"
             res.srcDirs +=  'src/main/res/layout/dm'
             res.srcDirs +=  'src/main/res/layout/main'
+            res.srcDirs +=  'src/main/res/layout/adapter'
         }
     }
     buildTypes {

@@ -1,6 +1,7 @@
 package com.example.godcode.utils;
 
 import android.annotation.SuppressLint;
+
 import com.example.godcode.bean.WebSocketNews1;
 import com.example.godcode.bean.WebSocketNews2;
 import com.example.godcode.bean.WebSocketNews3;
@@ -11,13 +12,15 @@ import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
 import com.example.godcode.observable.WebSocketNewsObservable;
 import com.example.godcode.ui.activity.BaseActivity;
-import com.example.godcode.ui.view.UpdateDialog;
+
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
+
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -57,9 +60,10 @@ public class WebSocketUtil {
 
                     @Override
                     public void onMessage(String message) {
-                       // message = "{\"EventType\":6,\"Data\":{\"msg\":\"您有新的二维码收款入账！\",\"RelatedKey\":10055,\"Id\":10291,\"TransationType\":2}}";
-                       // message="{\"EventType\":9,\"Data\":{\"msg\":\"该账户已在其他设备登录！\"}}";
-                       // message="{\"EventType\":19,\"Data\":{\"ProductNumber\":\"4G4\",\"CoinCount\":0,\"PaperMoney\":0.0,\"ScanQRMoney\":0.04,\"DivedeMoney\":0.04,\"MerchantUserIds\":null,\"AwardPosition\":0,\"AwardCount\":1},\"Flag\":\"9022cd79-9c90-46a7-95e4-548423e48cd0\"}";
+                        //message="{\"EventType\":22,\"Data\":{\"msg\":\"'13250554787'向您申请'100'积分！\"},\"Flag\":\"78a31ef8-5f59-4f06-8da6-073eab619628\",\"SendTime\":\"2019-06-27T16:59:26.184+08:00\"}";
+                        // message = "{\"EventType\":6,\"Data\":{\"msg\":\"您有新的二维码收款入账！\",\"RelatedKey\":10055,\"Id\":10291,\"TransationType\":2}}";
+                        // message="{\"EventType\":9,\"Data\":{\"msg\":\"该账户已在其他设备登录！\"}}";
+                        // message="{\"EventType\":19,\"Data\":{\"ProductNumber\":\"4G4\",\"CoinCount\":0,\"PaperMoney\":0.0,\"ScanQRMoney\":0.04,\"DivedeMoney\":0.04,\"MerchantUserIds\":null,\"AwardPosition\":0,\"AwardCount\":1},\"Flag\":\"9022cd79-9c90-46a7-95e4-548423e48cd0\"}";
                         LogUtil.log(message);
                         WebSocketNewsHandler.Builder builder = new WebSocketNewsHandler.Builder();
                         String type = message.substring(message.indexOf("\"EventType\":") + "\"EventType\":".length(), message.indexOf(","));
@@ -113,14 +117,34 @@ public class WebSocketUtil {
                 WebSocketNews1 webSocketNews1 = GsonUtil.getInstance().fromJson(message, WebSocketNews1.class);
                 builder.webSocketNews1(webSocketNews1);
                 break;
-            case "4": case "5": case "6": case "8": case "10": case "11":
+            case "4":
+            case "5":
+            case "6":
+            case "8":
+            case "10":
+            case "11":
                 WebSocketNews2 webSocketNews2 = GsonUtil.getInstance().fromJson(message, WebSocketNews2.class);
                 builder.webSocketNews2(webSocketNews2);
             case "12":
                 WebSocketNews4 webSocketNews4 = GsonUtil.getInstance().fromJson(message, WebSocketNews4.class);
                 builder.webSocketNews4(webSocketNews4);
                 break;
-            case "1": case "2": case "3": case "7": case "13": case "14": case "15": case "16": case "17": case "18":
+            case "1":
+            case "2":
+            case "3":
+            case "7":
+            case "13":
+            case "14":
+            case "15":
+            case "16":
+            case "17":
+            case "18":
+            case "22":
+            case "23":
+            case "24":
+            case "25":
+            case "26":
+            case "27":
                 WebSocketNews3 webSocketNews3 = GsonUtil.getInstance().fromJson(message, WebSocketNews3.class);
                 builder.webSocketNews3(webSocketNews3);
                 break;
@@ -134,7 +158,17 @@ public class WebSocketUtil {
 
     public void getStrategyByType(String type, WebSocketNewsHandler.Builder builder) {
         switch (type) {
-            case "2": case "3": case "7": case "13": case "14": case "15": case "16": case "17": case "18":
+            case "2":
+                builder.handlerType(0);
+                break;
+            case "3":
+            case "7":
+            case "13":
+            case "14":
+            case "15":
+            case "16":
+            case "17":
+            case "18":
                 builder.handlerType(1);
                 break;
             case "9":
@@ -150,17 +184,30 @@ public class WebSocketUtil {
                 builder.handlerType(5);
                 RxBus.getInstance().post(new RxEvent(1));
                 break;
-            case "4": case "5": case "6": case "8": case "10": case "11":
+            case "4":
+            case "5":
+            case "6":
+            case "8":
+            case "10":
+            case "11":
                 builder.handlerType(6);
                 break;
             case "21":
                 builder.handlerType(7);
                 break;
+            case "22":
+            case "23":
+                builder.handlerType(8);
+                break;
+            case "24":
+            case "25":
+            case "26":
+            case "27":
+                builder.handlerType(9);
+                break;
         }
 
     }
-
-
 
 
     // 1 请求添加好友 您有一条好友请求！   /**

@@ -20,6 +20,7 @@ import com.example.godcode.bean.CreateOrder;
 import com.example.godcode.bean.EditProduct;
 import com.example.godcode.bean.EditProductPrice;
 import com.example.godcode.bean.EditProductSetting;
+import com.example.godcode.bean.FrcationOption;
 import com.example.godcode.bean.GetVerification;
 import com.example.godcode.bean.Id;
 import com.example.godcode.bean.LoginBody;
@@ -330,7 +331,7 @@ public interface HttpInterface {
     Call<ResponseBody> buyScore(@Body HashMap<String, Object> map);
 
     @GET("/api/services/app/MCMerchantOwner/GetMobileMCMerchantOwners")
-    Call<ResponseBody> getDmMsgDetail(@Query("UserID") int userId, @Query("CurrentGroupUserID") int groupId, @Query("page") int page, @Query("limit") int limit);
+    Call<ResponseBody> getDmMsgDetail(@Query("MCProductNumber") String productNum, @Query("UserID") int userId, @Query("CurrentGroupUserID") int groupId, @Query("page") int page, @Query("limit") int limit);
 
 
     @POST("/api/services/app/MakeCodeProduct/MCProductBatchTransfer")
@@ -340,13 +341,29 @@ public interface HttpInterface {
     @POST("/api/services/app/MakeCodeProduct/MCProductBatchReturn")
     Call<ResponseBody> batchReturn(@Body BatchReturn batchReturn);
 
-    @POST("/api/services/app/MCFraction/GetBuyFractionPriceByUserId")
+    @GET("/api/services/app/MCFraction/GetBuyFractionPriceByUserId")
     Call<ResponseBody> getPriceScale(@Query("Id") int userId);//积分换算比例
-
 
     @POST("/api/services/app/MakeCodeProduct/MCProductUnlock")
     Call<ResponseBody> unlock(@Body UnLockMc unLockMc);
 
     @GET("/api/services/app/MCProductUnlockRecord/GetPaged")
     Call<ResponseBody> getMcUnLockDetail(@Query("UserID") int userId, @Query("MCProductID") Integer productId, @Query("page") int page, @Query("limit") int limit);
+
+    @POST("/api/services/app/MCFraction/RequestOrReturnFraction")
+    Call<ResponseBody> requestOrReturnFraction(@Body HashMap<String, Integer> map);
+
+
+    @GET("/api/services/app/RechargeMCFractionRecord/GetFractionRecordByUserID")
+    Call<ResponseBody> getFractionRecord(@Query("UserID") int userId);
+
+
+    @PUT("/api/services/app/MCFraction/UpdateRequestOrReturnFraction")
+    Call<ResponseBody> frcationOption(@Body FrcationOption frcationOption);//申请积分、返回积分 同意或拒绝
+
+
+    @GET("/api/services/app/RechargeMCFractionRecord/GetPagedByUserID")
+    Call<ResponseBody> getScoreOptionRecord(@Query("UserID") int userId, @Query("page") int page, @Query("limit") int limit);
+
+
 }

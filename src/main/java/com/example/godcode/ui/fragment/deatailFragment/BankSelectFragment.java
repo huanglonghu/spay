@@ -10,9 +10,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.example.godcode.R;
+import com.example.godcode.bean.BankBean;
 import com.example.godcode.bean.BankCard;
 import com.example.godcode.databinding.FragmentBankselectBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
+import com.example.godcode.ui.adapter.BankSelectAdapter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.google.gson.Gson;
@@ -26,24 +30,19 @@ import io.reactivex.schedulers.Schedulers;
 public class BankSelectFragment extends BaseFragment {
     private FragmentBankselectBinding binding;
     private View view;
-    private int fragmentType;
+    private BankSelectAdapter bankSelectAdapter;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        if (getArguments() != null) {
-            fragmentType = getArguments().getInt("fragmentType");
-        }
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bankselect, container, false);
             binding.setPresenter(presenter);
             view = binding.getRoot();
-
             binding.selectBankToolbar.title.setText("选择银行卡");
-            initData();
             initView();
             initListener();
         }
+
         return view;
     }
 
@@ -51,39 +50,30 @@ public class BankSelectFragment extends BaseFragment {
         binding.lvBank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                bankSelectAdapter.selectItem(position);
+                RxEvent rxEvent = new RxEvent(5);
+                rxEvent.setId(position);
+                RxBus.getInstance().post(rxEvent);
                 presenter.back();
             }
         });
     }
 
 
-    private ArrayList<String> bankList = new ArrayList<>();
+    private ArrayList<BankBean> bankList;
 
-    private void initData() {
-        getBankList();
-    }
+    private int index;
 
-    private void getBankList() {
-        HttpUtil.getInstance().getBankCardsByUserID(Constant.userId).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                bankListStr -> {
-                    BankCard bankCard = new Gson().fromJson(bankListStr, BankCard.class);
-                    List<BankCard.ResultBean> result = bankCard.getResult();
-                    for (int i = 0; i < result.size(); i++) {
-                        BankCard.ResultBean resultBean = result.get(i);
-                        if (resultBean.getBindType() == 3) {
-                            bankList.add(resultBean.getBankName());
-                        }
-                    }
-                    ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(activity, R.layout.item_bank, bankList);
-                    binding.lvBank.setAdapter(stringArrayAdapter);
-                }, throwable -> {
-                }
-        );
+    public void setBankMsg(ArrayList<BankBean> bankList, int index) {
+        this.bankList = bankList;
+        this.index = index;
     }
 
 
     public void initView() {
-
+        bankSelectAdapter = new BankSelectAdapter(getContext(), bankList, R.layout.lv_selectbank_item);
+        binding.lvBank.setAdapter(bankSelectAdapter);
+        bankSelectAdapter.selectItem(index);
     }
 
     @Override

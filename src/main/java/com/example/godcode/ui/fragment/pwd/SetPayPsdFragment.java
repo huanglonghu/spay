@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.ChangePsd;
 import com.example.godcode.bean.SetPayPsd;
@@ -122,5 +123,11 @@ public class SetPayPsdFragment extends BaseFragment {
 
     private int index;
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (keyBoard != null) {
+            keyBoard.dismiss();
+        }
+    }
 }

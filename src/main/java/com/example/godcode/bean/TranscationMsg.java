@@ -23,6 +23,16 @@ public class TranscationMsg {
     private String description;
     private String paymentAmount;
     private String rechargeDate;
+    private String fraction;
+
+
+    public String getFraction() {
+        return fraction;
+    }
+
+    public void setFraction(String fraction) {
+        this.fraction = fraction;
+    }
 
     public String getRechargeDate() {
         return rechargeDate;

@@ -14,6 +14,7 @@ import com.example.godcode.greendao.option.NotificationOption;
 import com.example.godcode.ui.adapter.ServiceRemainderListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
+import com.example.godcode.ui.fragment.dm.MyScore;
 import com.example.godcode.utils.StringUtil;
 
 import java.util.Collections;
@@ -64,6 +65,10 @@ public class ServiceRemainderFragment extends BaseFragment {
                         break;
                     case 4:
                         presenter.step2Fragment("myAsset");
+                        break;
+                    case 5:
+                        MyScore myScore = new MyScore();
+                        presenter.step2Fragment(myScore, "myScore");
                         break;
 
                 }

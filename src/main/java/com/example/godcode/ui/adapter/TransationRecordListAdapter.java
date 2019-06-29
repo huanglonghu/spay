@@ -24,7 +24,7 @@ public class TransationRecordListAdapter extends BaseListAdapter {
         ItemLvTransationrecordBinding binding = DataBindingUtil.inflate(layoutInflater, res, parent, false);
         Teansantion.DataBean dataBean = (Teansantion.DataBean) datas.get(position);
         int transactionType = dataBean.getTransactionType();
-        if (transactionType == 1 || transactionType == 3 || transactionType == 4 || transactionType == 6 || transactionType == 10) {
+        if (transactionType == 1 || transactionType == 3 || transactionType == 4 || transactionType == 6 || transactionType == 10||transactionType==11) {
             binding.setIsIncome(false);
         } else {
             binding.setIsIncome(true);
@@ -34,7 +34,9 @@ public class TransationRecordListAdapter extends BaseListAdapter {
         String transationName;
         if (transactionType == 10) {
             transationName = "手机充值";
-        } else {
+        }else if(transactionType ==11){
+           transationName="购买积分";
+        } else  {
             transationName = TransationOption.getInstance().getTransationName(transactionType);
         }
         binding.setType(transationName);

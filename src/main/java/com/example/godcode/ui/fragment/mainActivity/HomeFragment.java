@@ -4,13 +4,10 @@ import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.DivideIncome;
 import com.example.godcode.databinding.FragmentHomeBinding;
@@ -21,7 +18,6 @@ import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.EtStrategy;
 import com.example.godcode.observable.WebSocketNewsObservable;
 import com.example.godcode.observable.WebSocketNewsObserver;
-import com.example.godcode.presenter.Presenter;
 import com.example.godcode.service.NetStateReceiver;
 import com.example.godcode.ui.activity.MainActivity;
 import com.example.godcode.ui.base.BaseFragment;
@@ -31,9 +27,9 @@ import com.example.godcode.ui.fragment.dm.MyScore;
 import com.example.godcode.ui.view.widget.NetStateDialog;
 import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.GsonUtil;
-import com.example.godcode.utils.LogUtil;
-
+import com.google.gson.Gson;
 import java.util.List;
+
 
 public class HomeFragment extends BaseFragment {
 
@@ -46,6 +42,7 @@ public class HomeFragment extends BaseFragment {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
             binding.setPresenter(presenter);
             initListener();
+            isMakeCode();
             MainActivity activity = (MainActivity) this.activity;
             WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable = activity.getWebSocketNewsObservable();
             WebSocketNewsObserver<WebSocketNewsHandler> observer = new WebSocketNewsObserver<WebSocketNewsHandler>() {
@@ -172,7 +169,6 @@ public class HomeFragment extends BaseFragment {
                 presenter.step2Fragment(myScore, "myScore");
             }
         });
-
     }
 
     @Override
@@ -186,11 +182,25 @@ public class HomeFragment extends BaseFragment {
     }
 
 
+    public void isMakeCode() {
+        HttpUtil.getInstance().getUserMsgById(Constant.userId).subscribe(
+                personalStr -> {
+                    com.example.godcode.bean.User mine = new Gson().fromJson(personalStr, com.example.godcode.bean.User.class);
+                    com.example.godcode.bean.User.ResultBean result = mine.getResult();
+                    if (result != null) {
+                        boolean makeCode = result.isMakeCode();
+                        binding.setIsMakeCode(makeCode);
+                    }
+                }
+        );
+    }
+
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible()) {
-            LogUtil.log("WWWWWWWWW============home可见===========");
+            isMakeCode();
             refreshDivideIncome();
         }
     }

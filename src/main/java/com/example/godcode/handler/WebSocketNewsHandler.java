@@ -11,6 +11,7 @@ import com.example.godcode.greendao.option.NotificationOption;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class WebSocketNewsHandler {
 
@@ -32,7 +33,7 @@ public class WebSocketNewsHandler {
         this.eventType = builder.eventType;
     }
 
-
+    //{"EventType":22,"Data":{"msg":"'13250554787'向您申请'100'积分！"},"Flag":"78a31ef8-5f59-4f06-8da6-073eab619628","SendTime":"2019-06-27T16:59:26.184+08:00"}
     public void setNofication() {
         Notification notification = new Notification();
         switch (eventType) {
@@ -71,6 +72,16 @@ public class WebSocketNewsHandler {
                 notification.setType(1);
                 notification.setDate(webSocketNews2.getSendTime());
                 break;
+            case "22":
+            case "23":
+            case "24":
+            case "25":
+            case "26":
+            case "27":
+                notification.setContent(webSocketNews3.getData().getMsg());
+                notification.setDate(webSocketNews3.getSendTime());
+                notification.setType(5);
+                break;
         }
         if (notification.getType() != 0) {
             notification.setUserId(Constant.userId);
@@ -89,8 +100,11 @@ public class WebSocketNewsHandler {
         return sdf.format(now);
     }
 
-    private String[] titleArray = {"好友请求", "好友同意", "银行卡审核成功", "提现成功", "好友转账", "二维码收款", "银行卡审核失败", "提现失败", "登录异常", "退款到账",
-            "产品营收到账", "删除好友", "资产分成", "修改资产分成", "删除资产分成", "解除资产绑定", "产权归还", "产权转移"};
+    String[] titleArray = {"好友请求", "好友同意", "银行卡审核成功", "提现成功", "好友转账", "二维码收款", "银行卡审核失败", "提现失败", "登录异常", "退款到账",
+            "产品营收到账", "删除好友", "资产分成", "修改资产分成", "删除资产分成", "解除资产绑定", "产权归还", "产权转移", "营收分成", "", "", "申请积分", "返还积分", "申请积分被拒绝", "返还积分被拒绝",
+            "申请积分已通过", "返还积分已通过"
+
+    };
 
 
     public static class Builder {

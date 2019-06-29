@@ -26,6 +26,7 @@ import com.example.godcode.bean.EditPresonal;
 import com.example.godcode.bean.EditProduct;
 import com.example.godcode.bean.EditProductPrice;
 import com.example.godcode.bean.EditProductSetting;
+import com.example.godcode.bean.FrcationOption;
 import com.example.godcode.bean.GetVerification;
 import com.example.godcode.bean.Id;
 import com.example.godcode.bean.LoginBody;
@@ -649,8 +650,8 @@ public class HttpUtil {
         return enqueueCall(call);
     }
 
-    public Observable<String> getDmMsgDetail(int userId, int groupId, int page) {
-        Call<ResponseBody> call = httpInterface.getDmMsgDetail(userId, groupId, page, 10);
+    public Observable<String> getDmMsgDetail(int userId, int groupId, int page,String productNum) {
+        Call<ResponseBody> call = httpInterface.getDmMsgDetail(productNum,userId, groupId, page, 100);
         return enqueueCall(call);
     }
 
@@ -676,7 +677,32 @@ public class HttpUtil {
     }
 
     public Observable<String> getMcUnLockDetail(int userId, Integer productId, int page) {
-        Call<ResponseBody> call = httpInterface.getMcUnLockDetail(userId, productId, page, 10);
+        Call<ResponseBody> call = httpInterface.getMcUnLockDetail(userId, productId, page, 20);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> requestOrReturnFraction(int userId, int fraction, int type) {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("userID", userId);
+        map.put("fraction", fraction);
+        map.put("type", type);
+        Call<ResponseBody> call = httpInterface.requestOrReturnFraction(map);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> getFractionRecord() {
+        Call<ResponseBody> call = httpInterface.getFractionRecord(Constant.userId);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> frcationOption(FrcationOption frcationOption) {
+        Call<ResponseBody> call = httpInterface.frcationOption(frcationOption);
+        return enqueueCall(call);
+    }
+
+
+    public Observable<String> getScoreOptionRecord(int page) {
+        Call<ResponseBody> call = httpInterface.getScoreOptionRecord(Constant.userId, page, 20);
         return enqueueCall(call);
     }
 
@@ -719,6 +745,7 @@ public class HttpUtil {
                             String errorCodeStr = errorBody.substring(errorBody.indexOf("\"code\":") + "\"code\":".length(), errorBody.indexOf(",\"message\""));
                             int errorCode = Integer.parseInt(errorCodeStr.trim());
                             LogUtil.log(errorBody + "--unsuccess---" + errorCodeStr);
+                            ErrrCodeShow.showToast(errorCode, context, errorBody);
                             if (errorCode == 2008 || errorCode == 2000 || errorCode == 3002 || errorCode == 4006 || errorCode == 6004) {
                                 if (errorCode == 4006) {
                                     Presenter.getInstance().exit(context);
@@ -726,7 +753,6 @@ public class HttpUtil {
                                     observableEmitter.onNext(errorBody);
                                 }
                             } else {
-                                ErrrCodeShow.showToast(errorCode, context, errorBody);
                                 if (errorCode == 2007) {
                                     observableEmitter.onNext("no");
                                 }

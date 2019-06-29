@@ -26,8 +26,6 @@
     <string name="endDate">结束时间</string>
 
 
-
-
     <string name="wxdl">微信登录</string>
     <string name="zhdl">账号登录</string>
     <string name="zczh">注册SY新账号</string>
@@ -221,6 +219,12 @@
 
     <string name="myScore">我的积分</string>
     <string name="unLock">解锁</string>
+    <string name="getScore">获取积分</string>
+    <string name="applyScore">申请积分</string>
+    <string name="backScore">返还积分</string>
+
+    <string name="hq">获取</string>
+    <string name="sq">申请</string>
 
 
 </resources>

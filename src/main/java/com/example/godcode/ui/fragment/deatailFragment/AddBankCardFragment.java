@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.AddBankCard;
 import com.example.godcode.databinding.FragmentBindbankcardBinding;
@@ -32,7 +31,6 @@ import com.example.godcode.utils.StringUtil;
 import com.youth.picker.PickerView;
 import com.youth.picker.entity.PickerData;
 import com.youth.picker.listener.OnPickerClickListener;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,6 +75,7 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
             }
         });
         bankArray = new String[]{"中国银行", "中国农业银行", "中国工商银行", "中国建设银行", "交通银行", "招商银行", "广发银行", "中国民生银行", "浦发银行", "中国光大银行", "中国邮政", "中信银行", "兴业银行", "汇丰中国银行"};
+
         binding.etBankName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +89,7 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
             @Override
             public void onClick(View v) {
                 pickerView.show(view);
+
                 pickerView.setOnPickerClickListener(new OnPickerClickListener() {
                     @Override
                     public void OnPickerClick(PickerData pickerData) {
@@ -128,7 +128,6 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
                 HttpUtil.getInstance().sendBankCardMsg(editBankCard).subscribe(
                         sendBankStr -> {
                             Toast.makeText(activity, "银行卡添加完成，请等待审核", Toast.LENGTH_SHORT).show();
-                            clear();
                             presenter.back();
                         }
                 );
@@ -150,11 +149,6 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
     }
 
 
-    public void clear() {
-        getFragmentManager().beginTransaction().remove(AddBankCardFragment.this).commit();
-
-    }
-
 
     @Override
     protected void lazyLoad() {
@@ -174,7 +168,6 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
         @Override
         public void sure() {
             try {
-                clear();
                 presenter.back();
             } catch (Exception e) {
                 e.printStackTrace();

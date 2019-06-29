@@ -15,6 +15,8 @@ import com.example.godcode.databinding.LayoutMainPopupBinding;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.adapter.MyViewPagerAdapter;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.base.BaseFragment;
@@ -76,6 +78,7 @@ public class MainFragment extends BaseFragment {
                                 user.setSyNumber(result.getUserName());
                                 user.setArea(result.getArea());
                                 user.setPhoneNumer(result.getPhoneNumber());
+                                user.setIsMakeCode(result.isMakeCode());
                                 if (result.getSex() == 1) {
                                     user.setSex("男");
                                 } else {
@@ -84,6 +87,7 @@ public class MainFragment extends BaseFragment {
                                 user.setUserId(result.getId());
                                 UserOption.getInstance().addUser(user);
                                 FriendOption.getInstance(activity).querryFriendList(1, true);
+                                RxBus.getInstance().post(new RxEvent(8));
                             }
                         }
 

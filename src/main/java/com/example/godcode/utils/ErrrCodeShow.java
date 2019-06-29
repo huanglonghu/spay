@@ -144,6 +144,9 @@ public class ErrrCodeShow {
             case 4006:
                 content="异地登录";
                 break;
+            case 6006:
+                content="不符合申请条件";
+                break;
         }
         if (!TextUtils.isEmpty(content)) {
             Toast.makeText(context, content, Toast.LENGTH_SHORT).show();

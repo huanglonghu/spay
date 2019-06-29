@@ -38,7 +38,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class BankCardFragment extends BaseFragment {
     private FragmentBankcardBinding binding;
-    private boolean isPrepared;
     private View view;
     private List<BankCard.ResultBean> result;
 
@@ -49,7 +48,6 @@ public class BankCardFragment extends BaseFragment {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bankcard, container, false);
             binding.setPresenter(presenter);
-            isPrepared = true;
             view = binding.getRoot();
             String title = StringUtil.getString(activity, R.string.bankCard);
             binding.bankcardToolbar.title.setText(title);

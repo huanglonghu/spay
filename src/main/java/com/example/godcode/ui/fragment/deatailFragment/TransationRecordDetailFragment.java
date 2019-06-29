@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.godcode.R;
+import com.example.godcode.bean.FrcationRecord;
 import com.example.godcode.bean.MobileRechargeRecord;
 import com.example.godcode.bean.QRPay;
 import com.example.godcode.bean.QrcodeGathering;
@@ -35,7 +36,7 @@ public class TransationRecordDetailFragment extends BaseFragment {
     private int id;
     private int relatedKey;
     private int transactionType;
-    private String[] typeArray = {"", "转账支出", "二维码收款", "二维码付款", "商户消费", "充值", "提现", "退款", "转账收入", "产品营收", "手机充值"};
+    private String[] typeArray = {"", "转账支出", "二维码收款", "二维码付款", "商户消费", "充值", "提现", "退款", "转账收入", "产品营收", "手机充值","购买积分"};
     private DecimalFormat decimalFormat;
 
     @Nullable
@@ -154,6 +155,13 @@ public class TransationRecordDetailFragment extends BaseFragment {
                             transcationMsg.setOrderNum(result10.getRechargeOrderNumber());
                             transcationMsg.setRechargePhone(result10.getRechargePhoneNumber());
                             transcationMsg.setRechargeDate(changeDate(result10.getAddDateTime()));
+                            break;
+                        case 11:
+                            FrcationRecord frcationRecord = GsonUtil.fromJson(transactionStr, FrcationRecord.class);
+                            FrcationRecord.ResultBean result11 = frcationRecord.getResult();
+                            transcationMsg.setMoney(result11.getMoney()+"");
+                            transcationMsg.setDate(result11.getAddDateTime());
+                            transcationMsg.setFraction(result11.getFraction()+"");
                             break;
                     }
                     binding.setMsg(transcationMsg);
