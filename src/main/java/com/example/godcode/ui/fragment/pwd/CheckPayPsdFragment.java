@@ -14,14 +14,17 @@ import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
+import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
+import com.example.godcode.utils.LogUtil;
 
 public class CheckPayPsdFragment extends BaseFragment {
     private FragmentCheckpaypsdBinding binding;
     private View view;
     private KeyBoard keyBoard;
+    private int eventType;
 
     @Nullable
     @Override
@@ -29,6 +32,7 @@ public class CheckPayPsdFragment extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_checkpaypsd, container, false);
         binding.setPresenter(presenter);
         view = binding.getRoot();
+        eventType = getArguments().getInt("eventType");
         initView();
         initListener();
         return view;
@@ -60,7 +64,9 @@ public class CheckPayPsdFragment extends BaseFragment {
                                 binding.checkPsdPsdView.setPsLength(0);
                                 Toast.makeText(activity, "密码输入错误，请重新输入", Toast.LENGTH_SHORT).show();
                             } else {
-                                RxBus.getInstance().post(new RxEvent(2));
+                                LogUtil.log("===============EventType============"+eventType);
+                                presenter.back();
+                                RxBus.getInstance().post(new RxEvent(eventType));
                             }
                         }
                 );

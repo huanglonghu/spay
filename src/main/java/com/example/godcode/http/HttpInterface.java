@@ -31,6 +31,7 @@ import com.example.godcode.bean.RechargeBody;
 import com.example.godcode.bean.RefreshDiviceToken;
 import com.example.godcode.bean.RefreshToken;
 import com.example.godcode.bean.RegisterBody;
+import com.example.godcode.bean.ResetPwdBean;
 import com.example.godcode.bean.ReturnEquity;
 import com.example.godcode.bean.SetPayPsd;
 import com.example.godcode.bean.TransationDetail;
@@ -364,6 +365,13 @@ public interface HttpInterface {
 
     @GET("/api/services/app/RechargeMCFractionRecord/GetPagedByUserID")
     Call<ResponseBody> getScoreOptionRecord(@Query("UserID") int userId, @Query("page") int page, @Query("limit") int limit);
+
+    @POST("/api/services/app/PayPassword/ResetPayPassword")
+    Call<ResponseBody> resetPassword(@Body ResetPwdBean resetPwd);
+
+
+    @POST("/api/services/app/MakeCodeProduct/CheckMCProductUnlockInfo")
+    Call<ResponseBody> look(@Body HashMap<String, String> map);
 
 
 }

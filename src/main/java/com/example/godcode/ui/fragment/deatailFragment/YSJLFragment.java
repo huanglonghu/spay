@@ -12,6 +12,7 @@ import com.example.godcode.R;
 import com.example.godcode.bean.YSRecord;
 import com.example.godcode.databinding.FragmentYsjlBinding;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.adapter.YsjlListAdapter;
@@ -52,8 +53,7 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
             data = new ArrayList<>();
             initView();
             initListener();
-            binding.lvYsjl.setPage(1);
-            querryYsjl();
+            refreshData(1);
         }
 
         return view;
@@ -108,10 +108,10 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
             @Override
             public void onNext(RxEvent rxEvent) {
                 //处理事件
-                if (rxEvent.getEventType() == 1) {
+                if (rxEvent.getEventType() == EventType.EVENTTYPE_DIVIDE_MSG || rxEvent.getEventType() == EventType.EVENTTYPE_REFRESH_YSJL) {
                     data.clear();
                     ysjlListAdapter.clearView();
-                    querryYsjl();
+                    binding.lvYsjl.setState(2);
                 }
             }
 
@@ -125,28 +125,6 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
 
             }
         });
-
-    }
-
-
-    private void querryYsjl() {
-        HttpUtil.getInstance().getYSRecord(time1, time2, binding.lvYsjl.getPage()).subscribe(
-                ysRecordStr -> {
-                    YSRecord ysRecord = new Gson().fromJson(ysRecordStr, YSRecord.class);
-                    List<YSRecord.ResultBean.DataBean> list = ysRecord.getResult().getData();
-                    double allSumMoney = ysRecord.getResult().getAllSumMoney();
-                    binding.divideIncomeTotal.setText(FormatUtil.getInstance().get2double(allSumMoney));
-                    String incomeSumMoney = FormatUtil.getInstance().get2double(ysRecord.getResult().getIncomeSumMoney());
-                    binding.sz.setText("收入¥  " + incomeSumMoney);
-                    if (list.size() > 0) {
-                        data.addAll(list);
-                        binding.lvYsjl.setLoading(true);
-                        ysjlListAdapter.notifyDataSetChanged();
-                    } else {
-                        binding.lvYsjl.setLoading(false);
-                    }
-                }
-        );
 
     }
 
@@ -184,7 +162,23 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
 
     @Override
     public void refreshData(int page) {
-        querryYsjl();
+        HttpUtil.getInstance().getYSRecord(time1, time2, page).subscribe(
+                ysRecordStr -> {
+                    YSRecord ysRecord = new Gson().fromJson(ysRecordStr, YSRecord.class);
+                    List<YSRecord.ResultBean.DataBean> list = ysRecord.getResult().getData();
+                    double allSumMoney = ysRecord.getResult().getAllSumMoney();
+                    binding.divideIncomeTotal.setText(FormatUtil.getInstance().get2double(allSumMoney));
+                    String incomeSumMoney = FormatUtil.getInstance().get2double(ysRecord.getResult().getIncomeSumMoney());
+                    binding.sz.setText("收入¥  " + incomeSumMoney);
+                    if (list != null && list.size() > 0) {
+                        data.addAll(list);
+                        ysjlListAdapter.notifyDataSetChanged();
+                        binding.lvYsjl.setState(0);
+                    } else {
+                        binding.lvYsjl.setState(1);
+                    }
+                }
+        );
     }
 
     @Override
@@ -195,7 +189,7 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
         binding.tvDate2.setText(time2);
         data.clear();
         ysjlListAdapter.clearView();
-        querryYsjl();
+        binding.lvYsjl.setState(2);
     }
 
     @Override

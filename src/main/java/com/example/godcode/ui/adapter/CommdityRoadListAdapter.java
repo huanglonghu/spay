@@ -2,6 +2,7 @@ package com.example.godcode.ui.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +19,9 @@ import com.example.godcode.databinding.ItemBindproductBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.EtStrategy;
 import com.example.godcode.interface_.VemConfigStrategy;
+import com.example.godcode.observable.EventType;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.view.widget.VemConfigDialog;
 
@@ -133,7 +137,11 @@ public class CommdityRoadListAdapter extends BaseAdapter {
                                                                         sumStock += dataBean.getCurrentStocks();
                                                                     }
                                                                 }
-                                                                Presenter.getInstance().getKucunObservable().notifyObservers(sumStock);
+                                                                RxEvent rxEvent = new RxEvent(EventType.EVENTTYPE_CURRENSSTOCK_CHANGE);
+                                                                Bundle bundle = new Bundle();
+                                                                bundle.putInt("kc",sumStock);
+                                                                rxEvent.setBundle(bundle);
+                                                                RxBus.getInstance().post(rxEvent);
                                                             }
                                                             etStrategy.etComplete();
                                                         }

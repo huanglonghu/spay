@@ -23,6 +23,8 @@
     <string name="loadCompleted">No more data</string>
     <string name="text_no_song">No data</string>
 
+    <string name="authentication">身份验证</string>
+
 
     <string name="startDate">Start Time</string>
     <string name="endDate">End Time</string>
@@ -225,4 +227,7 @@
     <string name="hq">获取</string>
     <string name="sq">申请</string>
 
+    <string name="aqyz">安全验证</string>
+
+    <string name="selectAuthWay">选择验证方式</string>
 </resources>

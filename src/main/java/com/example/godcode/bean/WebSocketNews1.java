@@ -43,7 +43,7 @@ public class WebSocketNews1 implements Serializable{
         this.Flag = Flag;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * ProductNumber : SY1AC
          * CoinCount : 1

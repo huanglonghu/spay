@@ -46,7 +46,6 @@
             android:layout_height="1px"
             android:background="#1aac19" />
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,8 +54,6 @@
             android:text="@{name}"
             android:textColor="#000"
             android:textSize="20sp" />
-
-
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -78,15 +75,21 @@
 
         </LinearLayout>
 
-
-
-
-
         <com.example.godcode.ui.view.PayPsdInputView
             android:id="@+id/tx_payPsdView"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="20dp" />
+
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="忘记密码?找回并完成支付"
+            android:textColor="@color/theme_color"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            />
 
     </LinearLayout>
 </layout>

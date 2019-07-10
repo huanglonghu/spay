@@ -21,6 +21,8 @@ import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.EtStrategy;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.adapter.RevenueConfigListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
@@ -32,10 +34,12 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class RevenueConfigFragment extends BaseFragment implements Presenter.FriendIdResponse {
+public class RevenueConfigFragment extends BaseFragment{
     private FragmentRevenueconfigBinding binding;
     private View view;
     private RevenueConfigListAdapter adapter;
@@ -52,7 +56,6 @@ public class RevenueConfigFragment extends BaseFragment implements Presenter.Fri
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_revenueconfig, container, false);
             bean = (MyAssetList.ResultBean.DataBean) getArguments().getSerializable("bean");
-            presenter.setFriendIdResponse(this);
             initData();
             String title = StringUtil.getString(activity, R.string.revenueSetting);
             binding.revenueconfigToolbar.title.setText(title);
@@ -78,6 +81,39 @@ public class RevenueConfigFragment extends BaseFragment implements Presenter.Fri
             }
         });
         createDivide();
+
+        RxBus.getInstance().toObservable(RxEvent.class).subscribe(new Observer<RxEvent>() {
+            @Override
+            public void onSubscribe(Disposable disposable) {
+
+            }
+
+            @Override
+            public void onNext(RxEvent rxEvent) {
+                int id = rxEvent.getId();
+                for (RevenueDivideItem revenueDivideItem : revenueDivideList) {
+                    if (revenueDivideItem.getUserId() == id) {
+                        Toast.makeText(activity, "该分成用户已存在", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                isAdd = true;
+                Friend friend = FriendOption.getInstance(activity).querryFriend(id);
+                currentRevenueItem = getRevenueItem(friend.getUserName(), 0, null, id);
+                revenueDivideList.add(currentRevenueItem);
+                binding.lvRevenueconfig.setAdapter(adapter);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     @Override
@@ -220,20 +256,7 @@ public class RevenueConfigFragment extends BaseFragment implements Presenter.Fri
         return revenueDivideItem;
     }
 
-    @Override
-    public void getFriendId(int friendId) {
-        for (RevenueDivideItem revenueDivideItem : revenueDivideList) {
-            if (revenueDivideItem.getUserId() == friendId) {
-                Toast.makeText(activity, "该分成用户已存在", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-        isAdd = true;
-        Friend friend = FriendOption.getInstance(activity).querryFriend(friendId);
-        currentRevenueItem = getRevenueItem(friend.getUserName(), 0, null, friendId);
-        revenueDivideList.add(currentRevenueItem);
-        binding.lvRevenueconfig.setAdapter(adapter);
-    }
+
 
     public class TransferEquityStrategy extends EtStrategy {
         @Override

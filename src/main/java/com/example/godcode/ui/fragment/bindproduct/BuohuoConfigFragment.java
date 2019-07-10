@@ -7,24 +7,20 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.Toast;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.CommodityRoadList;
 import com.example.godcode.bean.MyAssetList;
 import com.example.godcode.databinding.FragmentBuhuoConfigBinding;
-import com.example.godcode.entity.BhConfigparameter;
-import com.example.godcode.handler.WebSocketNewsHandler;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.EtStrategy;
-import com.example.godcode.observable.WebSocketNewsObservable;
+import com.example.godcode.observable.EventType;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.adapter.BuhuoConfigAdapter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.utils.GsonUtil;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class BuohuoConfigFragment extends BaseFragment {
@@ -85,8 +81,11 @@ public class BuohuoConfigFragment extends BaseFragment {
                     list.add(datas[i]);
                 }
             }
-
-            presenter.getKucunObservable().notifyObservers(kc);
+            RxEvent rxEvent = new RxEvent(EventType.EVENTTYPE_CURRENSSTOCK_CHANGE);
+            Bundle bundle = new Bundle();
+            bundle.putInt("kc",kc);
+            rxEvent.setBundle(bundle);
+            RxBus.getInstance().post(rxEvent);
         }
         if (buhuoConfigAdapter == null) {
             buhuoConfigAdapter = new BuhuoConfigAdapter(activity, dataBean.getProductNumber(), datas, binding, new BatchConfigStrategy(), list);

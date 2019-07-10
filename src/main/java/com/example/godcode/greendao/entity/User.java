@@ -20,10 +20,11 @@ public class User {
     private String phoneNumer;
     private boolean setPwd;
     private boolean isMakeCode;
-    @Generated(hash = 1478910381)
+    private String emailAddress;
+    @Generated(hash = 168504241)
     public User(Long id, String area, String sex, String headImageUrl,
             String userName, int userId, String syNumber, String phoneNumer,
-            boolean setPwd, boolean isMakeCode) {
+            boolean setPwd, boolean isMakeCode, String emailAddress) {
         this.id = id;
         this.area = area;
         this.sex = sex;
@@ -34,6 +35,7 @@ public class User {
         this.phoneNumer = phoneNumer;
         this.setPwd = setPwd;
         this.isMakeCode = isMakeCode;
+        this.emailAddress = emailAddress;
     }
     @Generated(hash = 586692638)
     public User() {
@@ -98,6 +100,16 @@ public class User {
     public void setIsMakeCode(boolean isMakeCode) {
         this.isMakeCode = isMakeCode;
     }
+    public String getEmailAddress() {
+        return this.emailAddress;
+    }
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    
+
+
 
 
 

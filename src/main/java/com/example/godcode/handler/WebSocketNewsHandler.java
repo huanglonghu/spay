@@ -208,6 +208,14 @@ public class WebSocketNewsHandler {
     public void setHandlerType(int handlerType) {
         this.handlerType = handlerType;
     }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
 }
 
 

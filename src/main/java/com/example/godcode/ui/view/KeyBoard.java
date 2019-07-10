@@ -28,7 +28,6 @@ public class KeyBoard extends PopupWindow {
         setOutsideTouchable(false);
         setFocusable(false);
         setBackgroundDrawable(new BitmapDrawable());
-        setAnimationStyle(R.style.popupStyle);
     }
 
 

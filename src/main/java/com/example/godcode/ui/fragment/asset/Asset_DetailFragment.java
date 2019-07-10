@@ -52,7 +52,6 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
 
     public void initParameter(int status) {
         this.status = status;
-        binding.lvDetail.setPage(1);
         assetListAdapter.clearView(parentFragment.getPeriodType());
         UserNameOrAddress = "";
         selectPosition = 0;
@@ -116,7 +115,7 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
                         categoryMap.put(id, purview);
                         typeMap.put(productType, id);
                     }
-                    requestAssetList();
+                    refreshData(1);
                 }
         );
 
@@ -130,48 +129,6 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
 
     public void setCurrentGroupUserID(int currentGroupUserID) {
         this.currentGroupUserID = currentGroupUserID;
-    }
-    public void requestAssetList() {
-        HashMap<String, String> urlMap = new HashMap<>();
-        urlMap.put("UserId", String.valueOf(Constant.userId));
-        urlMap.put("limit", "20");
-        urlMap.put("PeriodType", parentFragment.getPeriodType() + "");
-        urlMap.put("CurrentGroupUserID", currentGroupUserID + "");
-        if (selectPosition == 1) {
-            urlMap.put("isMaster", true + "");
-        } else if (selectPosition == 2) {
-            urlMap.put("isMaster", false + "");
-        }
-        urlMap.put("isValid", status + "");
-        if (!TextUtils.isEmpty(UserNameOrAddress)) {
-            urlMap.put("UserNameOrAddress", UserNameOrAddress);
-        }
-        if (!TextUtils.isEmpty(productType)) {
-            urlMap.put("ProductType", productType);
-        }
-
-        urlMap.put("page", binding.lvDetail.getPage() + "");
-        assetMap=new HashMap<>();
-        HttpUtil.getInstance().getGroupById(urlMap).subscribe(
-                assetStr -> {
-                    MyAssetList myAssetList = new Gson().fromJson(assetStr, MyAssetList.class);
-                    MyAssetList.ResultBean result = myAssetList.getResult();
-                    List<MyAssetList.ResultBean.DataBean> datas = result.getData();
-                    parentFragment.refreshAsset(result.getCoinCount(), result.getCount(), result.getNormalCount()
-                            ,result.getErrorCount(), result.getDividedMoney(),result.getSumAwardCount());
-                    if (datas.size() > 0) {
-                        binding.lvDetail.setLoading(true);
-                        for (int i = 0; i < datas.size(); i++) {
-                            MyAssetList.ResultBean.DataBean dataBean = datas.get(i);
-                            assetMap.put(dataBean.getProductNumber(), i);
-                            assetList.add(dataBean);
-                        }
-                    } else {
-                        binding.lvDetail.setLoading(false);
-                    }
-                    assetListAdapter.notifyDataSetChanged();
-                }
-        );
     }
 
     public void refreshDivide(WebSocketNews1.DataBean data) {
@@ -216,18 +173,52 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
         this.selectPosition = position;
         this.productType = productType;
         this.UserNameOrAddress = UserNameOrAddress;
-        binding.lvDetail.setPage(1);
-        requestAssetList();
+        binding.lvDetail.setState(2);
     }
 
     @Override
     public void refreshData(int page) {
-        if (page == 1) {
-            assetList.clear();
-            assetListAdapter.clearView(parentFragment.getPeriodType());
-            assetListAdapter.notifyDataSetChanged();
-            binding.lvDetail.setPage(1);
+        HashMap<String, String> urlMap = new HashMap<>();
+        urlMap.put("UserId", String.valueOf(Constant.userId));
+        urlMap.put("limit", "20");
+        urlMap.put("PeriodType", parentFragment.getPeriodType() + "");
+        urlMap.put("CurrentGroupUserID", currentGroupUserID + "");
+        if (selectPosition == 1) {
+            urlMap.put("isMaster", true + "");
+        } else if (selectPosition == 2) {
+            urlMap.put("isMaster", false + "");
         }
-        requestAssetList();
+        urlMap.put("isValid", status + "");
+        if (!TextUtils.isEmpty(UserNameOrAddress)) {
+            urlMap.put("UserNameOrAddress", UserNameOrAddress);
+        }
+        if (!TextUtils.isEmpty(productType)) {
+            urlMap.put("ProductType", productType);
+        }
+
+        urlMap.put("page", page + "");
+        assetMap=new HashMap<>();
+        HttpUtil.getInstance().getGroupById(urlMap).subscribe(
+                assetStr -> {
+                    MyAssetList myAssetList = new Gson().fromJson(assetStr, MyAssetList.class);
+                    MyAssetList.ResultBean result = myAssetList.getResult();
+                    List<MyAssetList.ResultBean.DataBean> datas = result.getData();
+                    parentFragment.refreshAsset(result.getCoinCount(), result.getCount(), result.getNormalCount()
+                            ,result.getErrorCount(), result.getDividedMoney(),result.getSumAwardCount());
+
+                    if (datas!=null&&datas.size()> 0) {
+                        LogUtil.log("=====AAAAAAAAA===page==========="+page);
+                        binding.lvDetail.setState(0);
+                        for (int i = 0; i < datas.size(); i++) {
+                            MyAssetList.ResultBean.DataBean dataBean = datas.get(i);
+                            assetMap.put(dataBean.getProductNumber(), i);
+                            assetList.add(dataBean);
+                        }
+                    } else {
+                        binding.lvDetail.setState(1);
+                    }
+                    assetListAdapter.notifyDataSetChanged();
+                }
+        );
     }
 }

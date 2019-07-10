@@ -1,26 +1,22 @@
 package com.example.godcode.utils;
 
 import android.annotation.SuppressLint;
-
+import android.os.Bundle;
 import com.example.godcode.bean.WebSocketNews1;
 import com.example.godcode.bean.WebSocketNews2;
 import com.example.godcode.bean.WebSocketNews3;
 import com.example.godcode.bean.WebSocketNews4;
 import com.example.godcode.bean.WsHeart;
 import com.example.godcode.handler.WebSocketNewsHandler;
+import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
-import com.example.godcode.observable.WebSocketNewsObservable;
-import com.example.godcode.ui.activity.BaseActivity;
-
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
-
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -32,14 +28,11 @@ import rx.Subscription;
 public class WebSocketUtil {
     private String TAG = "WebSocket:";
     private WebSocketClient mSocketClient;
-    private BaseActivity activity;
     private static Disposable subscribe;
     private Subscription heartSubscribe;
-    private WebSocketNewsObservable<WebSocketNewsHandler> observable;
 
-    public WebSocketUtil(BaseActivity activity, WebSocketNewsObservable<WebSocketNewsHandler> observable) {
-        this.activity = activity;
-        this.observable = observable;
+    public WebSocketUtil() {
+
     }
 
     @SuppressLint("CheckResult")
@@ -68,7 +61,6 @@ public class WebSocketUtil {
                         WebSocketNewsHandler.Builder builder = new WebSocketNewsHandler.Builder();
                         String type = message.substring(message.indexOf("\"EventType\":") + "\"EventType\":".length(), message.indexOf(","));
                         analyWebSocketNews(type, message, builder);
-                        getStrategyByType(type, builder);
                         e.onNext(builder);
                     }
 
@@ -104,7 +96,7 @@ public class WebSocketUtil {
                 builder -> {
                     WebSocketNewsHandler webSocketNewsHandler = builder.build();
                     webSocketNewsHandler.setNofication();
-                    observable.notifyObservers(webSocketNewsHandler);
+                    getStrategyByType(webSocketNewsHandler);
                 }
         );
     }
@@ -156,10 +148,10 @@ public class WebSocketUtil {
     }
 
 
-    public void getStrategyByType(String type, WebSocketNewsHandler.Builder builder) {
-        switch (type) {
+    public void getStrategyByType(WebSocketNewsHandler webSocketNewsHandler) {
+        switch (webSocketNewsHandler.getEventType()) {
             case "2":
-                builder.handlerType(0);
+                RxBus.getInstance().post(new RxEvent(EventType.EVENTTYPE_ADDFRIEND_SUCCESS));
                 break;
             case "3":
             case "7":
@@ -169,20 +161,25 @@ public class WebSocketUtil {
             case "16":
             case "17":
             case "18":
-                builder.handlerType(1);
+                RxBus.getInstance().post(new RxEvent(EventType.EVENTTYPE_REFRESH_NOTIFICATION));
                 break;
             case "9":
-                builder.handlerType(2);
+                RxBus.getInstance().post(new RxEvent(EventType.EVENTTYPE_EXIT));
                 break;
             case "12":
-                builder.handlerType(3);
+                RxEvent rxEvent = new RxEvent(EventType.EVENTTYPE_DELETE_FRIEND);
+                rxEvent.setId(webSocketNewsHandler.getWebSocketNews4().getData().getRelatedKey());
+                RxBus.getInstance().post(rxEvent);
                 break;
             case "1":
-                builder.handlerType(4);
+                RxBus.getInstance().post(new RxEvent(EventType.EVENTTYPE_ADDFRIEND));
                 break;
             case "19":
-                builder.handlerType(5);
-                RxBus.getInstance().post(new RxEvent(1));
+                RxEvent rxEvent2 = new RxEvent(EventType.EVENTTYPE_DIVIDE_MSG);
+                Bundle bundle1 = new Bundle();
+                bundle1.putSerializable("dataBean",webSocketNewsHandler.getWebSocketNews1().getData());
+                rxEvent2.setBundle(bundle1);
+                RxBus.getInstance().post(rxEvent2);
                 break;
             case "4":
             case "5":
@@ -190,20 +187,24 @@ public class WebSocketUtil {
             case "8":
             case "10":
             case "11":
-                builder.handlerType(6);
+                RxBus.getInstance().post(new RxEvent(EventType.EVENTTYPE_BALANCE_CHANGE));
                 break;
             case "21":
-                builder.handlerType(7);
+                RxEvent rxEvent1 = new RxEvent(EventType.EVENTTYPE_HEART);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("heart",webSocketNewsHandler.getWsHeart());
+                rxEvent1.setBundle(bundle);
+                RxBus.getInstance().post(rxEvent1);
                 break;
             case "22":
             case "23":
-                builder.handlerType(8);
+                RxBus.getInstance().post(new RxEvent(EventType.EVENTTYPE_APPLAY_SCORE));
                 break;
             case "24":
             case "25":
             case "26":
             case "27":
-                builder.handlerType(9);
+                RxBus.getInstance().post(new RxEvent(EventType.EVENTTYPE_REFRESH_SCORE));
                 break;
         }
 

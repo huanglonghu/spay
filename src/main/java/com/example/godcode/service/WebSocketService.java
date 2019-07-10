@@ -5,15 +5,10 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-
-import com.example.godcode.handler.WebSocketNewsHandler;
-import com.example.godcode.observable.WebSocketNewsObservable;
 import com.example.godcode.ui.activity.BaseActivity;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.WebSocketUtil;
-
-import io.reactivex.disposables.Disposable;
 
 
 public class WebSocketService extends Service {
@@ -56,8 +51,8 @@ public class WebSocketService extends Service {
 
 
     public class MyBinder extends Binder {
-        public void connectWebSocket(BaseActivity activity, WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable) {
-            webSocketUtil = new WebSocketUtil(activity, webSocketNewsObservable);
+        public void connectWebSocket(BaseActivity activity) {
+            webSocketUtil = new WebSocketUtil();
             webSocketUtil.connect(Constant.webSocketUrl + "?userId=" + Constant.userId);
         }
     }

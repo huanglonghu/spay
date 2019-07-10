@@ -12,21 +12,22 @@ import com.example.godcode.R;
 import com.example.godcode.bean.GroupMsg;
 import com.example.godcode.bean.WebSocketNews1;
 import com.example.godcode.databinding.FragmentMyassetBinding;
-import com.example.godcode.handler.WebSocketNewsHandler;
 import com.example.godcode.http.HttpUtil;
-import com.example.godcode.observable.WebSocketNewsObservable;
-import com.example.godcode.observable.WebSocketNewsObserver;
+import com.example.godcode.observable.EventType;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.activity.MainActivity;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.fragment.asset.Asset_DetailFragment;
 import com.example.godcode.ui.fragment.asset.Asset_GroupFragment;
 import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.GsonUtil;
-import com.example.godcode.utils.LogUtil;
-import com.example.godcode.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 public class Asset_1_Fragment extends BaseFragment {
     private FragmentMyassetBinding binding;
@@ -57,17 +58,31 @@ public class Asset_1_Fragment extends BaseFragment {
             initListener();
             initView();
             initData();
-            MainActivity activity = (MainActivity) this.activity;
-            WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable = activity.getWebSocketNewsObservable();
-            WebSocketNewsObserver<WebSocketNewsHandler> observer = new WebSocketNewsObserver<WebSocketNewsHandler>() {
+            RxBus.getInstance().toObservable(RxEvent.class).subscribe(new Observer<RxEvent>() {
                 @Override
-                public void onUpdate(WebSocketNewsObservable<WebSocketNewsHandler> observable, WebSocketNewsHandler data) {
-                    if (data.getHandlerType() == 5) {
-                        refreshData(data.getWebSocketNews1().getData());
+                public void onSubscribe(Disposable disposable) {
+
+                }
+
+                @Override
+                public void onNext(RxEvent rxEvent) {
+                    if (rxEvent.getEventType() == EventType.EVENTTYPE_DIVIDE_MSG) {
+                        WebSocketNews1.DataBean dataBean = (WebSocketNews1.DataBean) rxEvent.getBundle().getSerializable("dataBean");
+                        refreshData(dataBean);
                     }
                 }
-            };
-            webSocketNewsObservable.register(observer);
+
+                @Override
+                public void onError(Throwable throwable) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+
         }
         toggleFragment(index);
         return root;
@@ -80,7 +95,7 @@ public class Asset_1_Fragment extends BaseFragment {
     public void querryByStatus(int status) {
         if (index == 1) {
             asset_detailFragment.initParameter(status);
-            asset_detailFragment.requestAssetList();
+            asset_detailFragment.refreshData(1);
         }
     }
 
@@ -118,12 +133,12 @@ public class Asset_1_Fragment extends BaseFragment {
     }
 
     private void initListener() {
-          binding.asset1Toolbar.toolbar4Back.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  onKeyDown();
-              }
-          });
+        binding.asset1Toolbar.toolbar4Back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onKeyDown();
+            }
+        });
     }
 
 
@@ -150,7 +165,7 @@ public class Asset_1_Fragment extends BaseFragment {
             );
         } else {
             asset_detailFragment.initParameter(2);
-            asset_detailFragment.requestAssetList();
+            asset_detailFragment.refreshData(1);
         }
 
     }

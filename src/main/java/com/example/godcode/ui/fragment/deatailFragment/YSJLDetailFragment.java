@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.PayByBalance;
 import com.example.godcode.bean.SellGoodsOrder;
@@ -15,6 +14,7 @@ import com.example.godcode.bean.YSRecord;
 import com.example.godcode.databinding.FragmentYsjlDetailBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.ClickSureListener;
+import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.adapter.HdSellListAdapter;
@@ -24,11 +24,9 @@ import com.example.godcode.ui.view.KeyBoard;
 import com.example.godcode.ui.view.PsdPopupWindow;
 import com.example.godcode.utils.DateUtil;
 import com.example.godcode.utils.FormatUtil;
-
 import com.example.godcode.utils.GsonUtil;
 import com.example.godcode.utils.PayPwdSetting;
 import com.example.godcode.utils.StringUtil;
-
 import java.util.List;
 
 
@@ -123,7 +121,7 @@ public class YSJLDetailFragment extends BaseFragment {
                     } else {
                         Toast.makeText(activity, "退款成功", Toast.LENGTH_SHORT).show();
                         PsdPopupWindow.getInstance(activity).exit();
-                        RxBus.getInstance().post(new RxEvent(1));
+                        RxBus.getInstance().post(new RxEvent(EventType.EVENTTYPE_REFRESH_YSJL));
                         presenter.back();
                     }
                 }

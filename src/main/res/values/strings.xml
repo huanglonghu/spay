@@ -25,6 +25,8 @@
     <string name="startDate">开始时间</string>
     <string name="endDate">结束时间</string>
 
+    <string name="authentication">身份验证</string>
+
 
     <string name="wxdl">微信登录</string>
     <string name="zhdl">账号登录</string>
@@ -225,6 +227,10 @@
 
     <string name="hq">获取</string>
     <string name="sq">申请</string>
+
+    <string name="aqyz">安全验证</string>
+
+    <string name="selectAuthWay">选择验证方式</string>
 
 
 </resources>

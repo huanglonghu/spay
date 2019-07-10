@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.DivideIncome;
 import com.example.godcode.databinding.FragmentHomeBinding;
@@ -16,8 +17,9 @@ import com.example.godcode.greendao.option.NotificationOption;
 import com.example.godcode.handler.WebSocketNewsHandler;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.EtStrategy;
-import com.example.godcode.observable.WebSocketNewsObservable;
-import com.example.godcode.observable.WebSocketNewsObserver;
+import com.example.godcode.observable.EventType;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.service.NetStateReceiver;
 import com.example.godcode.ui.activity.MainActivity;
 import com.example.godcode.ui.base.BaseFragment;
@@ -28,7 +30,11 @@ import com.example.godcode.ui.view.widget.NetStateDialog;
 import com.example.godcode.utils.FormatUtil;
 import com.example.godcode.utils.GsonUtil;
 import com.google.gson.Gson;
+
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 
 public class HomeFragment extends BaseFragment {
@@ -43,23 +49,34 @@ public class HomeFragment extends BaseFragment {
             binding.setPresenter(presenter);
             initListener();
             isMakeCode();
-            MainActivity activity = (MainActivity) this.activity;
-            WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable = activity.getWebSocketNewsObservable();
-            WebSocketNewsObserver<WebSocketNewsHandler> observer = new WebSocketNewsObserver<WebSocketNewsHandler>() {
+            RxBus.getInstance().toObservable(RxEvent.class).subscribe(new Observer<RxEvent>() {
                 @Override
-                public void onUpdate(WebSocketNewsObservable<WebSocketNewsHandler> observable, WebSocketNewsHandler data) {
-                    int handlerType = data.getHandlerType();
-                    if (handlerType == 1 || handlerType == 4 || handlerType == 6) {
-                        refreshData();
-                        if (handlerType == 6) {
-                            refreshDivideIncome();
-                        }
-                    } else if (handlerType == 5) {
+                public void onSubscribe(Disposable disposable) {
+
+                }
+
+                @Override
+                public void onNext(RxEvent rxEvent) {
+                    int eventType = rxEvent.getEventType();
+                    if (eventType == EventType.EVENTTYPE_REFRESH_NOTIFICATION || eventType == EventType.EVENTTYPE_BALANCE_CHANGE || eventType == EventType.EVENTTYPE_ADDFRIEND) {
+                        refreshNotification();
+                    }
+                    if(eventType ==EventType.EVENTTYPE_DIVIDE_MSG||eventType == EventType.EVENTTYPE_BALANCE_CHANGE ){
                         refreshDivideIncome();
                     }
                 }
-            };
-            webSocketNewsObservable.register(observer);
+
+                @Override
+                public void onError(Throwable throwable) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+
         }
         initBalanceMsg();
         initView();
@@ -176,7 +193,7 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    public void refreshData() {
+    public void refreshNotification() {
         initView();
         binding.setShowNews(true);
     }

@@ -22,6 +22,7 @@ import com.example.godcode.databinding.FragmentTxFirstBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.interface_.Strategy;
+import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.base.BaseFragment;
@@ -163,7 +164,7 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
             @Override
             public void onNext(RxEvent rxEvent) {
                 //处理事件
-                if (rxEvent.getEventType() == 5) {
+                if (rxEvent.getEventType() == EventType.EVENTTYPE_SELECT_BANK) {
                     bankIndex = rxEvent.getId();
                     BankBean bankBean = bankList.get(bankIndex);
                     binding.txBank.setText(bankBean.getBankName() + "(" + bankBean.getLastfourNum() + ")");
@@ -230,14 +231,12 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
         rate = parentFragment.getWithdrawRate();
         binding.txRate.setText("(收取" + FormatUtil.getInstance().get2double(rate * 100) + "%服务费)");
         binding.setTx(true);
-        LogUtil.log("======txMoney===========" + parentFragment.getBalance());
         binding.useBalance.setText("可用余额" + parentFragment.getBalance());
     }
 
     private ArrayList<BankBean> bankList = new ArrayList<>();
 
     private void getBankList() {
-
         HttpUtil.getInstance().getBankCardsByUserID(Constant.userId).subscribe(
                 bankListStr -> {
                     BankCard bankCard = new Gson().fromJson(bankListStr, BankCard.class);

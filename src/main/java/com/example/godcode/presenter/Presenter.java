@@ -5,14 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
-
 import com.example.godcode.R;
 import com.example.godcode.databinding.FragmentMainBinding;
 import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.handler.ActivityResultHandler;
+import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
-import com.example.godcode.observable.WebSocketNewsObservable;
 import com.example.godcode.ui.activity.BaseActivity;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.base.GodCodeApplication;
@@ -59,23 +58,10 @@ public class Presenter {
 
     private static Presenter defaultInstance;
 
-    public interface FriendIdResponse {
-        void getFriendId(int friendId);
-    }
-
-    private FriendIdResponse friendIdResponse;
-
-    public void setFriendIdResponse(FriendIdResponse friendIdResponse) {
-        this.friendIdResponse = friendIdResponse;
-    }
-
     public void clickItem(int type, Friend friend) {
         switch (type) {
             case 2:
-                if (friendIdResponse != null) {
-                    friendIdResponse.getFriendId(friend.getUserId());
-                }
-                RxEvent rxEvent = new RxEvent(3);
+                RxEvent rxEvent = new RxEvent(EventType.EVENTTYPE_SELECT_FRIEND);
                 rxEvent.setId(friend.getUserId());
                 RxBus.getInstance().post(rxEvent);
                 back();
@@ -169,20 +155,6 @@ public class Presenter {
     }
 
 
-    private WebSocketNewsObservable<Integer> kucunObservable;
-
-    public void initObservable() {
-        kucunObservable = new WebSocketNewsObservable<Integer>();
-    }
-
-    public WebSocketNewsObservable<Integer> getKucunObservable() {
-        return kucunObservable;
-    }
-
-    public void setKucunObservable(WebSocketNewsObservable<Integer> kucunObservable) {
-        this.kucunObservable = kucunObservable;
-    }
-
     public void removeFragment(BaseFragment fragment) {
         fm.beginTransaction().remove(fragment).commit();
     }
@@ -194,6 +166,7 @@ public class Presenter {
             fm.beginTransaction().replace(R.id.mainActivity_fragmentContainer, fragment).addToBackStack(name).commit();
         }
     }
+
 
     public void showQrDialog(String productNum) {
         QrcodeDialog qrcodeDialog = new QrcodeDialog(activity, productNum);

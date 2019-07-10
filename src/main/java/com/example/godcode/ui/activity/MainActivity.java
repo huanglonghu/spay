@@ -22,22 +22,20 @@ import com.example.godcode.databinding.ActivityMainBinding;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.greendao.option.VersionMsgOption;
 import com.example.godcode.handler.ActivityResultHandler;
-import com.example.godcode.handler.WebSocketNewsHandler;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
-import com.example.godcode.observable.WebSocketNewsObservable;
-import com.example.godcode.observable.WebSocketNewsObserver;
 import com.example.godcode.presenter.Presenter;
 import com.example.godcode.service.WebSocketService;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.base.GodCodeApplication;
+import com.example.godcode.ui.fragment.auth.SelectAuthWay;
 import com.example.godcode.ui.fragment.bindproduct.BindProductFragment;
 import com.example.godcode.ui.fragment.deatailFragment.AddBankCardFragment;
 import com.example.godcode.ui.fragment.deatailFragment.Asset_1_Fragment;
 import com.example.godcode.ui.fragment.deatailFragment.MobileRechargeFragment;
-import com.example.godcode.ui.fragment.deatailFragment.NoticeDetailFragment;
 import com.example.godcode.ui.fragment.deatailFragment.OrderDetailFragment;
 import com.example.godcode.ui.fragment.deatailFragment.PaySuccessFragment;
 import com.example.godcode.ui.fragment.deatailFragment.PresonalFragment;
@@ -48,18 +46,24 @@ import com.example.godcode.ui.fragment.deatailFragment.TxFragment;
 import com.example.godcode.ui.fragment.deatailFragment.YSJLDetailFragment;
 import com.example.godcode.ui.fragment.mainActivity.HomeFragment;
 import com.example.godcode.ui.fragment.mainActivity.MainFragment;
+import com.example.godcode.ui.fragment.pwd.ResetPwd;
 import com.example.godcode.ui.view.PsdPopupWindow;
 import com.example.godcode.ui.view.UpdateDialog;
 import com.example.godcode.utils.PayPwdSetting;
 import com.example.godcode.utils.SharepreferenceUtil;
-
+import java.util.concurrent.TimeUnit;
+import io.reactivex.Flowable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
     private FragmentManager supportFragmentManager;
     private WebSocketService.MyBinder myBinder;
     private DeviceTokenReceiver deviceTokenReceiver;
-    private WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable;
+
 
     @Override
     public void init() {
@@ -71,7 +75,6 @@ public class MainActivity extends BaseActivity {
         supportFragmentManager.addOnBackStackChangedListener(getListener());
         Presenter.getInstance().initFragmentManager(this, supportFragmentManager, 1);
         supportFragmentManager.beginTransaction().replace(R.id.mainActivity_fragmentContainer, mainFragment).addToBackStack("main").commit();
-        webSocketNewsObservable = new WebSocketNewsObservable<WebSocketNewsHandler>();
         //开启websocket服务
         Intent intent = new Intent(this, WebSocketService.class);
         bindService(intent, serviceConnection, BIND_AUTO_CREATE);
@@ -82,27 +85,38 @@ public class MainActivity extends BaseActivity {
             intentFilter.addAction("refreshDeviceToken");
             registerReceiver(deviceTokenReceiver, intentFilter);
         }
-
-        WebSocketNewsObserver<WebSocketNewsHandler> observer = new WebSocketNewsObserver<WebSocketNewsHandler>() {
+        RxBus.getInstance().toObservable(RxEvent.class).subscribe(new Observer<RxEvent>() {
             @Override
-            public void onUpdate(WebSocketNewsObservable<WebSocketNewsHandler> observable, WebSocketNewsHandler data) {
-                int handlerType = data.getHandlerType();
-                switch (handlerType) {
-                    case 0:
-                        FriendOption.getInstance(MainActivity.this).querryFriendList(1, true);
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(RxEvent rxEvent) {
+
+                switch (rxEvent.getEventType()) {
+                    case EventType.EVENTTYPE_ADDFRIEND_SUCCESS:
+                        Flowable.intervalRange(0, 2, 0, 500, TimeUnit.MILLISECONDS)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnComplete(new Action() {
+                                    @Override
+                                    public void run() throws Exception {
+                                        FriendOption.getInstance(MainActivity.this).querryFriendList(1, true);
+                                    }
+                                })
+                                .subscribe();
+
                         break;
-                    case 2:
+                    case EventType.EVENTTYPE_EXIT:
                         Presenter.getInstance().exit(MainActivity.this);
                         break;
-                    case 3:
-                        int id = data.getWebSocketNews4().getData().getRelatedKey();
-                        FriendOption.getInstance(MainActivity.this).deleteFriend(id);
+                    case EventType.EVENTTYPE_DELETE_FRIEND:
+                        FriendOption.getInstance(MainActivity.this).deleteFriend(rxEvent.getId());
                         break;
-                    case 4:
+                    case EventType.EVENTTYPE_ADDFRIEND:
                         Presenter.getInstance().showNew(1);
                         break;
-                    case 7:
-                        WsHeart wsHeart = data.getWsHeart();
+                    case EventType.EVENTTYPE_HEART:
+                        WsHeart wsHeart = (WsHeart) rxEvent.getBundle().getSerializable("heart");
                         String androidVer = wsHeart.getData().getAndroidVer();
                         try {
                             String versionName = GodCodeApplication.getInstance().getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
@@ -115,18 +129,20 @@ public class MainActivity extends BaseActivity {
                             e1.printStackTrace();
                         }
                         break;
-                    case 8:
-                        //获取到申请积分通知
-                        RxBus.getInstance().post(new RxEvent(6));
-                        break;
-                    case 9://刷新积分
-                        RxBus.getInstance().post(new RxEvent(7));
-                        break;
                 }
 
             }
-        };
-        webSocketNewsObservable.register(observer);
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
+
+
     }
 
 
@@ -152,7 +168,6 @@ public class MainActivity extends BaseActivity {
         return result;
     }
 
-
     private void createUpdateDialog(WsHeart wsHeart) {
         wsHeart.getData().getAndroidVerDes();
         String androidVerDes = wsHeart.getData().getAndroidVerDes();
@@ -165,14 +180,13 @@ public class MainActivity extends BaseActivity {
         updateDialog.setDescibe(androidVerDes, androidVer);
     }
 
-
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             if (myBinder == null) {
                 myBinder = (WebSocketService.MyBinder) service;
             }
-            myBinder.connectWebSocket(MainActivity.this, webSocketNewsObservable);
+            myBinder.connectWebSocket(MainActivity.this);
         }
 
         @Override
@@ -200,7 +214,7 @@ public class MainActivity extends BaseActivity {
                     || fragment instanceof OrderDetailFragment || fragment instanceof YSJLDetailFragment
                     || fragment instanceof PresonalFragment || fragment instanceof OrderDetailFragment
                     || fragment instanceof Asset_1_Fragment || fragment instanceof PaySuccessFragment || fragment instanceof MobileRechargeFragment
-                    || fragment instanceof BindProductFragment) {
+                    || fragment instanceof BindProductFragment||fragment instanceof SelectAuthWay||fragment instanceof ResetPwd) {
                 fragment.onKeyDown();
                 return true;
             }
@@ -214,14 +228,6 @@ public class MainActivity extends BaseActivity {
         ActivityResultHandler.getInstance().handler(requestCode, resultCode, data);
     }
 
-
-    public WebSocketNewsObservable<WebSocketNewsHandler> getWebSocketNewsObservable() {
-        return webSocketNewsObservable;
-    }
-
-    public void setWebSocketNewsObservable(WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable) {
-        this.webSocketNewsObservable = webSocketNewsObservable;
-    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -237,13 +243,13 @@ public class MainActivity extends BaseActivity {
         int message = intent.getIntExtra("message", 0);
         switch (message) {
             case 0:
-                Presenter.getInstance().togglePager(2);
-                Bundle bundle0 = intent.getExtras();
-                String noticeId = bundle0.getString("noticeId");
-                NoticeDetailFragment noticeDetailFragment = new NoticeDetailFragment();
-                bundle0.putInt("noticeId", Integer.parseInt(noticeId));
-                noticeDetailFragment.setArguments(bundle0);
-                Presenter.getInstance().step2Fragment(noticeDetailFragment, "noticeDetail");
+//                Presenter.getInstance().togglePager(2);
+//                Bundle bundle0 = intent.getExtras();
+//                String noticeId = bundle0.getString("noticeId");
+//                NoticeDetailFragment noticeDetailFragment = new NoticeDetailFragment();
+//                bundle0.putInt("noticeId", Integer.parseInt(noticeId));
+//                noticeDetailFragment.setArguments(bundle0);
+//                Presenter.getInstance().step2Fragment(noticeDetailFragment, "noticeDetail");
                 break;
             case 1:
                 step2transtaion(intent);

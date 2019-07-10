@@ -6,14 +6,16 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.BalanceResponse;
 import com.example.godcode.bean.DivideIncome;
 import com.example.godcode.databinding.FragmentBalanceBinding;
 import com.example.godcode.handler.WebSocketNewsHandler;
 import com.example.godcode.http.HttpUtil;
-import com.example.godcode.observable.WebSocketNewsObservable;
-import com.example.godcode.observable.WebSocketNewsObserver;
+import com.example.godcode.observable.EventType;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.activity.MainActivity;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
@@ -21,7 +23,11 @@ import com.example.godcode.utils.DateUtil;
 import com.example.godcode.utils.GsonUtil;
 import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
+
 import java.text.DecimalFormat;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 
 public class BalanceFragment extends BaseFragment {
@@ -40,17 +46,30 @@ public class BalanceFragment extends BaseFragment {
             binding.setPresenter(presenter);
             view = binding.getRoot();
             MainActivity activity = (MainActivity) this.activity;
-            WebSocketNewsObservable<WebSocketNewsHandler> webSocketNewsObservable = activity.getWebSocketNewsObservable();
-            WebSocketNewsObserver<WebSocketNewsHandler> observer = new WebSocketNewsObserver<WebSocketNewsHandler>() {
+            RxBus.getInstance().toObservable(RxEvent.class).subscribe(new Observer<RxEvent>() {
                 @Override
-                public void onUpdate(WebSocketNewsObservable<WebSocketNewsHandler> observable, WebSocketNewsHandler data) {
-                    int handlerType = data.getHandlerType();
-                    if (handlerType == 6 || handlerType == 5) {
+                public void onSubscribe(Disposable disposable) {
+
+                }
+
+                @Override
+                public void onNext(RxEvent rxEvent) {
+                    int eventType = rxEvent.getEventType();
+                    if (eventType == EventType.EVENTTYPE_BALANCE_CHANGE || eventType == EventType.EVENTTYPE_DIVIDE_MSG) {
                         querryDivide();
                     }
                 }
-            };
-            webSocketNewsObservable.register(observer);
+
+                @Override
+                public void onError(Throwable throwable) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
             initView();
             initListener();
         }
@@ -58,9 +77,6 @@ public class BalanceFragment extends BaseFragment {
         querryDivide();
         return view;
     }
-
-
-
 
 
     private void querryDivide() {

@@ -102,7 +102,6 @@ public class HiddenAnimUtils {
         ValueAnimator animator = createDropAnimator(v, 0,
                 mHeight);
         animator.start();
-
     }
 
 

@@ -53,6 +53,7 @@ public class PayPwdSetting {
     public void verifyPwd(ClickSureListener clickSureListener) {//验证密码是否存在
         User user = UserOption.getInstance().querryUser(Constant.userId);
         boolean setPwd = user.getSetPwd();
+        LogUtil.log("========setPwd========"+setPwd);
         if (setPwd) {
             clickSureListener.isPwdExit(true);
         } else {

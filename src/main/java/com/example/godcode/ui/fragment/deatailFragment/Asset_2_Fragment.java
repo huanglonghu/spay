@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.BindProduct;
 import com.example.godcode.bean.EditProduct;
@@ -26,12 +25,13 @@ import com.example.godcode.catche.Loader.RxImageLoader;
 import com.example.godcode.databinding.FragmentMyassetConfigBinding;
 import com.example.godcode.handler.ActivityResultHandler;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.interface_.EtStrategy;
 import com.example.godcode.interface_.HandlerStrategy;
 import com.example.godcode.interface_.ProductSettingStrategy;
-import com.example.godcode.interface_.Strategy;
-import com.example.godcode.observable.WebSocketNewsObservable;
-import com.example.godcode.observable.WebSocketNewsObserver;
+import com.example.godcode.observable.EventType;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.bindproduct.HuoDaoDetailFrgment;
@@ -43,7 +43,8 @@ import com.example.godcode.ui.view.widget.ProductSettingDialog;
 import com.example.godcode.utils.GsonUtil;
 import com.example.godcode.utils.StringUtil;
 import com.example.godcode.utils.ToastUtil;
-
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import okhttp3.MultipartBody;
 
 public class Asset_2_Fragment extends BaseFragment implements EditAssetFragment.AssetUpdate {
@@ -97,11 +98,42 @@ public class Asset_2_Fragment extends BaseFragment implements EditAssetFragment.
                     String title = null;
                     if (type == 1) {
                         title = "是否解除资产绑定?";
-                        DeleteDialog deleteDialog = new DeleteDialog(activity, title, new UnBindStrategy());
+                        DeleteDialog deleteDialog = new DeleteDialog(activity, title, new ClickSureListener() {
+                            @Override
+                            public void clickSure() {
+                                BindProduct body = new BindProduct();
+                                body.setFK_UserID(bean.getFK_UserID());
+                                body.setIsBind(false);
+                                body.setProductName(bean.getProductName());
+                                body.setProductNumber(bean.getProductNumber());
+                                body.setMachineAddress(bean.getMachineAddress());
+                                body.setFK_ProductCategoryID(bean.getProductCategoryID());
+                                body.setPrice(bean.getPrice() + "");
+                                HttpUtil.getInstance().bindProduct(body).subscribe(
+                                        bindProductStr -> {
+                                            Toast.makeText(activity, "解绑成功", Toast.LENGTH_SHORT).show();
+                                            presenter.back();
+                                        }
+                                );
+                            }
+                        });
                         deleteDialog.show();
                     } else if (type == 2) {
                         title = "是否返还股权?";
-                        DeleteDialog deleteDialog = new DeleteDialog(activity, title, new ReturnEquityStrategy());
+                        DeleteDialog deleteDialog = new DeleteDialog(activity, title, new ClickSureListener() {
+                            @Override
+                            public void clickSure() {
+                                ReturnEquity returnEquity = new ReturnEquity();
+                                returnEquity.setFK_UserID(bean.getFK_UserID());
+                                returnEquity.setId(bean.getId());
+                                HttpUtil.getInstance().returnEquity(returnEquity).subscribe(
+                                        returnEquityStr -> {
+                                            Toast.makeText(activity, "产权返还成功", Toast.LENGTH_SHORT).show();
+                                            presenter.back();
+                                        }
+                                );
+                            }
+                        });
                         deleteDialog.show();
                     }
                 }
@@ -120,15 +152,32 @@ public class Asset_2_Fragment extends BaseFragment implements EditAssetFragment.
                 }).requestCode(ActivityResultHandler.REQUEST_SELECT_PHOTO).intent(intent).activity(activity).build().startActivityForResult();
             }
         });
-
-        presenter.initObservable();
-        WebSocketNewsObserver<Integer> webSocketNewsObserver = new WebSocketNewsObserver<Integer>() {
+        RxBus.getInstance().toObservable(RxEvent.class).subscribe(new Observer<RxEvent>() {
             @Override
-            public void onUpdate(WebSocketNewsObservable<Integer> observable, Integer kc) {
-                bean.setCurrentStock(kc);
+            public void onSubscribe(Disposable disposable) {
+
             }
-        };
-        presenter.getKucunObservable().register(webSocketNewsObserver);
+
+            @Override
+            public void onNext(RxEvent rxEvent) {
+                if(rxEvent.getEventType() == EventType.EVENTTYPE_CURRENSSTOCK_CHANGE){
+                    Bundle bundle = rxEvent.getBundle();
+                    int kc = bundle.getInt("kc");
+                    bean.setCurrentStock(kc);
+                }
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
     }
 
 
@@ -256,41 +305,6 @@ public class Asset_2_Fragment extends BaseFragment implements EditAssetFragment.
     }
 
 
-    private class UnBindStrategy implements Strategy {
-        @Override
-        public void sure() {
-            BindProduct body = new BindProduct();
-            body.setFK_UserID(bean.getFK_UserID());
-            body.setIsBind(false);
-            body.setProductName(bean.getProductName());
-            body.setProductNumber(bean.getProductNumber());
-            body.setMachineAddress(bean.getMachineAddress());
-            body.setFK_ProductCategoryID(bean.getProductCategoryID());
-            body.setPrice(bean.getPrice() + "");
-            HttpUtil.getInstance().bindProduct(body).subscribe(
-                    bindProductStr -> {
-                        Toast.makeText(activity, "解绑成功", Toast.LENGTH_SHORT).show();
-                        presenter.back();
-                    }
-            );
-        }
-    }
-
-    private class ReturnEquityStrategy implements Strategy {
-
-        @Override
-        public void sure() {
-            ReturnEquity returnEquity = new ReturnEquity();
-            returnEquity.setFK_UserID(bean.getFK_UserID());
-            returnEquity.setId(bean.getId());
-            HttpUtil.getInstance().returnEquity(returnEquity).subscribe(
-                    returnEquityStr -> {
-                        Toast.makeText(activity, "产权返还成功", Toast.LENGTH_SHORT).show();
-                        presenter.back();
-                    }
-            );
-        }
-    }
 
     @Override
     public void assetUpdate(String productName, String adress) {

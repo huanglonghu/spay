@@ -14,6 +14,7 @@ import com.example.godcode.databinding.FragmentContacterDetailBinding;
 import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.interface_.Strategy;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
@@ -50,7 +51,19 @@ public class ContactDetailFragment extends BaseFragment implements RemarkSetting
         binding.deleteFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DeleteDialog deleteDialog = new DeleteDialog(activity, "确定要删除"+friend.getUserName()+"吗？",new DeleteFriendStrategy());
+                DeleteDialog deleteDialog = new DeleteDialog(activity, "确定要删除" + friend.getUserName() + "吗？", new ClickSureListener() {
+                    @Override
+                    public void clickSure() {
+                        HttpUtil.getInstance().deleteFriend(Constant.userId, id)
+                                .subscribe(
+                                        deleteStr -> {
+                                            FriendOption.getInstance(activity).deleteFriend(id);
+                                            Toast.makeText(activity, "删除成功", Toast.LENGTH_SHORT).show();
+                                            presenter.back();
+                                        }
+                                );
+                    }
+                });
                 deleteDialog.show();
             }
         });
@@ -111,18 +124,5 @@ public class ContactDetailFragment extends BaseFragment implements RemarkSetting
     }
 
 
-    private class DeleteFriendStrategy implements Strategy{
-        @Override
-        public void sure() {
-            HttpUtil.getInstance().deleteFriend(Constant.userId, id)
-                    .subscribe(
-                            deleteStr -> {
-                                FriendOption.getInstance(activity).deleteFriend(id);
-                                Toast.makeText(activity, "删除成功", Toast.LENGTH_SHORT).show();
-                                presenter.back();
-                            }
-                    );
-        }
-    }
 
 }

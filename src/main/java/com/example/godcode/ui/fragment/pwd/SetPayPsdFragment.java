@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.ChangePsd;
 import com.example.godcode.bean.SetPayPsd;
@@ -41,7 +40,6 @@ public class SetPayPsdFragment extends BaseFragment {
             initView();
             initListener();
         }
-
         return view;
     }
 
@@ -54,6 +52,7 @@ public class SetPayPsdFragment extends BaseFragment {
                 }
             }
         });
+
         binding.btnSetPsd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +88,8 @@ public class SetPayPsdFragment extends BaseFragment {
             }
         });
     }
+
+
 
     private KeyBoard keyBoard;
 

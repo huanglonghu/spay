@@ -33,8 +33,7 @@
             <RelativeLayout
                 android:id="@+id/pwdRl"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -50,7 +49,6 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/back3" />
             </RelativeLayout>
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -92,6 +90,7 @@
                     android:src="@drawable/back3" />
 
             </RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -108,29 +107,28 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="13378469272"
-                    />
+                    android:text="13378469272" />
 
             </RelativeLayout>
 
             <!--<RelativeLayout-->
-                <!--android:id="@+id/LanguageConfig"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
+            <!--android:id="@+id/LanguageConfig"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-                <!--<TextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:text="多语言"-->
-                    <!--android:textColor="#000" />-->
+            <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:text="多语言"-->
+            <!--android:textColor="#000" />-->
 
-                <!--<ImageView-->
-                    <!--android:layout_width="20dp"-->
-                    <!--android:layout_height="20dp"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:src="@drawable/back3" />-->
+            <!--<ImageView-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:src="@drawable/back3" />-->
 
             <!--</RelativeLayout>-->
 

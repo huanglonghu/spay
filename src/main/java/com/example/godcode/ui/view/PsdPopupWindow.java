@@ -8,11 +8,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
+
 import com.example.godcode.R;
 import com.example.godcode.databinding.LayoutInputPsdBinding;
+import com.example.godcode.interface_.ClickSureListener;
+import com.example.godcode.observable.EventType;
+import com.example.godcode.observable.RxBus;
+import com.example.godcode.observable.RxEvent;
 import com.example.godcode.presenter.Presenter;
+import com.example.godcode.ui.fragment.auth.SelectAuthWay;
 import com.example.godcode.utils.FormatUtil;
+import com.example.godcode.utils.LogUtil;
+import com.example.godcode.utils.PayPwdSetting;
+import com.example.godcode.utils.ToastUtil;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 public class PsdPopupWindow extends PopupWindow {
     private LayoutInputPsdBinding binding;
@@ -50,12 +61,63 @@ public class PsdPopupWindow extends PopupWindow {
             }
         });
 
+        binding.forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PayPwdSetting.getInstance().verifyPwd(new ClickSureListener() {
+                    @Override
+                    public void isPwdExit(boolean isPwdExit) {
+                        if (isPwdExit) {
+                            SelectAuthWay selectAuthWay = new SelectAuthWay();
+                            Presenter.getInstance().step2Fragment(selectAuthWay, "selectAuthWay");
+                            exit();
+                        } else {
+                            ToastUtil.getInstance().showToast("您还未设置支付密码,请前往设置界面设置密码", 1000, activity);
+                        }
+                    }
+                });
+
+            }
+        });
+
         setContentView(binding.getRoot());
         setWidth(Presenter.getInstance().getWindowWidth() - 100);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         setOutsideTouchable(false);
         setFocusable(false);
         setBackgroundDrawable(new BitmapDrawable());
+
+        RxBus.getInstance().toObservable(RxEvent.class).subscribe(
+                new Observer<RxEvent>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+
+                    }
+
+                    @Override
+                    public void onNext(RxEvent rxEvent) {
+                        if (rxEvent.getEventType() == EventType.EVENTTYPE_CHANGEPWD_BACK) {
+                            showAtLocation(view, Gravity.TOP, 0, 300);
+                            WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+                            lp.alpha = 0.6f;
+                            activity.getWindow().setAttributes(lp);
+                            if(keyBoard!=null){
+                                keyBoard.show(view);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }
+        );
     }
 
 
@@ -66,12 +128,15 @@ public class PsdPopupWindow extends PopupWindow {
         this.view = view;
         binding.setName(name);
         binding.money.setText(FormatUtil.getInstance().get2double(money));
+
         showAtLocation(view, Gravity.TOP, 0, 300);
         keyBoard.show(view);
         keyBoard.setRefreshPsd(binding.txPayPsdView);
         WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
         lp.alpha = 0.6f;
         activity.getWindow().setAttributes(lp);
+
+
     }
 
     private KeyBoard keyBoard;
@@ -84,7 +149,6 @@ public class PsdPopupWindow extends PopupWindow {
         if (keyBoard != null) {
             keyBoard.clearPsd();
             keyBoard.dismiss();
-
         }
         dismiss();
     }

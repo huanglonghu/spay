@@ -34,6 +34,7 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property PhoneNumer = new Property(7, String.class, "phoneNumer", false, "PHONE_NUMER");
         public final static Property SetPwd = new Property(8, boolean.class, "setPwd", false, "SET_PWD");
         public final static Property IsMakeCode = new Property(9, boolean.class, "isMakeCode", false, "IS_MAKE_CODE");
+        public final static Property EmailAddress = new Property(10, String.class, "emailAddress", false, "EMAIL_ADDRESS");
     }
 
 
@@ -58,7 +59,8 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"SY_NUMBER\" TEXT," + // 6: syNumber
                 "\"PHONE_NUMER\" TEXT," + // 7: phoneNumer
                 "\"SET_PWD\" INTEGER NOT NULL ," + // 8: setPwd
-                "\"IS_MAKE_CODE\" INTEGER NOT NULL );"); // 9: isMakeCode
+                "\"IS_MAKE_CODE\" INTEGER NOT NULL ," + // 9: isMakeCode
+                "\"EMAIL_ADDRESS\" TEXT);"); // 10: emailAddress
     }
 
     /** Drops the underlying database table. */
@@ -108,6 +110,11 @@ public class UserDao extends AbstractDao<User, Long> {
         }
         stmt.bindLong(9, entity.getSetPwd() ? 1L: 0L);
         stmt.bindLong(10, entity.getIsMakeCode() ? 1L: 0L);
+ 
+        String emailAddress = entity.getEmailAddress();
+        if (emailAddress != null) {
+            stmt.bindString(11, emailAddress);
+        }
     }
 
     @Override
@@ -151,6 +158,11 @@ public class UserDao extends AbstractDao<User, Long> {
         }
         stmt.bindLong(9, entity.getSetPwd() ? 1L: 0L);
         stmt.bindLong(10, entity.getIsMakeCode() ? 1L: 0L);
+ 
+        String emailAddress = entity.getEmailAddress();
+        if (emailAddress != null) {
+            stmt.bindString(11, emailAddress);
+        }
     }
 
     @Override
@@ -170,7 +182,8 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // syNumber
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // phoneNumer
             cursor.getShort(offset + 8) != 0, // setPwd
-            cursor.getShort(offset + 9) != 0 // isMakeCode
+            cursor.getShort(offset + 9) != 0, // isMakeCode
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10) // emailAddress
         );
         return entity;
     }
@@ -187,6 +200,7 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setPhoneNumer(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setSetPwd(cursor.getShort(offset + 8) != 0);
         entity.setIsMakeCode(cursor.getShort(offset + 9) != 0);
+        entity.setEmailAddress(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
      }
     
     @Override

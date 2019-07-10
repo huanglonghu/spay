@@ -16,6 +16,7 @@ import com.example.godcode.greendao.option.LoginResultOption;
 import com.example.godcode.greendao.option.VersionMsgOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.ClickSureListener;
+import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
 import com.example.godcode.presenter.Presenter;
@@ -61,8 +62,10 @@ public class SettingFragment extends BaseFragment {
                     @Override
                     public void isPwdExit(boolean isPwdExit) {
                         if (isPwdExit) {
-                            LogUtil.log("============WWWWWWWWWWWWWW===========");
                             CheckPayPsdFragment checkPayPsdFragment = new CheckPayPsdFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("eventType", EventType.EVETNTTYPE_SETTING_CHECKPWD);
+                            checkPayPsdFragment.setArguments(bundle);
                             Presenter.getInstance().step2Fragment(checkPayPsdFragment, "checkPwd");
                         }
                     }
@@ -104,7 +107,7 @@ public class SettingFragment extends BaseFragment {
             @Override
             public void onNext(RxEvent rxEvent) {
                 //处理事件
-                if (rxEvent.getEventType() == 2) {
+                if (rxEvent.getEventType() == EventType.EVETNTTYPE_SETTING_CHECKPWD) {
                     SetPayPsdFragment setPayPsdFragment = new SetPayPsdFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("title", "请设置新密码");

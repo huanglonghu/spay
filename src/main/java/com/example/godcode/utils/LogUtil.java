@@ -14,7 +14,6 @@ public class LogUtil {
             int start = 0;
             int end = LOG_MAXLENGTH;
             for (int i = 0; i < 100; i++) {
-
                 if (strLength > end) {
                     Log.e("part" + i, msg.substring(start, end));
                     start = end;

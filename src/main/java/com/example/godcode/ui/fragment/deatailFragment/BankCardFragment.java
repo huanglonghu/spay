@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.BankCard;
 import com.example.godcode.bean.BindBankCard;
@@ -16,23 +15,21 @@ import com.example.godcode.databinding.FragmentBankcardBinding;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.interface_.EtStrategy;
+import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
-import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.adapter.BankCardListAdaPter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.fragment.pwd.CheckPayPsdFragment;
-import com.example.godcode.ui.fragment.pwd.SetPayPsdFragment;
 import com.example.godcode.ui.view.widget.BankConfigDialog;
 import com.example.godcode.ui.view.widget.EtItemDialog;
 import com.example.godcode.utils.PayPwdSetting;
 import com.example.godcode.utils.StringUtil;
 import com.google.gson.Gson;
-
 import java.util.List;
-
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -40,6 +37,7 @@ public class BankCardFragment extends BaseFragment {
     private FragmentBankcardBinding binding;
     private View view;
     private List<BankCard.ResultBean> result;
+    private CompositeDisposable compositeDisposable;
 
     @Nullable
     @Override
@@ -84,6 +82,9 @@ public class BankCardFragment extends BaseFragment {
                     public void isPwdExit(boolean isPwdExit) {
                         if (isPwdExit) {
                             CheckPayPsdFragment checkPayPsdFragment = new CheckPayPsdFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("eventType", EventType.EVENTTYPE_BANKCARD_CHECKPWD);
+                            checkPayPsdFragment.setArguments(bundle);
                             presenter.step2Fragment(checkPayPsdFragment, "checkPsd");
                         }
                     }
@@ -100,9 +101,9 @@ public class BankCardFragment extends BaseFragment {
             @Override
             public void onNext(RxEvent rxEvent) {
                 //处理事件
-                if (rxEvent.getEventType() == 2) {
+                if (rxEvent.getEventType() == EventType.EVENTTYPE_BANKCARD_CHECKPWD) {
                     AddBankCardFragment addBankCardFragment = new AddBankCardFragment();
-                    presenter.step2Fragment(addBankCardFragment);
+                    presenter.step2Fragment(addBankCardFragment,"addBankCard");
                 }
             }
 
@@ -179,5 +180,10 @@ public class BankCardFragment extends BaseFragment {
                     }
             );
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

@@ -7,25 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.BankBean;
-import com.example.godcode.bean.BankCard;
 import com.example.godcode.databinding.FragmentBankselectBinding;
-import com.example.godcode.http.HttpUtil;
+import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
 import com.example.godcode.ui.adapter.BankSelectAdapter;
 import com.example.godcode.ui.base.BaseFragment;
-import com.example.godcode.constant.Constant;
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class BankSelectFragment extends BaseFragment {
     private FragmentBankselectBinding binding;
@@ -51,7 +41,7 @@ public class BankSelectFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 bankSelectAdapter.selectItem(position);
-                RxEvent rxEvent = new RxEvent(5);
+                RxEvent rxEvent = new RxEvent(EventType.EVENTTYPE_SELECT_BANK);
                 rxEvent.setId(position);
                 RxBus.getInstance().post(rxEvent);
                 presenter.back();

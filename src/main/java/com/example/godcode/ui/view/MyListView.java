@@ -14,8 +14,8 @@ import com.example.godcode.utils.LogUtil;
 public class MyListView extends ListView implements AbsListView.OnScrollListener {
 
     private ListFootBinding listFootBinding;
-    private int page = 1;
-    private boolean isLoading;
+    private int page=1;
+    private View footView;
 
     public MyListView(Context context) {
         this(context, null);
@@ -28,7 +28,7 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
     public MyListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         listFootBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.list_foot, null, false);
-        listFootBinding.setIsLoading(true);
+        footView = listFootBinding.getRoot();
         setOnScrollListener(this);
     }
 
@@ -39,19 +39,51 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if ((firstVisibleItem + visibleItemCount) == totalItemCount) {
-            View lastVisibleItemView = getChildAt(getChildCount() - 1);
-            if (lastVisibleItemView != null && lastVisibleItemView.getBottom() == getHeight() && isLoading) {
-                if (getFooterViewsCount() == 0) {
-                    addFooterView(listFootBinding.getRoot());
+            if (currentState != STATE_LOADCOMPLETE) {
+                View lastVisibleItemView = getChildAt(getChildCount() - 1);
+                if (lastVisibleItemView != null && lastVisibleItemView.getBottom() == getHeight()) {
+                    LogUtil.log(page + "==============滑动到底了=========" + currentState);
+                    if (currentState == STATE_LOADING && getFooterViewsCount() == 0) {
+                        addFooterView(footView);
+                        listFootBinding.setIsLoading(true);
+                    }
+                    refreshData.refreshData(page);
+                    return;
                 }
-                listFootBinding.setIsLoading(false);
-                listFootBinding.getRoot().setVisibility(View.VISIBLE);
-                LogUtil.log("----滑动到底了----");
-                page++;
-                refreshData.refreshData(page);
-                return;
             }
+
         }
+
+    }
+
+
+    private int currentState;
+
+    private final int STATE_LOADING = 0;
+
+    private final int STATE_LOADCOMPLETE = 1;
+
+    private final int STATE_LOADREFRESH = 2;
+
+    public void setState(int currentState) {
+        this.currentState = currentState;
+        LogUtil.log(currentState+"===========setState============="+page);
+        switch (currentState) {
+            case STATE_LOADING:
+                page++;
+                break;
+            case STATE_LOADCOMPLETE:
+                listFootBinding.setIsLoading(false);
+                break;
+            case STATE_LOADREFRESH:
+                //移除已加载的所有内容
+                // 清空 footview
+                removeFooterView(footView);
+                page = 1;
+                refreshData.refreshData(page);
+                break;
+        }
+        LogUtil.log("===========setState============="+page);
 
     }
 
@@ -65,19 +97,5 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
         this.refreshData = refreshData;
     }
 
-    public int getPage() {
-        return page;
-    }
 
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public boolean isLoading() {
-        return isLoading;
-    }
-
-    public void setLoading(boolean loading) {
-        isLoading = loading;
-    }
 }

@@ -1,10 +1,12 @@
 package com.example.godcode.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2018/10/30.
  */
 
-public class WsHeart {
+public class WsHeart implements Serializable {
 
     /**
      * EventType : 21

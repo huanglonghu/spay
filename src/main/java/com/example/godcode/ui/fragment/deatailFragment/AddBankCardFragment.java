@@ -19,6 +19,7 @@ import com.example.godcode.greendao.gen.CityDao;
 import com.example.godcode.greendao.gen.ZoneDao;
 import com.example.godcode.greendao.option.UserOption;
 import com.example.godcode.http.HttpUtil;
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.interface_.Strategy;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
@@ -159,21 +160,16 @@ public class AddBankCardFragment extends BaseFragment implements BankCardEditTex
     public void onKeyDown() {
         super.onKeyDown();
         String title = "是否放弃绑定银行卡?";
-        DeleteDialog deleteDialog = new DeleteDialog(activity, title,new UnBindBankCardStrategy());
+        DeleteDialog deleteDialog = new DeleteDialog(activity, title, new ClickSureListener() {
+            @Override
+            public void clickSure() {
+                presenter.back();
+            }
+        });
         deleteDialog.show();
     }
 
-    private class UnBindBankCardStrategy implements Strategy{
 
-        @Override
-        public void sure() {
-            try {
-                presenter.back();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 
     private void initPickerData() {

@@ -56,8 +56,7 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
             initView();
             initListener();
         } else {
-            binding.lvTransationrecord.setPage(1);
-            querryTeanstaion();
+            refreshData(1);
         }
         data.clear();
         return view;
@@ -104,27 +103,6 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
     private String type;
     private String date;
 
-    private void querryTeanstaion() {
-        HashMap<String, String> urlMap = new HashMap<>();
-        urlMap.put("UserId", String.valueOf(Constant.userId));
-        urlMap.put("type", type);
-        urlMap.put("time", date);
-        urlMap.put("page", binding.lvTransationrecord.getPage() + "");
-        urlMap.put("limit", "20");
-        HttpUtil.getInstance().getTeansantion(urlMap).subscribe(
-                teansantionStr -> {
-                    Teansantion teansantion = new Gson().fromJson(teansantionStr, Teansantion.class);
-                    if (teansantion.getData().size() > 0) {
-                        binding.lvTransationrecord.setLoading(true);
-                    } else {
-                        binding.lvTransationrecord.setLoading(false);
-                    }
-                    data.addAll(teansantion.getData());
-                    adapter.notifyDataSetChanged();
-                    binding.setTeansation(teansantion);
-                }
-        );
-    }
 
     private void querryTeansationName() {
         HttpUtil.getInstance().getTypeList2().subscribe(
@@ -137,7 +115,7 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
                         String key = resultBean.getKey();
                         TransationOption.getInstance().insertTransationName(key, value);
                     }
-                    querryTeanstaion();
+                    refreshData(1);
                 }
         );
 
@@ -146,7 +124,7 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
 
     public void initView() {
         initTime();
-        adapter = new TransationRecordListAdapter(activity, data,R.layout.item_lv_transationrecord);
+        adapter = new TransationRecordListAdapter(activity, data, R.layout.item_lv_transationrecord);
         binding.lvTransationrecord.setAdapter(adapter);
         binding.transationrecordToolbar.option.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,8 +152,7 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
                         data.clear();
                         date = String.format("%d-%d", year, month + 1);
                         binding.tvDate.setText(date);
-                        binding.lvTransationrecord.setPage(1);
-                        querryTeanstaion();
+                        binding.lvTransationrecord.setState(2);
                     }
                 }, y, m + 1, 0);
                 ((ViewGroup) ((ViewGroup) myDatePickerDialog.getDatePicker().
@@ -195,15 +172,34 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
     @Override
     public void selectType(int position) {
         data.clear();
-        binding.lvTransationrecord.setPage(1);
         date = binding.tvDate.getText().toString();
         type = teansantionTypeList.get(position).getValue();
         adapter.clearView();
-        querryTeanstaion();
+        binding.lvTransationrecord.setState(2);
     }
 
     @Override
     public void refreshData(int page) {
-        querryTeanstaion();
+        HashMap<String, String> urlMap = new HashMap<>();
+        urlMap.put("UserId", String.valueOf(Constant.userId));
+        urlMap.put("type", type);
+        urlMap.put("time", date);
+        urlMap.put("page", page + "");
+        urlMap.put("limit", "20");
+        HttpUtil.getInstance().getTeansantion(urlMap).subscribe(
+                teansantionStr -> {
+                    Teansantion teansantion = new Gson().fromJson(teansantionStr, Teansantion.class);
+                    List<Teansantion.DataBean> list = teansantion.getData();
+                    if (list != null && list.size() > 0) {
+                        data.addAll(list);
+                        adapter.notifyDataSetChanged();
+                        binding.setTeansation(teansantion);
+                        binding.lvTransationrecord.setState(0);
+                    } else {
+                        binding.lvTransationrecord.setState(1);
+                    }
+
+                }
+        );
     }
 }

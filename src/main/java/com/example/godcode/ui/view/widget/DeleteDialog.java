@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.WindowManager;
+
+import com.example.godcode.interface_.ClickSureListener;
 import com.example.godcode.interface_.Strategy;
 import com.example.godcode.presenter.Presenter;
 
 public class DeleteDialog extends AlertDialog {
 
-    public DeleteDialog(Context context, String title, Strategy strategy) {
+    public DeleteDialog(Context context, String title, ClickSureListener clickSureListener) {
         super(context);
         setMessage(title);
         setCancelable(false);
@@ -23,7 +25,7 @@ public class DeleteDialog extends AlertDialog {
         setButton(AlertDialog.BUTTON_POSITIVE, "是", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                strategy.sure();
+                clickSureListener.clickSure();
             }
         });
     }

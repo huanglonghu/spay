@@ -79,6 +79,7 @@ public class MainFragment extends BaseFragment {
                                 user.setArea(result.getArea());
                                 user.setPhoneNumer(result.getPhoneNumber());
                                 user.setIsMakeCode(result.isMakeCode());
+                                user.setEmailAddress(result.getEmailAddress());
                                 if (result.getSex() == 1) {
                                     user.setSex("男");
                                 } else {
@@ -87,7 +88,6 @@ public class MainFragment extends BaseFragment {
                                 user.setUserId(result.getId());
                                 UserOption.getInstance().addUser(user);
                                 FriendOption.getInstance(activity).querryFriendList(1, true);
-                                RxBus.getInstance().post(new RxEvent(8));
                             }
                         }
 

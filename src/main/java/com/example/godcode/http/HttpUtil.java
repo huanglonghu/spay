@@ -3,7 +3,6 @@ package com.example.godcode.http;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.godcode.bean.AddFriend;
@@ -37,6 +36,7 @@ import com.example.godcode.bean.RechargeBody;
 import com.example.godcode.bean.RefreshDiviceToken;
 import com.example.godcode.bean.RefreshToken;
 import com.example.godcode.bean.RegisterBody;
+import com.example.godcode.bean.ResetPwdBean;
 import com.example.godcode.bean.ReturnEquity;
 import com.example.godcode.bean.SetPayPsd;
 import com.example.godcode.bean.TransationDetail;
@@ -53,16 +53,9 @@ import com.example.godcode.ui.view.widget.ErrorDialog;
 import com.example.godcode.utils.ErrrCodeShow;
 import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.SharepreferenceUtil;
-import com.google.gson.JsonObject;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -385,7 +378,7 @@ public class HttpUtil {
     }
 
     public Observable<String> getYSRecord(String time, String time2, int page) {
-        Call<ResponseBody> call = httpInterface.getYSRecord(time, time2, Constant.userId, page, 100);
+        Call<ResponseBody> call = httpInterface.getYSRecord(time, time2, Constant.userId, page, 10);
         return enqueueCall(call);
     }
 
@@ -650,8 +643,8 @@ public class HttpUtil {
         return enqueueCall(call);
     }
 
-    public Observable<String> getDmMsgDetail(int userId, int groupId, int page,String productNum) {
-        Call<ResponseBody> call = httpInterface.getDmMsgDetail(productNum,userId, groupId, page, 100);
+    public Observable<String> getDmMsgDetail(int userId, int groupId, int page, String productNum) {
+        Call<ResponseBody> call = httpInterface.getDmMsgDetail(productNum, userId, groupId, page, 100);
         return enqueueCall(call);
     }
 
@@ -703,6 +696,20 @@ public class HttpUtil {
 
     public Observable<String> getScoreOptionRecord(int page) {
         Call<ResponseBody> call = httpInterface.getScoreOptionRecord(Constant.userId, page, 20);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> resetPassword(ResetPwdBean resetPwd) {
+        Call<ResponseBody> call = httpInterface.resetPassword(resetPwd);
+        return enqueueCall(call);
+    }
+
+    public Observable<String> look(String mcProductNumber,String currentProfit,String verifyCode) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("mcProductNumber",mcProductNumber);
+        map.put("currentProfit",currentProfit);
+        map.put("verifyCode",verifyCode);
+        Call<ResponseBody> call = httpInterface.look(map);
         return enqueueCall(call);
     }
 

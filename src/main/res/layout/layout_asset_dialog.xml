@@ -71,7 +71,7 @@
             android:layout_marginRight="20dp"
             android:padding="3dp"
             android:background="@null"
-            android:hint="商家名称/地址"
+            android:hint="产品名称/产品编号/地址"
             android:textSize="17sp" />
 
         <View
