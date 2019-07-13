@@ -57,6 +57,7 @@ public class KeyBoard extends PopupWindow {
     }
 
     public void delete() {
+        LogUtil.log("=============currentIndex============"+currentIndex);
         if (currentIndex > 0) {
             psdArray[currentIndex - 1] = null;
             currentIndex--;
@@ -65,6 +66,7 @@ public class KeyBoard extends PopupWindow {
     }
 
     public void clickItem(int num) {
+        LogUtil.log("clicitem=============currentIndex============"+currentIndex);
         if (currentIndex < 6) {
             psdArray[currentIndex] = String.valueOf(num);
             currentIndex++;
@@ -79,7 +81,6 @@ public class KeyBoard extends PopupWindow {
 
 
     public String getPsd() {
-        currentIndex = 0;
         StringBuffer psd = new StringBuffer();
         for (int i = 0; i < psdArray.length; i++) {
             psd.append(psdArray[i]);
@@ -88,6 +89,7 @@ public class KeyBoard extends PopupWindow {
     }
 
     public void clearPsd() {
+        currentIndex=0;
         for (int i = 0; i < psdArray.length; i++) {
             psdArray[i] = "";
         }

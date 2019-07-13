@@ -744,10 +744,8 @@ public class HttpUtil {
                     if (response.isSuccessful()) {
                         String body = response.body().string();
                         observableEmitter.onNext(body);
-                        LogUtil.log("--success---" + body);
                     } else {
                         String errorBody = response.errorBody().string();
-                        LogUtil.log("=======VVVVVVVVVVVVVVV============" + errorBody);
                         if (!TextUtils.isEmpty(errorBody) && errorBody.contains("message")) {
                             String errorCodeStr = errorBody.substring(errorBody.indexOf("\"code\":") + "\"code\":".length(), errorBody.indexOf(",\"message\""));
                             int errorCode = Integer.parseInt(errorCodeStr.trim());

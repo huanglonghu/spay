@@ -1,6 +1,5 @@
 package com.example.godcode.ui.activity;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;

@@ -51,7 +51,9 @@ import com.example.godcode.ui.view.PsdPopupWindow;
 import com.example.godcode.ui.view.UpdateDialog;
 import com.example.godcode.utils.PayPwdSetting;
 import com.example.godcode.utils.SharepreferenceUtil;
+
 import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Flowable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -214,7 +216,7 @@ public class MainActivity extends BaseActivity {
                     || fragment instanceof OrderDetailFragment || fragment instanceof YSJLDetailFragment
                     || fragment instanceof PresonalFragment || fragment instanceof OrderDetailFragment
                     || fragment instanceof Asset_1_Fragment || fragment instanceof PaySuccessFragment || fragment instanceof MobileRechargeFragment
-                    || fragment instanceof BindProductFragment||fragment instanceof SelectAuthWay||fragment instanceof ResetPwd) {
+                    || fragment instanceof BindProductFragment || fragment instanceof SelectAuthWay || fragment instanceof ResetPwd) {
                 fragment.onKeyDown();
                 return true;
             }

@@ -155,6 +155,7 @@ public class PsdPopupWindow extends PopupWindow {
 
     public void clear() {
         keyBoard.clearPsd();
+
         binding.txPayPsdView.setPsLength(0);
     }
 

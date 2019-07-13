@@ -36,7 +36,7 @@ public class Asset_GroupFragment extends BaseFragment {
             initData();
             initListener();
         }
-        parentFragment.setTitle("我的资产");
+        parentFragment.setTitle("我的设备");
         return binding.getRoot();
     }
 
