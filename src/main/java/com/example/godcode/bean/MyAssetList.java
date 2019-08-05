@@ -2,6 +2,7 @@ package com.example.godcode.bean;
 
 
 import com.example.godcode.utils.FormatUtil;
+import com.umeng.commonsdk.debug.D;
 
 import java.io.Serializable;
 import java.util.List;
@@ -147,7 +148,7 @@ public class MyAssetList {
             this.data = data;
         }
 
-        public static class DataBean implements Serializable{
+        public static class DataBean implements Serializable {
             /**
              * fK_UserID : 40
              * userName : 122828
@@ -197,11 +198,11 @@ public class MyAssetList {
             private String productNumber;
             private double price;
             private int fK_PriceID;
-            private double scanCodeIncome;
-            private double divideIncome;
-            private double todayCoin;
-            private double todayBanknote;
-            private int todayAwardCount;
+            private Double scanCodeIncome;
+            private Double divideIncome;
+            private Integer todayCoin;
+            private Integer todayBanknote;
+            private Integer todayAwardCount;
             private int divideRate;
             private int primaevalUserID;
             private String parentID;
@@ -276,11 +277,11 @@ public class MyAssetList {
             }
 
 
-            public int getTodayAwardCount() {
+            public Integer getTodayAwardCount() {
                 return todayAwardCount;
             }
 
-            public void setTodayAwardCount(int todayAwardCount) {
+            public void setTodayAwardCount(Integer todayAwardCount) {
                 this.todayAwardCount = todayAwardCount;
             }
 
@@ -405,36 +406,42 @@ public class MyAssetList {
             }
 
             public String getScanCodeIncome() {
-                String aDouble = FormatUtil.getInstance().get2double(scanCodeIncome);
+                String aDouble=null;
+                if(scanCodeIncome!=null){
+                    aDouble = FormatUtil.getInstance().get2double(scanCodeIncome);
+                }
                 return aDouble;
             }
 
-            public void setScanCodeIncome(double scanCodeIncome) {
+            public void setScanCodeIncome(Double scanCodeIncome) {
                 this.scanCodeIncome = scanCodeIncome;
             }
 
             public String getDivideIncome() {
-                String aDouble = FormatUtil.getInstance().get2double(divideIncome);
+                String aDouble = null;
+                if (divideIncome != null) {
+                    aDouble = FormatUtil.getInstance().get2double(divideIncome);
+                }
                 return aDouble;
             }
 
-            public void setDivideIncome(double divideIncome) {
+            public void setDivideIncome(Double divideIncome) {
                 this.divideIncome = divideIncome;
             }
 
-            public double getTodayCoin() {
+            public Integer getTodayCoin() {
                 return todayCoin;
             }
 
-            public void setTodayCoin(double todayCoin) {
+            public void setTodayCoin(Integer todayCoin) {
                 this.todayCoin = todayCoin;
             }
 
-            public double getTodayBanknote() {
+            public Integer getTodayBanknote() {
                 return todayBanknote;
             }
 
-            public void setTodayBanknote(double todayBanknote) {
+            public void setTodayBanknote(Integer todayBanknote) {
                 this.todayBanknote = todayBanknote;
             }
 

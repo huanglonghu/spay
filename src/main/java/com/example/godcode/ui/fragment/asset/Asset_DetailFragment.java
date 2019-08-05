@@ -190,12 +190,11 @@ public class Asset_DetailFragment extends BaseFragment implements AssetSelectDia
         }
         urlMap.put("isValid", status + "");
         if (!TextUtils.isEmpty(UserNameOrAddress)) {
-            urlMap.put("UserNameOrAddress", UserNameOrAddress);
+            urlMap.put("ProductNameOrAddress", UserNameOrAddress);
         }
         if (!TextUtils.isEmpty(productType)) {
             urlMap.put("ProductType", productType);
         }
-
         urlMap.put("page", page + "");
         assetMap=new HashMap<>();
         HttpUtil.getInstance().getGroupById(urlMap).subscribe(

@@ -84,7 +84,7 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                if (s.equals("0")) {
+                if (s.contains("0")) {
                     tx();
                 } else {
                     new TxReminderDialog(getContext(), new Strategy() {
@@ -101,6 +101,7 @@ public class Tx_firstFragment extends BaseFragment implements MyEditText.MoneyVa
                 tx();
             }
         });
+
         requestQueue.add(stringRequest);
     }
 

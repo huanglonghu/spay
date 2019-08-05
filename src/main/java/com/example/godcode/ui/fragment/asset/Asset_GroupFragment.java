@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
 import com.example.godcode.R;
 import com.example.godcode.bean.GroupMsg;
 import com.example.godcode.bean.WebSocketNews1;
@@ -15,8 +14,6 @@ import com.example.godcode.databinding.LayoutAssetGroupBinding;
 import com.example.godcode.ui.adapter.GroupListAdapter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.ui.fragment.deatailFragment.Asset_1_Fragment;
-import com.example.godcode.utils.LogUtil;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -93,7 +90,6 @@ public class Asset_GroupFragment extends BaseFragment {
             bean.setDivideIncome(v2 + divedeMoney);
             groupListAdapter.refreshData(i, bean);
             break;
-
         }
     }
 

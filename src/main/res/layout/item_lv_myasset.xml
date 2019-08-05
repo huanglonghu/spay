@@ -15,9 +15,6 @@
             name="isMaster"
             type="boolean" />
 
-        <variable
-            name="periodType"
-            type="String" />
 
         <import type="android.view.View" />
 
@@ -27,14 +24,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@{assetBean.isValid?@color/c5:@color/c10}"
-        android:padding="10dp">
+        android:padding="7dp"
+        >
 
         <ImageView
             android:id="@+id/iv_zc"
             android:layout_width="60dp"
             android:layout_height="80dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="10dp" />
+           />
 
         <LinearLayout
             android:id="@+id/ll_right"
@@ -70,11 +67,12 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:id="@+id/myAsset_content"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="106dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginLeft="7dp"
             android:layout_toLeftOf="@id/ll_right"
             android:layout_toRightOf="@id/iv_zc"
             android:orientation="vertical">
@@ -117,66 +115,48 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:text='@{@string/jqdz+(assetBean.machineAddress??"")}'
                 android:textSize="12sp" />
 
-            <include layout="@layout/layout_divider3" />
-
-            <LinearLayout
+            <include
+                layout="@layout/layout_divider3"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/tv_jrtb"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@{periodType+@string/tb+(int)assetBean.todayCoin}"
-                    android:textSize="12sp" />
-
-
-                <TextView
-                    android:id="@+id/jrsm"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@{periodType+@string/sm+assetBean.scanCodeIncome}"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
+                android:layout_height="1px"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp" />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="3">
 
-                <TextView
-                    android:id="@+id/tv_jrtl"
+                <LinearLayout
+                    android:id="@+id/container1"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@{periodType+@string/tl+(int)assetBean.todayAwardCount}"
-                    android:textSize="12sp" />
+                    android:orientation="vertical"
+                    android:weightSum="3">
 
-                <TextView
-                    android:id="@+id/myDivide"
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/container2"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@{@string/wdfc+assetBean.divideIncome}"
-                    android:textSize="12sp" />
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+
+                </LinearLayout>
+
 
             </LinearLayout>
+
 
         </LinearLayout>
 

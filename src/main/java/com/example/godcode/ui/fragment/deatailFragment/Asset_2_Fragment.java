@@ -60,7 +60,7 @@ public class Asset_2_Fragment extends BaseFragment implements EditAssetFragment.
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_myasset_config, container, false);
             binding.setPresenter(presenter);
             view = binding.getRoot();
-            binding.asset2Toolbar.title.setText("我的资产");
+            binding.asset2Toolbar.title.setText("我的设备");
             binding.setFragment(this);
             initListener();
             Bundle bundle = getArguments();

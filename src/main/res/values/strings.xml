@@ -37,7 +37,7 @@
     <string name="balance">余额</string>
     <string name="syygjfw">SY云管家服务</string>
     <string name="fwtx">服务提醒</string>
-    <string name="myAsset">我的资产</string>
+    <string name="myAsset">我的设备</string>
     <string name="cpzx">产品中心</string>
     <string name="sjcz">手机充值</string>
     <string name="ykkg">遥控开关</string>
@@ -151,6 +151,7 @@
     <string name="sm">扫码:</string>
     <string name="tb">投币:</string>
     <string name="tl">退礼:</string>
+    <string name="zb">纸币:</string>
     <string name="fenc">分成</string>
 
     <string name="et_voice">音量设置</string>

@@ -741,15 +741,18 @@ public class HttpUtil {
                 }
 
                 try {
+                    LogUtil.log( response.isSuccessful()+"--QQQQQQQQQQQ---==============" +response.toString());
                     if (response.isSuccessful()) {
                         String body = response.body().string();
                         observableEmitter.onNext(body);
                     } else {
+                        ResponseBody body = response.body();
                         String errorBody = response.errorBody().string();
+                        LogUtil.log(body + "--unsuccess---" + errorBody);
                         if (!TextUtils.isEmpty(errorBody) && errorBody.contains("message")) {
                             String errorCodeStr = errorBody.substring(errorBody.indexOf("\"code\":") + "\"code\":".length(), errorBody.indexOf(",\"message\""));
                             int errorCode = Integer.parseInt(errorCodeStr.trim());
-                            LogUtil.log(errorBody + "--unsuccess---" + errorCodeStr);
+
                             ErrrCodeShow.showToast(errorCode, context, errorBody);
                             if (errorCode == 2008 || errorCode == 2000 || errorCode == 3002 || errorCode == 4006 || errorCode == 6004) {
                                 if (errorCode == 4006) {
@@ -764,7 +767,7 @@ public class HttpUtil {
                             }
                         }
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -777,7 +780,7 @@ public class HttpUtil {
                     netLoading.cancel();
                     map.remove(netLoading);
                 }
-
+                LogUtil.log("===============fail==============");
                 if (s.contains("java.net.ConnectException")) {
                     showErrorDialog();
                 } else {

@@ -16,7 +16,6 @@ import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.dm.MyScore;
 import com.example.godcode.utils.StringUtil;
-
 import java.util.Collections;
 import java.util.List;
 

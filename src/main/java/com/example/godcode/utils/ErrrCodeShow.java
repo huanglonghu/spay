@@ -144,6 +144,9 @@ public class ErrrCodeShow {
             case 4006:
                 content="异地登录";
                 break;
+            case 6002:
+                content="数据校验错误";
+                break;
             case 6006:
                 content="不符合申请条件";
                 break;
