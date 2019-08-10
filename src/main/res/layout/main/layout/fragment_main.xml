@@ -21,6 +21,10 @@
             name="titleArray"
             type="String[]" />
 
+        <variable
+            name="update"
+            type="boolean" />
+
         <import type="android.view.View" />
 
     </data>
@@ -157,27 +161,48 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:onClick="@{()->presenter.togglePager(3)}"
-                    android:orientation="vertical">
+                    android:onClick="@{()->presenter.togglePager(3)}">
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@{position==3?@drawable/mine2:@drawable/mine1}" />
-
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/r2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/me"
-                        android:textColor="@{position==3?@color/theme_color:@color/home_text2}"
-                        android:textSize="12sp" />
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@{position==3?@drawable/mine2:@drawable/mine1}" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/me"
+                            android:textColor="@{position==3?@color/theme_color:@color/home_text2}"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/newImg"
+                        android:layout_width="106pt"
+                        android:layout_height="50pt"
+                        android:background="@drawable/bg_new"
+                        android:gravity="center"
+                        android:text="NEW"
+                        android:layout_toRightOf="@id/r2"
+                        android:visibility="@{update?View.VISIBLE:View.GONE}"
+                        android:textColor="#fff"
+                        android:textSize="24pt" />
+
+                </RelativeLayout>
 
 
             </LinearLayout>

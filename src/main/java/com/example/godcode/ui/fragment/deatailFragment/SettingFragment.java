@@ -108,9 +108,11 @@ public class SettingFragment extends BaseFragment {
             public void onNext(RxEvent rxEvent) {
                 //处理事件
                 if (rxEvent.getEventType() == EventType.EVETNTTYPE_SETTING_CHECKPWD) {
+                    String originalPayPass = rxEvent.getBundle().getString("OriginalPayPass");
                     SetPayPsdFragment setPayPsdFragment = new SetPayPsdFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("title", "请设置新密码");
+                    bundle.putString("OriginalPayPass", originalPayPass);
                     setPayPsdFragment.setArguments(bundle);
                     Presenter.getInstance().step2Fragment(setPayPsdFragment, "setPwd");
                 }

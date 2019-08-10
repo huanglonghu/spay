@@ -17,6 +17,7 @@ import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.view.KeyBoard;
+import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.PayPwdSetting;
 
 public class SetPayPsdFragment extends BaseFragment {
@@ -37,6 +38,7 @@ public class SetPayPsdFragment extends BaseFragment {
                 String title = getArguments().getString("title");
                 binding.setPsdTitle.setText(title);
             }
+            LogUtil.log("==============originalPayPass============"+originalPayPass);
             initView();
             initListener();
         }

@@ -15,7 +15,7 @@
 
         <variable
             name="title"
-            type="String"/>
+            type="String" />
 
 
     </data>
@@ -161,19 +161,44 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/bg_item"
+            android:gravity="center_vertical"
             android:onClick="@{()->presenter.step2Fragment(&quot;setting&quot;)}"
             android:paddingLeft="20dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
                 android:src="@drawable/setting" />
 
             <TextView
-                style="@style/text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="@string/setting" />
+                android:text="@string/setting"
+                android:textSize="17sp" />
+
+
+            <TextView
+                android:id="@+id/newImg"
+                android:layout_width="106pt"
+                android:layout_height="50pt"
+                android:layout_marginLeft="25pt"
+                android:background="@drawable/bg_new"
+                android:gravity="center"
+                android:text="NEW"
+                android:textColor="#fff"
+                android:textSize="24pt"
+                android:visibility="gone" />
+
+
+            <TextView
+                android:id="@+id/versionMsg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="@color/home_text2" />
         </LinearLayout>
 
         <View

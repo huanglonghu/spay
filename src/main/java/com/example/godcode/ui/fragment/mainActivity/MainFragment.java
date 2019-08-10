@@ -32,8 +32,6 @@ public class MainFragment extends BaseFragment {
     private ArrayList<BaseFragment> fragments;
     private View view;
 
-
-
     public FragmentMainBinding getBinding() {
         return binding;
     }

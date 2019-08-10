@@ -49,14 +49,15 @@ public class EditProductSetting {
         private Integer isAttempt;
         private Integer isMaking;
         private Integer buyLimit;
-        private Integer isFreePlay;
+        private Integer freePlayType;
 
-        public int getIsFreePlay() {
-            return isFreePlay;
+
+        public Integer getFreePlayType() {
+            return freePlayType;
         }
 
-        public void setIsFreePlay(int isFreePlay) {
-            this.isFreePlay = isFreePlay;
+        public void setFreePlayType(Integer freePlayType) {
+            this.freePlayType = freePlayType;
         }
 
         public Integer getId() {

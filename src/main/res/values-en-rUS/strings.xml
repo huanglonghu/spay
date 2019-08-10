@@ -231,4 +231,5 @@
 
     <string name="selectAuthWay">选择验证方式</string>
     <string name="zb">纸币:</string>
+    <string name="freeMode">免费模式</string>
 </resources>

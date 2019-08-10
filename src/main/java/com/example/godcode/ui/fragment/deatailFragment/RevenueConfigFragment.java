@@ -21,6 +21,7 @@ import com.example.godcode.greendao.entity.Friend;
 import com.example.godcode.greendao.option.FriendOption;
 import com.example.godcode.http.HttpUtil;
 import com.example.godcode.interface_.EtStrategy;
+import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
 import com.example.godcode.presenter.Presenter;
@@ -90,18 +91,23 @@ public class RevenueConfigFragment extends BaseFragment{
 
             @Override
             public void onNext(RxEvent rxEvent) {
-                int id = rxEvent.getId();
-                for (RevenueDivideItem revenueDivideItem : revenueDivideList) {
-                    if (revenueDivideItem.getUserId() == id) {
-                        Toast.makeText(activity, "该分成用户已存在", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+                switch (rxEvent.getEventType()){
+                    case EventType.EVENTTYPE_SELECT_FRIEND:
+                        int id = rxEvent.getId();
+                        for (RevenueDivideItem revenueDivideItem : revenueDivideList) {
+                            if (revenueDivideItem.getUserId() == id) {
+                                Toast.makeText(activity, "该分成用户已存在", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                        isAdd = true;
+                        Friend friend = FriendOption.getInstance(activity).querryFriend(id);
+                        currentRevenueItem = getRevenueItem(friend.getUserName(), 0, null, id);
+                        revenueDivideList.add(currentRevenueItem);
+                        binding.lvRevenueconfig.setAdapter(adapter);
+                        break;
                 }
-                isAdd = true;
-                Friend friend = FriendOption.getInstance(activity).querryFriend(id);
-                currentRevenueItem = getRevenueItem(friend.getUserName(), 0, null, id);
-                revenueDivideList.add(currentRevenueItem);
-                binding.lvRevenueconfig.setAdapter(adapter);
+
             }
 
             @Override

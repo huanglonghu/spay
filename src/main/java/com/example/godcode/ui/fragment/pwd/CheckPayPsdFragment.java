@@ -1,5 +1,6 @@
 package com.example.godcode.ui.fragment.pwd;
 
+import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -52,6 +53,7 @@ public class CheckPayPsdFragment extends BaseFragment {
 
     public void initView() {
         keyBoard = new KeyBoard(activity, new ClickSureListener() {
+            @SuppressLint("CheckResult")
             @Override
             public void checkPwd(String pwd) {
                 CheckPsd checkPsd = new CheckPsd();
@@ -66,7 +68,11 @@ public class CheckPayPsdFragment extends BaseFragment {
                             } else {
                                 LogUtil.log("===============EventType============"+eventType);
                                 presenter.back();
-                                RxBus.getInstance().post(new RxEvent(eventType));
+                                RxEvent rxEvent = new RxEvent(eventType);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("OriginalPayPass",pwd);
+                                rxEvent.setBundle(bundle);
+                                RxBus.getInstance().post(rxEvent);
                             }
                         }
                 );

@@ -437,6 +437,25 @@
                 </RelativeLayout>
 
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="@{isMaster?true:false}"
+                    android:onClick="@{()->fragment.assetConfig(11)}">
+
+                    <TextView
+                        style="@style/tv1"
+                        android:text="免费模式" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/back3" />
+                </RelativeLayout>
+
+
             </LinearLayout>
 
 

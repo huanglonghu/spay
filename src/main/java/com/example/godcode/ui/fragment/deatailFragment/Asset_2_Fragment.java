@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.example.godcode.R;
 import com.example.godcode.bean.BindProduct;
 import com.example.godcode.bean.EditProduct;
@@ -32,6 +33,7 @@ import com.example.godcode.interface_.ProductSettingStrategy;
 import com.example.godcode.observable.EventType;
 import com.example.godcode.observable.RxBus;
 import com.example.godcode.observable.RxEvent;
+import com.example.godcode.presenter.Presenter;
 import com.example.godcode.ui.base.BaseFragment;
 import com.example.godcode.constant.Constant;
 import com.example.godcode.ui.fragment.bindproduct.HuoDaoDetailFrgment;
@@ -41,8 +43,10 @@ import com.example.godcode.ui.view.widget.EtItemDialog;
 import com.example.godcode.ui.view.widget.AirkissConfigDialog;
 import com.example.godcode.ui.view.widget.ProductSettingDialog;
 import com.example.godcode.utils.GsonUtil;
+import com.example.godcode.utils.LogUtil;
 import com.example.godcode.utils.StringUtil;
 import com.example.godcode.utils.ToastUtil;
+
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import okhttp3.MultipartBody;
@@ -160,7 +164,7 @@ public class Asset_2_Fragment extends BaseFragment implements EditAssetFragment.
 
             @Override
             public void onNext(RxEvent rxEvent) {
-                if(rxEvent.getEventType() == EventType.EVENTTYPE_CURRENSSTOCK_CHANGE){
+                if (rxEvent.getEventType() == EventType.EVENTTYPE_CURRENSSTOCK_CHANGE) {
                     Bundle bundle = rxEvent.getBundle();
                     int kc = bundle.getInt("kc");
                     bean.setCurrentStock(kc);
@@ -249,7 +253,7 @@ public class Asset_2_Fragment extends BaseFragment implements EditAssetFragment.
                 huoDaoDetailFrgment.setArguments(b);
                 presenter.step2Fragment(huoDaoDetailFrgment, "hdDetail");
                 break;
-            case 10:
+            case 10: {
                 PackageFragment packageFragment = new PackageFragment();
                 int productCategoryID = bean.getProductCategoryID();
                 int fk_productID = bean.getFK_ProductID();
@@ -261,13 +265,32 @@ public class Asset_2_Fragment extends BaseFragment implements EditAssetFragment.
                 String isFreePlay = null;
                 if (result != null) {
                     productSettingId = result.getId() + "";
-                    isFreePlay = result.getIsFreePlay() + "";
                 }
                 bundle1.putString("productSettingId", productSettingId);
                 bundle1.putString("isFreeplay", isFreePlay);
                 packageFragment.setArguments(bundle1);
                 presenter.step2Fragment(packageFragment, "package");
-                break;
+            }
+
+            break;
+            case 11: {
+                FreeModeSetting freeModeSetting = new FreeModeSetting();
+                Bundle bundle2 = new Bundle();
+                ProductSetting.ResultBean result = productSetting.getResult();
+                int freePlayType = 0;
+                String productSettingId = null;
+                if (result != null) {
+                    productSettingId = result.getId() + "";
+                    freePlayType = result.getFreePlayType();
+                }
+                bundle2.putInt("productId", bean.getFK_ProductID());
+                bundle2.putString("productSettingId", productSettingId);
+                bundle2.putInt("freePlayType", freePlayType);
+                freeModeSetting.setArguments(bundle2);
+                Presenter.getInstance().step2Fragment(freeModeSetting, "freeModeSetting");
+            }
+
+            break;
 
         }
 
@@ -303,7 +326,6 @@ public class Asset_2_Fragment extends BaseFragment implements EditAssetFragment.
     @Override
     protected void lazyLoad() {
     }
-
 
 
     @Override

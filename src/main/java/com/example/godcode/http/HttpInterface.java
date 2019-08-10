@@ -338,7 +338,6 @@ public interface HttpInterface {
     @POST("/api/services/app/MakeCodeProduct/MCProductBatchTransfer")
     Call<ResponseBody> batchTransfer(@Body BatchTransfer batchTransfer);
 
-
     @POST("/api/services/app/MakeCodeProduct/MCProductBatchReturn")
     Call<ResponseBody> batchReturn(@Body BatchReturn batchReturn);
 
@@ -354,14 +353,11 @@ public interface HttpInterface {
     @POST("/api/services/app/MCFraction/RequestOrReturnFraction")
     Call<ResponseBody> requestOrReturnFraction(@Body HashMap<String, Integer> map);
 
-
     @GET("/api/services/app/RechargeMCFractionRecord/GetFractionRecordByUserID")
     Call<ResponseBody> getFractionRecord(@Query("UserID") int userId);
 
-
     @PUT("/api/services/app/MCFraction/UpdateRequestOrReturnFraction")
     Call<ResponseBody> frcationOption(@Body FrcationOption frcationOption);//申请积分、返回积分 同意或拒绝
-
 
     @GET("/api/services/app/RechargeMCFractionRecord/GetPagedByUserID")
     Call<ResponseBody> getScoreOptionRecord(@Query("UserID") int userId, @Query("page") int page, @Query("limit") int limit);
@@ -372,6 +368,10 @@ public interface HttpInterface {
 
     @POST("/api/services/app/MakeCodeProduct/CheckMCProductUnlockInfo")
     Call<ResponseBody> look(@Body HashMap<String, String> map);
+
+
+    @GET("/api/services/app/SystemSettings/GetSystemSettings")
+    Call<ResponseBody> getSystemSetting();
 
 
 }

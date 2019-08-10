@@ -40,7 +40,7 @@ public class PackageFragment extends BaseFragment {
     private int productCategoryID;
     private int productId;
     private Integer productSettingId;
-    private Integer isFreePlay;
+
 
     @Nullable
     @Override
@@ -51,7 +51,6 @@ public class PackageFragment extends BaseFragment {
         packageSettingBeanMap= new HashMap<>();
         initData();
         initListener();
-        LogUtil.log("" + Constant.accessToken);
         return binding.getRoot();
     }
 
@@ -62,15 +61,8 @@ public class PackageFragment extends BaseFragment {
         productId = bundle.getInt("productId");
         productCategoryID = bundle.getInt("productCategoryID");
         String psId = bundle.getString("productSettingId");
-        String ifplay = bundle.getString("isFreeplay");
         if (psId != null) {
             productSettingId = Integer.parseInt(psId);
-        }
-        if (ifplay != null) {
-            isFreePlay = Integer.parseInt(ifplay);
-            if (isFreePlay == 1) {
-                binding.cb.setChecked(true);
-            }
         }
 
         HttpUtil.getInstance().getPackageSettingList(productId).subscribe(
@@ -104,30 +96,6 @@ public class PackageFragment extends BaseFragment {
                 } else {
                     ToastUtil.getInstance().showToast("最多添加三个套餐", 1500, getContext());
                 }
-            }
-        });
-
-        binding.cb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditProductSetting.ProductSettingBean productSettingBean = new EditProductSetting.ProductSettingBean();
-                boolean checked = binding.cb.isChecked();
-                productSettingBean.setFK_ProductID(productId);
-                productSettingBean.setId(productSettingId);
-                if (checked) {
-                    productSettingBean.setIsFreePlay(1);
-                } else {
-                    productSettingBean.setIsFreePlay(0);
-                }
-                HttpUtil.getInstance().editProductSetting(productSettingBean).subscribe(
-                        str -> {
-                            ProductSetting productSetting = GsonUtil.fromJson(str, ProductSetting.class);
-                            ProductSetting.ResultBean result = productSetting.getResult();
-                            if (result != null) {
-                                productSettingId = result.getId();
-                            }
-                        }
-                );
             }
         });
 

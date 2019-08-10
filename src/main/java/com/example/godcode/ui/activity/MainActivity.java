@@ -117,20 +117,7 @@ public class MainActivity extends BaseActivity {
                     case EventType.EVENTTYPE_ADDFRIEND:
                         Presenter.getInstance().showNew(1);
                         break;
-                    case EventType.EVENTTYPE_HEART:
-                        WsHeart wsHeart = (WsHeart) rxEvent.getBundle().getSerializable("heart");
-                        String androidVer = wsHeart.getData().getAndroidVer();
-                        try {
-                            String versionName = GodCodeApplication.getInstance().getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-                            int version1 = Integer.parseInt(versionName.replace(".", ""));
-                            int version2 = Integer.parseInt(androidVer.replace(".", ""));
-                            if (version2 > version1) {
-                                createUpdateDialog(wsHeart);
-                            }
-                        } catch (PackageManager.NameNotFoundException e1) {
-                            e1.printStackTrace();
-                        }
-                        break;
+
                 }
 
             }

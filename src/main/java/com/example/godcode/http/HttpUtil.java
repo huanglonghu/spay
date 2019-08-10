@@ -704,13 +704,18 @@ public class HttpUtil {
         return enqueueCall(call);
     }
 
-    public Observable<String> look(String mcProductNumber,String currentProfit,String verifyCode) {
+    public Observable<String> look(String mcProductNumber, String currentProfit, String verifyCode) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("mcProductNumber",mcProductNumber);
-        map.put("currentProfit",currentProfit);
-        map.put("verifyCode",verifyCode);
+        map.put("mcProductNumber", mcProductNumber);
+        map.put("currentProfit", currentProfit);
+        map.put("verifyCode", verifyCode);
         Call<ResponseBody> call = httpInterface.look(map);
         return enqueueCall(call);
+    }
+
+    public Observable<String> getSystemSettings() {
+        Call<ResponseBody> ca = httpInterface.getSystemSetting();
+        return enqueueCall(ca);
     }
 
 
@@ -741,7 +746,7 @@ public class HttpUtil {
                 }
 
                 try {
-                    LogUtil.log( response.isSuccessful()+"--QQQQQQQQQQQ---==============" +response.toString());
+                    LogUtil.log(response.isSuccessful() + "--QQQQQQQQQQQ---==============" + response.toString());
                     if (response.isSuccessful()) {
                         String body = response.body().string();
                         observableEmitter.onNext(body);

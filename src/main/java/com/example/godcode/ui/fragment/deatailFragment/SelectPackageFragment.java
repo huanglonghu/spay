@@ -73,18 +73,6 @@ public class SelectPackageFragment extends BaseFragment {
             itemBinding.setFragment(this);
             binding.llPackageContent.addView(itemBinding.getRoot());
         }
-
-        binding.freePlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HttpUtil.getInstance().freePlay(productScanResult.getProductNumber()).subscribe(
-                        str -> {
-                            ToastUtil.getInstance().showToast("机器开启成功", 1500, getContext());
-                            presenter.back();
-                        }
-                );
-            }
-        });
     }
 
     @Override

@@ -92,7 +92,7 @@ public class ProductSetting {
         private int award;
         private int coinPlay;
         private int productSettingType;
-        private int isFreePlay;
+        private int freePlayType;
         private int businessType;
         private int isBuy;
         private int isMulti;
@@ -101,6 +101,16 @@ public class ProductSetting {
         private int isAttempt;
         private int isMaking;
         private int buyLimit;
+        private int publicNoPrice;
+
+
+        public int getPublicNoPrice() {
+            return publicNoPrice;
+        }
+
+        public void setPublicNoPrice(int publicNoPrice) {
+            this.publicNoPrice = publicNoPrice;
+        }
 
         public int getId() {
             return id;
@@ -150,12 +160,12 @@ public class ProductSetting {
             this.productSettingType = productSettingType;
         }
 
-        public int getIsFreePlay() {
-            return isFreePlay;
+        public int getFreePlayType() {
+            return freePlayType;
         }
 
-        public void setIsFreePlay(int isFreePlay) {
-            this.isFreePlay = isFreePlay;
+        public void setFreePlayType(int freePlayType) {
+            this.freePlayType = freePlayType;
         }
 
         public int getBusinessType() {
