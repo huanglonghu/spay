@@ -50,7 +50,16 @@ public class EditProductSetting {
         private Integer isMaking;
         private Integer buyLimit;
         private Integer freePlayType;
+        private Integer freePlayCount;
 
+
+        public Integer getFreePlayCount() {
+            return freePlayCount;
+        }
+
+        public void setFreePlayCount(Integer freePlayCount) {
+            this.freePlayCount = freePlayCount;
+        }
 
         public Integer getFreePlayType() {
             return freePlayType;

@@ -406,8 +406,8 @@ public class MyAssetList {
             }
 
             public String getScanCodeIncome() {
-                String aDouble=null;
-                if(scanCodeIncome!=null){
+                String aDouble = null;
+                if (scanCodeIncome != null) {
                     aDouble = FormatUtil.getInstance().get2double(scanCodeIncome);
                 }
                 return aDouble;
@@ -423,6 +423,17 @@ public class MyAssetList {
                     aDouble = FormatUtil.getInstance().get2double(divideIncome);
                 }
                 return aDouble;
+            }
+
+            private double adIncome;
+
+            public String getAdIncome() {
+                String aDouble = FormatUtil.getInstance().get2double(adIncome);
+                return aDouble;
+            }
+
+            public void setAdIncome(double adIncome) {
+                this.adIncome = adIncome;
             }
 
             public void setDivideIncome(Double divideIncome) {

@@ -278,14 +278,17 @@ public class Asset_2_Fragment extends BaseFragment implements EditAssetFragment.
                 Bundle bundle2 = new Bundle();
                 ProductSetting.ResultBean result = productSetting.getResult();
                 int freePlayType = 0;
+                int freePlayCount = 0;
                 String productSettingId = null;
                 if (result != null) {
                     productSettingId = result.getId() + "";
                     freePlayType = result.getFreePlayType();
+                    freePlayCount = result.getFreePlayCount();
                 }
                 bundle2.putInt("productId", bean.getFK_ProductID());
                 bundle2.putString("productSettingId", productSettingId);
                 bundle2.putInt("freePlayType", freePlayType);
+                bundle2.putInt("freePlayCount", freePlayCount);
                 freeModeSetting.setArguments(bundle2);
                 Presenter.getInstance().step2Fragment(freeModeSetting, "freeModeSetting");
             }

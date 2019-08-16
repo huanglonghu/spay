@@ -101,14 +101,23 @@ public class ProductSetting {
         private int isAttempt;
         private int isMaking;
         private int buyLimit;
-        private int publicNoPrice;
+        private double publicNoPrice;
+        private Integer freePlayCount;
 
 
-        public int getPublicNoPrice() {
+        public Integer getFreePlayCount() {
+            return freePlayCount;
+        }
+
+        public void setFreePlayCount(Integer freePlayCount) {
+            this.freePlayCount = freePlayCount;
+        }
+
+        public double getPublicNoPrice() {
             return publicNoPrice;
         }
 
-        public void setPublicNoPrice(int publicNoPrice) {
+        public void setPublicNoPrice(double publicNoPrice) {
             this.publicNoPrice = publicNoPrice;
         }
 

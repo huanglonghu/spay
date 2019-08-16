@@ -80,25 +80,30 @@ public class AssetListAdapter extends BaseAdapter {
             v2.setText(periodType + "扫码:" + dataBean.getScanCodeIncome());
             binding.container1.addView(v2);
 
-            TextView v5 = (TextView) layoutInflater.inflate(R.layout.item_assetdetail_tv, binding.container1, false);
+            TextView v5 = (TextView) layoutInflater.inflate(R.layout.item_assetdetail_tv, binding.container2, false);
             v5.setText("我的分成:" + dataBean.getDivideIncome());
             binding.container2.addView(v5);
 
 
+            TextView v6 = (TextView) layoutInflater.inflate(R.layout.item_assetdetail_tv, binding.container1, false);
+            v6.setText("广告收入:" + dataBean.getAdIncome());
+            binding.container1.addView(v6);
+
+
             if ((1 & purView) != 0) {
-                TextView v3 = (TextView) layoutInflater.inflate(R.layout.item_assetdetail_tv, binding.container1, false);
+                TextView v3 = (TextView) layoutInflater.inflate(R.layout.item_assetdetail_tv, binding.container2, false);
                 v3.setText(periodType + "投币:" + dataBean.getTodayCoin());
-                binding.container1.addView(v3);
+                binding.container2.addView(v3);
             }
 
 
             if ((1 << 1 & purView) != 0) {
                 TextView v1 = (TextView) layoutInflater.inflate(R.layout.item_assetdetail_tv, binding.container1, false);
                 v1.setText(periodType + "纸币:" + dataBean.getTodayBanknote());
-                if (binding.container1.getChildCount() == 1) {
-                    binding.container1.addView(v1);
-                } else {
+                if (binding.container2.getChildCount() == 1) {
                     binding.container2.addView(v1);
+                } else {
+                    binding.container1.addView(v1);
                 }
             }
 
@@ -106,16 +111,16 @@ public class AssetListAdapter extends BaseAdapter {
             if ((1 << 2 & purView) != 0) {
                 TextView v4 = (TextView) layoutInflater.inflate(R.layout.item_assetdetail_tv, binding.container1, false);
                 v4.setText(periodType + "退礼:" + dataBean.getTodayAwardCount());
-                if(binding.container1.getChildCount()+binding.container2.getChildCount()==2){
-                    binding.container1.addView(v4);
-                }
-
-                if(binding.container1.getChildCount()+binding.container2.getChildCount()==3){
+                if (binding.container1.getChildCount() + binding.container2.getChildCount() == 3) {
                     binding.container2.addView(v4);
                 }
 
-                if(binding.container1.getChildCount()+binding.container2.getChildCount()==4){
+                if (binding.container1.getChildCount() + binding.container2.getChildCount() == 4) {
                     binding.container1.addView(v4);
+                }
+
+                if (binding.container1.getChildCount() + binding.container2.getChildCount() == 5) {
+                    binding.container2.addView(v4);
                 }
 
             }

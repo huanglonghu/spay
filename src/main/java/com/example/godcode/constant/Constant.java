@@ -19,11 +19,6 @@ public class Constant {
 
 
     //http://192.168.1.188:8011
-    //http://192.168.1.188:21021
-    //http://gc.app.gate.1.cnameauto.org:8011
-    //http://godcode.joinvalue.com:80
-    //http://godcode.joinvalue.com:8027
-    //http://192.168.1.188:8011/
     //http://api.sy1999.com:8011
     //http://api.sy1999.com:8027
 
