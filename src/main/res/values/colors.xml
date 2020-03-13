@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#393A3F</color>
-    <color name="colorPrimaryDark">#393A3F</color>
-    <color name="colorAccent">#0f0</color>
+    <color name="colorPrimary">#db9540</color>
+    <color name="colorPrimaryDark">#db9540</color>
+    <color name="colorAccent">#db9540</color>
 
     <!-- QRCode scanner color begin -->
     <color name="viewfinder_mask">#60000000</color>
@@ -25,7 +25,7 @@
 
     <color name="bg_productCenter">#F0EFF5</color>
 
-    <color name="theme_color">#dabc2a</color>
+    <color name="theme_color">#db9540</color>
 
     <color name="bg1">#ffffff</color>
     <color name="bg2">#EBEBEB</color>
@@ -37,6 +37,7 @@
     <color name="bg8">#f9fafc</color>
     <color name="bg9">#f0eff5</color>
 
+
     <color name="btn_psd_1">#F5F5F5</color>
     <color name="btn_psd_2">#BFBFBF</color>
 
@@ -44,14 +45,14 @@
     <color name="colorBackground">#f1f0f6</color>
     <color name="colorText">#9b9b9b</color>
 
-   <color name="netease_red">#d5a5b3</color>
+    <color name="netease_red">#d5a5b3</color>
 
     <color name="home_text2">#838588</color>
 
-    <color name="c1">#d9d9d9</color>
 
     <color name="yzm">#dbdbdb</color>
 
+    <color name="c1">#838383</color>
     <color name="c2">#ff0101</color>
     <color name="c3">#f0eff5</color>
     <color name="c4">#d4d4d4</color>
@@ -60,19 +61,16 @@
     <color name="c7">#ff9800</color>
     <color name="c8">#0099cb</color>
     <color name="c9">#30c813</color>
+    <color name="c10">#d3d3d3</color>
+    <color name="c11">#f9fafc</color>
+    <color name="c12">#50000000</color>
 
     <color name="picker_text_color">#878787</color>
     <color name="picker_select_text_color">#03a9f4</color>
     <color name="picker_title_text_color">#000000</color>
     <color name="picker_border_color">#e5e5e5</color>
-
-    <color name="c10">#d3d3d3</color>
-
-    <color name="c11">#f9fafc</color>
-
-
-
-
-
+    <color name="t1">#586b95</color>
+    <color name="t2">#e2e2e2</color>
+    <color name="t3">#999999</color>
 
 </resources>

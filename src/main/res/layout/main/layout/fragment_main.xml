@@ -7,7 +7,7 @@
 
         <variable
             name="presenter"
-            type="com.example.godcode.presenter.Presenter" />
+            type="com.example.spay.presenter.Presenter" />
 
         <variable
             name="position"
@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context="com.example.godcode.ui.activity.MainActivity">
+            tools:context="com.example.spay.ui.activity.MainActivity">
 
 
             <android.support.v4.view.ViewPager
@@ -50,7 +50,7 @@
             <LinearLayout
                 android:id="@+id/navigation"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="116pt"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/frame_navigation"
                 android:gravity="center_vertical"
@@ -110,7 +110,7 @@
                             android:textSize="12sp" />
                     </LinearLayout>
 
-                    <com.example.godcode.ui.view.NewsView
+                    <com.example.spay.ui.view.NewsView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_toRightOf="@id/rl"
@@ -120,26 +120,9 @@
 
                 </RelativeLayout>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/app_name"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/r2"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -150,59 +133,16 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@{position==2?@drawable/discovery2:@drawable/discovery1}" />
+                        android:src="@{position==2?@drawable/mine2:@drawable/mine1}" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/fx"
+                        android:text="@string/me"
                         android:textColor="@{position==2?@color/theme_color:@color/home_text2}"
                         android:textSize="12sp" />
 
                 </LinearLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:onClick="@{()->presenter.togglePager(3)}">
-
-                    <LinearLayout
-                        android:id="@+id/r2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@{position==3?@drawable/mine2:@drawable/mine1}" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/me"
-                            android:textColor="@{position==3?@color/theme_color:@color/home_text2}"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/newImg"
-                        android:layout_width="106pt"
-                        android:layout_height="50pt"
-                        android:background="@drawable/bg_new"
-                        android:gravity="center"
-                        android:text="NEW"
-                        android:layout_toRightOf="@id/r2"
-                        android:visibility="@{update?View.VISIBLE:View.GONE}"
-                        android:textColor="#fff"
-                        android:textSize="24pt" />
-
-                </RelativeLayout>
 
 
             </LinearLayout>
@@ -210,12 +150,7 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="20dp"
-            android:src="@drawable/logo" />
+
     </FrameLayout>
 
 

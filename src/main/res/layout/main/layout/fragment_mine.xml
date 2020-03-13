@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="presenter"
-            type="com.example.godcode.presenter.Presenter" />
+            type="com.example.spay.presenter.Presenter" />
 
         <variable
             name="user"
-            type="com.example.godcode.greendao.entity.User" />
+            type="com.example.spay.greendao.entity.User" />
 
         <variable
             name="title"
             type="String" />
+
+        <import type="android.view.View" />
 
 
     </data>
@@ -23,188 +24,164 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/bg2"
         android:orientation="vertical">
 
-        <include
-            layout="@layout/layout_toolbar1"
-            bind:title="@{title}" />
 
-        <include layout="@layout/layout_divider" />
-
-        <LinearLayout
-            android:id="@+id/presenal"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_item"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="30dp">
+            android:layout_height="420pt"
+            android:background="@color/theme_color">
+
 
             <ImageView
-                android:id="@+id/iv_user"
-                android:layout_width="70dp"
-                android:layout_height="70dp" />
-
-            <TextView
-                android:id="@+id/tv_userName"
+                android:id="@+id/head"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/iv_user"
-                android:layout_marginTop="5dp"
-                android:text="@{user.userName}"
-                android:textColor="#000"
-                android:textSize="15sp" />
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="35pt" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/head"
+                android:text="账户余额"
+                android:textColor="#fff"
+                android:textSize="32pt" />
 
 
-        </LinearLayout>
+            <ImageView
+                android:layout_width="20pt"
+                android:layout_height="33pt"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="50pt"
+                android:src="@drawable/back4" />
 
-        <include layout="@layout/layout_divider" />
+
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/bg1"
-            android:divider="@drawable/divider2"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:showDividers="middle">
+            android:paddingLeft="30pt"
+            android:paddingTop="30pt"
+            android:paddingRight="30pt">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_item"
+                android:layout_height="100pt"
+                android:background="@drawable/shape_item1"
                 android:onClick="@{()->presenter.step2Fragment(&quot;bankCard&quot;)}"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                android:paddingLeft="25pt"
+                android:paddingRight="30pt">
 
                 <ImageView
+                    android:id="@+id/img"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_centerVertical="true"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/card" />
 
                 <TextView
-                    style="@style/text2"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/bankAccount" />
-            </LinearLayout>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20pt"
+                    android:layout_toRightOf="@id/img"
+                    android:text="@string/bankAccount"
+                    android:textColor="#000"
+                    android:textSize="28pt" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_item"
-                android:onClick="@{()->presenter.step2Fragment(&quot;transationRecord&quot;)}"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
 
                 <ImageView
+                    android:layout_width="20pt"
+                    android:layout_height="33pt"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back3" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100pt"
+                android:layout_marginTop="30pt"
+                android:layout_marginBottom="30pt"
+                android:background="@drawable/shape_item1"
+                android:onClick="@{()->presenter.step2Fragment(&quot;transationRecord&quot;)}"
+                android:paddingLeft="25pt"
+                android:paddingRight="30pt">
+
+                <ImageView
+                    android:id="@+id/img2"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_centerVertical="true"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/record_fill" />
 
                 <TextView
-                    style="@style/text2"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/transactionsDetail" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_item"
-                android:onClick="@{()->presenter.step2Fragment(&quot;myAsset&quot;)}"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20pt"
+                    android:layout_toRightOf="@id/img2"
+                    android:text="@string/transactionsDetail"
+                    android:textColor="#000"
+                    android:textSize="28pt" />
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/account" />
+                    android:layout_width="20pt"
+                    android:layout_height="33pt"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back3" />
 
-                <TextView
-                    style="@style/text2"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/myAsset" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_item"
-                android:onClick="@{()->presenter.step2Ysjl(4)}"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                android:layout_height="100pt"
+                android:background="@drawable/shape_item1"
+                android:gravity="center_vertical"
+                android:onClick="@{()->presenter.step2Fragment(&quot;setting&quot;)}"
+                android:paddingLeft="25pt"
+                android:paddingRight="30pt">
 
                 <ImageView
+                    android:id="@+id/img3"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/myrevenue" />
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/setting" />
 
                 <TextView
-                    style="@style/text2"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/wdsyfc" />
-            </LinearLayout>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20pt"
+                    android:layout_toRightOf="@id/img3"
+                    android:text="@string/setting"
+                    android:textColor="#000"
+                    android:textSize="28pt" />
+
+                <ImageView
+                    android:layout_width="20pt"
+                    android:layout_height="33pt"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back3" />
+
+            </RelativeLayout>
 
 
         </LinearLayout>
 
-        <include layout="@layout/layout_divider" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/bg_item"
-            android:gravity="center_vertical"
-            android:onClick="@{()->presenter.step2Fragment(&quot;setting&quot;)}"
-            android:paddingLeft="20dp">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/setting" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="@string/setting"
-                android:textSize="17sp" />
-
-
-            <TextView
-                android:id="@+id/newImg"
-                android:layout_width="106pt"
-                android:layout_height="50pt"
-                android:layout_marginLeft="25pt"
-                android:background="@drawable/bg_new"
-                android:gravity="center"
-                android:text="NEW"
-                android:textColor="#fff"
-                android:textSize="24pt"
-                android:visibility="gone" />
-
-
-            <TextView
-                android:id="@+id/versionMsg"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:textColor="@color/home_text2" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/bg2" />
 
     </LinearLayout>
 </layout>

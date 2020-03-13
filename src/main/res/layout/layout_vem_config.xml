@@ -6,7 +6,7 @@
 
         <variable
             name="hdBean"
-            type="com.example.godcode.bean.BindProduct.CommodityRoadBeanX.CommodityRoadBean" />
+            type="com.example.spay.bean.BindProduct.CommodityRoadBeanX.CommodityRoadBean" />
 
 
         <variable
@@ -17,7 +17,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@drawable/divider2"
+        android:divider="@drawable/divider2_a"
         android:orientation="vertical"
         android:showDividers="middle">
 
@@ -71,7 +71,7 @@
                 android:text="商品售卖价格"
                 android:textColor="#000" />
 
-            <com.example.godcode.ui.view.customview.LastInputEditText
+            <com.example.spay.ui.view.customview.LastInputEditText
                 android:id="@+id/etSell"
                 android:layout_width="60dp"
                 android:layout_height="30dp"
@@ -102,7 +102,7 @@
                 android:text="货道(游戏)单价"
                 android:textColor="#000" />
 
-            <com.example.godcode.ui.view.customview.LastInputEditText
+            <com.example.spay.ui.view.customview.LastInputEditText
                 android:id="@+id/et_game"
                 android:layout_width="60dp"
                 android:layout_height="30dp"
@@ -132,7 +132,7 @@
                 android:text="货道商品获得概率"
                 android:textColor="#000" />
 
-            <com.example.godcode.ui.view.customview.LastInputEditText
+            <com.example.spay.ui.view.customview.LastInputEditText
                 android:layout_width="60dp"
                 android:layout_height="30dp"
                 android:background="@drawable/bg_et"
@@ -163,7 +163,7 @@
                 android:textColor="#000" />
 
 
-            <com.example.godcode.ui.view.customview.AmountView
+            <com.example.spay.ui.view.customview.AmountView
                 android:id="@+id/amountView"
                 android:layout_width="100dp"
                 android:layout_height="30dp" />
@@ -185,7 +185,7 @@
                 android:text="货道容量"
                 android:textColor="#000" />
 
-            <com.example.godcode.ui.view.customview.LastInputEditText
+            <com.example.spay.ui.view.customview.LastInputEditText
                 android:layout_width="60dp"
                 android:layout_height="30dp"
                 android:background="@drawable/bg_et"

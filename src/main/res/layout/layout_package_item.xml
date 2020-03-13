@@ -6,11 +6,11 @@
 
         <variable
             name="item"
-            type="com.example.godcode.bean.PackageSettingList.ResultBean" />
+            type="com.example.spay.bean.PackageSettingList.ResultBean" />
 
         <variable
             name="fragment"
-            type="com.example.godcode.ui.fragment.deatailFragment.PackageFragment" />
+            type="com.example.spay.ui.fragment.deatailFragment.PackageFragment" />
 
 
     </data>

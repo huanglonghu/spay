@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="loginBody"
+            type="com.example.spay.bean.LoginBody" />
+
+        <variable
+            name="presenter"
+            type="com.example.spay.presenter.Presenter" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <ImageButton
+            android:id="@+id/exit"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/exit"
+            android:onClick="exit" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="20dp"
+            android:text="验证码登录"
+            android:textSize="58pt"
+            android:textStyle="bold" />
+
+        <include layout="@layout/layout_divider3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="105pt"
+            android:divider="@drawable/divider2_a"
+            android:gravity="center_vertical"
+            android:showDividers="middle">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="手机号"
+                android:textColor="#000"
+                android:textSize="27pt" />
+
+            <EditText
+                android:id="@+id/et_account"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:background="@null"
+                android:hint="请输入手机号"
+                android:paddingLeft="20pt"
+                android:textSize="27pt" />
+
+
+        </LinearLayout>
+
+        <include layout="@layout/layout_divider3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100pt"
+            android:divider="@drawable/divider2_a"
+            android:gravity="center_vertical"
+            android:showDividers="middle">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="验证码"
+                android:textColor="#000"
+                android:textSize="27pt" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="3">
+
+                <EditText
+                    android:id="@+id/login_yzm"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="请输入验证码"
+                    android:inputType="number"
+                    android:paddingLeft="20pt"
+                    android:text="@={loginBody.verificationCode}"
+                    android:textSize="27pt" />
+
+
+                <TextView
+                    android:id="@+id/getYzm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_tv"
+                    android:gravity="center"
+                    android:hint="获取验证码"
+                    android:textColorHint="#000"
+                    android:textColor="#000"
+                    android:textSize="26pt" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <include layout="@layout/layout_divider3" />
+
+        <TextView
+            android:id="@+id/logByPwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25pt"
+            android:text="用密码登录"
+            android:textSize="23pt"
+            android:textColor="@color/t1" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/login"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_wxdl"
+                android:gravity="center"
+                android:text="登录"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</layout>

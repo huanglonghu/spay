@@ -5,7 +5,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.godcode.ui.fragment.mainActivity.FriendFragment"/>
+            type="com.example.spay.ui.fragment.mainActivity.FriendFragment"/>
     </data>
 
     <LinearLayout
@@ -20,7 +20,7 @@
         android:paddingTop="10dp"
         android:showDividers="middle">
 
-        <com.example.godcode.ui.view.customview.ImageTextView
+        <com.example.spay.ui.view.customview.ImageTextView
             android:id="@+id/mainPopup_addFriend"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -37,7 +37,7 @@
             android:onClick="@{(view)->fragment.config(view)}"
             />
 
-        <com.example.godcode.ui.view.customview.ImageTextView
+        <com.example.spay.ui.view.customview.ImageTextView
             android:id="@+id/mainPopup_sys"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -54,7 +54,7 @@
             android:onClick="@{(view)->fragment.config(view)}"
             />
 
-        <com.example.godcode.ui.view.customview.ImageTextView
+        <com.example.spay.ui.view.customview.ImageTextView
             android:id="@+id/mainPopup_gathering"
             android:layout_width="match_parent"
             android:layout_height="0dp"

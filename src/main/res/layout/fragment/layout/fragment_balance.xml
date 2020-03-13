@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="presenter"
+            type="com.example.spay.presenter.Presenter" />
+
+        <variable
+            name="today"
+            type="String" />
+
+        <variable
+            name="yesterDay"
+            type="String" />
+
+
+    </data>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/balance_toolbar"
+            layout="@layout/layout_toolbar2"
+            bind:presenter="@{presenter}" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="420pt"
+            android:background="@color/theme_color"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="33pt">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¥"
+                        android:textColor="#fff"
+                        android:textSize="45pt" />
+
+                    <TextView
+                        android:id="@+id/balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20pt"
+                        android:gravity="center_vertical"
+                        android:textColor="#fff"
+                        android:textSize="65pt" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="30pt"
+            android:paddingTop="30pt"
+            android:paddingRight="30pt">
+
+            <RelativeLayout
+                android:id="@+id/recharge"
+                android:layout_width="match_parent"
+                android:layout_height="100pt"
+                android:background="@drawable/shape_item1"
+                android:paddingLeft="25pt"
+                android:paddingRight="30pt">
+
+                <ImageView
+                    android:id="@+id/img6"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/recharge" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20pt"
+                    android:layout_toRightOf="@id/img6"
+                    android:text="@string/recharge"
+                    android:textColor="#000"
+                    android:textSize="28pt" />
+
+                <ImageView
+                    android:layout_width="20pt"
+                    android:layout_height="33pt"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back3" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/tx"
+                android:layout_width="match_parent"
+                android:layout_height="100pt"
+                android:layout_marginTop="20pt"
+                android:background="@drawable/shape_item1"
+                android:paddingLeft="25pt"
+                android:paddingRight="30pt">
+
+                <ImageView
+                    android:id="@+id/img5"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/tx" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20pt"
+                    android:layout_toRightOf="@id/img5"
+                    android:text="@string/withdraw"
+                    android:textColor="#000"
+                    android:textSize="28pt" />
+
+                <ImageView
+                    android:layout_width="20pt"
+                    android:layout_height="33pt"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back3" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/balance_bank"
+                android:layout_width="match_parent"
+                android:layout_height="100pt"
+                android:layout_marginTop="20pt"
+                android:background="@drawable/shape_item1"
+                android:paddingLeft="25pt"
+                android:paddingRight="30pt">
+
+                <ImageView
+                    android:id="@+id/img4"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/card" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20pt"
+                    android:layout_toRightOf="@id/img4"
+                    android:text="@string/bankAccount"
+                    android:textColor="#000"
+                    android:textSize="28pt" />
+
+                <ImageView
+                    android:layout_width="20pt"
+                    android:layout_height="33pt"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back3" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/balance_zz"
+                android:layout_width="match_parent"
+                android:layout_height="100pt"
+                android:layout_marginTop="20pt"
+                android:background="@drawable/shape_item1"
+                android:paddingLeft="25pt"
+                android:paddingRight="30pt">
+
+                <ImageView
+                    android:id="@+id/img3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/zz" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20pt"
+                    android:layout_toRightOf="@id/img3"
+                    android:text="@string/transfer"
+                    android:textColor="#000"
+                    android:textSize="28pt" />
+
+                <ImageView
+                    android:layout_width="20pt"
+                    android:layout_height="33pt"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back3" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100pt"
+                android:layout_marginTop="20pt"
+                android:background="@drawable/shape_item1"
+                android:onClick="@{()->presenter.step2Fragment(&quot;transationRecord&quot;)}"
+                android:paddingLeft="25pt"
+                android:paddingRight="30pt">
+
+                <ImageView
+                    android:id="@+id/img2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/record_fill" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20pt"
+                    android:layout_toRightOf="@id/img2"
+                    android:text="@string/transactionsDetail"
+                    android:textColor="#000"
+                    android:textSize="28pt" />
+
+                <ImageView
+                    android:layout_width="20pt"
+                    android:layout_height="33pt"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back3" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

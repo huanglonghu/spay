@@ -53,7 +53,7 @@
                 android:orientation="vertical"
                 android:visibility="@{type!=3?View.VISIBLE:View.GONE}">
 
-                <com.example.godcode.ui.view.seekbar.CustomLayout
+                <com.example.spay.ui.view.seekbar.CustomLayout
                     android:id="@+id/textLayout"
                     android:layout_width="match_parent"
                     android:layout_height="30dp">
@@ -62,7 +62,7 @@
                         android:id="@+id/moveText"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent" />
-                </com.example.godcode.ui.view.seekbar.CustomLayout>
+                </com.example.spay.ui.view.seekbar.CustomLayout>
 
                 <SeekBar
                     android:id="@+id/seekbar"
@@ -99,7 +99,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:divider="@drawable/divider2"
+            android:divider="@drawable/divider2_a"
             android:showDividers="middle">
 
             <TextView

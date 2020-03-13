@@ -4,11 +4,11 @@
 
         <variable
             name="bean"
-            type="com.example.godcode.bean.ProductScan.ResultBean.ProductPackageListBean"/>
+            type="com.example.spay.bean.ProductScan.ResultBean.ProductPackageListBean"/>
 
         <variable
             name="fragment"
-            type="com.example.godcode.ui.fragment.deatailFragment.SelectPackageFragment"/>
+            type="com.example.spay.ui.fragment.deatailFragment.SelectPackageFragment"/>
     </data>
 <LinearLayout
     xmlns:tools="http://schemas.android.com/tools"

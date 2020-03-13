@@ -5,13 +5,13 @@
 
         <variable
             name="bean"
-            type="com.example.godcode.bean.PresentOption.PresentBean" />
+            type="com.example.spay.bean.PresentOption.PresentBean" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@drawable/divider2"
+        android:divider="@drawable/divider2_a"
         android:orientation="vertical"
         android:showDividers="middle|end">
 
@@ -27,7 +27,7 @@
                 android:text="礼品名称"
                 android:textColor="#000" />
 
-            <com.example.godcode.ui.view.customview.LastInputEditText
+            <com.example.spay.ui.view.customview.LastInputEditText
                 android:id="@+id/present_name"
                 android:layout_width="150dp"
                 android:layout_height="30dp"
@@ -54,7 +54,7 @@
                 android:text="成本价"
                 android:textColor="#000" />
 
-            <com.example.godcode.ui.view.customview.LastInputEditText
+            <com.example.spay.ui.view.customview.LastInputEditText
                 android:id="@+id/present_price"
                 android:layout_width="150dp"
                 android:layout_height="30dp"

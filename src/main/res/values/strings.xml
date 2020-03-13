@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SY云管家</string>
+    <string name="app_name">SPay</string>
     <string name="encode_qrcode">生成二维码</string>
     <string name="dencode_qrcode">扫描二维码</string>
     <string name="code_text">请输入生成二维码的文本信息</string>
@@ -21,6 +21,11 @@
     <string name="loadCompleted">没有更多数据</string>
     <string name="text_no_song">无数据</string>
 
+    <string name="myAgent">我的代理</string>
+
+
+    <string name="txsy">提现收益</string>
+
 
     <string name="startDate">开始时间</string>
     <string name="endDate">结束时间</string>
@@ -30,12 +35,12 @@
 
     <string name="wxdl">微信登录</string>
     <string name="zhdl">账号登录</string>
-    <string name="zczh">注册SY新账号</string>
+    <string name="zczh">注册S新账号</string>
     <string name="home">首页</string>
     <string name="sys">扫一扫</string>
     <string name="sk">收款</string>
     <string name="balance">余额</string>
-    <string name="syygjfw">SY云管家服务</string>
+    <string name="syygjfw">SPay服务</string>
     <string name="fwtx">服务提醒</string>
     <string name="myAsset">我的设备</string>
     <string name="cpzx">产品中心</string>
@@ -94,7 +99,7 @@
     <string name="selectTpe">请选择产品类型</string>
     <string name="mine">我的</string>
     <string name="me">我</string>
-    <string name="syNumber">SY号:</string>
+    <string name="syNumber">S号:</string>
     <string name="wdsyfc">我的营收分成</string>
     <string name="setting">设置</string>
     <string name="payPsd">支付密码</string>
@@ -125,7 +130,7 @@
     <string name="tytjhy">同意添加好友</string>
 
 
-    <string name="zhye">账户余额(元)</string>
+    <string name="zhye">账户余额</string>
     <string name="zrsm">昨日扫码:</string>
     <string name="jrsm">今日扫码(元):</string>
     <string name="sr">收入</string>
@@ -166,6 +171,8 @@
     <string name="totalYs">总营收(元)</string>
     <string name="add">添加</string>
     <string name="unbindAsset">解除资产</string>
+
+    <string name="totalIncome">总资产</string>
 
 
     <string name="today">今日</string>
@@ -233,6 +240,10 @@
 
     <string name="selectAuthWay">选择验证方式</string>
     <string name="freeMode">免费模式</string>
+    <string name="parameterChange">参数调整</string>
+
+    <string name="sqgl">授权管理</string>
+    <string name="qxsq">取消授权</string>
 
 
 </resources>

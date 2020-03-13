@@ -22,7 +22,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:divider="@drawable/divider2"
+            android:divider="@drawable/divider2_a"
             android:showDividers="middle">
 
             <TextView

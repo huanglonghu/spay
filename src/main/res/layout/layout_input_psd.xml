@@ -75,7 +75,7 @@
 
         </LinearLayout>
 
-        <com.example.godcode.ui.view.PayPsdInputView
+        <com.example.spay.ui.view.PayPsdInputView
             android:id="@+id/tx_payPsdView"
             android:layout_width="match_parent"
             android:layout_height="40dp"

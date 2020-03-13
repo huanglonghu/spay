@@ -45,13 +45,13 @@
 
 
 #实体类
--keep class com.example.godcode.bean.**{*;}
+-keep class com.example.spay.bean.**{*;}
 
--keep class com.example.godcode.greendao.entity.**{*;}
+-keep class com.example.spay.greendao.entity.**{*;}
 
 
 #自定义控件
--keep class com.example.godcode.ui.view.**{*;}
+-keep class com.example.spay.ui.view.**{*;}
 
 #pinyin4j
 -dontwarn net.soureceforge.pinyin4j.**
@@ -68,7 +68,6 @@
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
-
 
 
 # greendao
@@ -143,6 +142,9 @@ public static java.lang.String TABLENAME;
 -keep public class **.R$*{
    public static final int *;
 }
+
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
 
 
 

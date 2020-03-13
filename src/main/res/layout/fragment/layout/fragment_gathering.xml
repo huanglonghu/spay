@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="presenter"
+            type="com.example.spay.presenter.Presenter" />
+
+        <variable
+            name="money"
+            type="double" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/theme_color"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/gathering_toolbar"
+            layout="@layout/layout_toolbar2"
+            bind:presenter="@{presenter}" />
+
+        <LinearLayout
+            android:layout_width="620pt"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="140pt"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="135pt"
+                android:background="#fff"
+                android:gravity="center"
+                android:text="@string/sysfq"
+                android:textColor="#000"
+                android:textSize="29pt" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3pt"
+                android:background="#fff"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/gatheringCode"
+                    android:layout_width="350pt"
+                    android:layout_height="350pt"
+                    android:layout_marginTop="77pt" />
+
+                <TextView
+                    android:id="@+id/gathering_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:textSize="25sp"
+                    android:visibility="@{money>0?View.VISIBLE:View.GONE}" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="70pt"
+                    android:layout_marginBottom="95pt"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_setMoney"
+                        android:layout_width="168pt"
+                        android:layout_height="62pt"
+                        android:background="@drawable/shape_item3"
+                        android:gravity="center"
+                        android:text="设置金额" />
+
+                    <TextView
+                        android:id="@+id/save_bitmap"
+                        android:layout_width="168pt"
+                        android:layout_height="62pt"
+                        android:layout_marginLeft="20pt"
+                        android:background="@drawable/shape_item3"
+                        android:gravity="center"
+                        android:text="@string/savePhoto" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

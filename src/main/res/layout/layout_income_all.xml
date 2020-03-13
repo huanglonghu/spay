@@ -4,7 +4,7 @@
     <data>
         <variable
             name="presenter"
-            type="com.example.godcode.presenter.Presenter"/>
+            type="com.example.spay.presenter.Presenter"/>
        <variable
            name="month"
            type="String"/>

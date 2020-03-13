@@ -9,7 +9,7 @@
 
         <variable
             name="dialog"
-            type="com.example.godcode.ui.view.widget.VemConfigDialog" />
+            type="com.example.spay.ui.view.widget.VemConfigDialog" />
     </data>
 
     <LinearLayout
@@ -54,7 +54,7 @@
 
         </RelativeLayout>
 
-        <com.example.godcode.ui.view.MyViewPager
+        <com.example.spay.ui.view.MyViewPager
             android:id="@+id/vem_config_pager"
             android:layout_width="match_parent"
             android:layout_height="300dp"

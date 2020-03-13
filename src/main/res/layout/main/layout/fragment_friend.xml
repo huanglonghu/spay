@@ -7,7 +7,7 @@
 
         <variable
             name="title"
-            type="String"/>
+            type="String" />
     </data>
 
     <LinearLayout
@@ -25,58 +25,18 @@
             android:layout_height="match_parent">
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <LinearLayout
+                <ListView
+                    android:id="@+id/friend_list"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:background="@color/bg2"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp">
-
-                    <LinearLayout
-                        android:id="@+id/search_friend"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@drawable/bg_search"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/search" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:gravity="center"
-                            android:text="@string/search" />
-
-                    </LinearLayout>
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
 
 
-                </LinearLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ListView
-                        android:id="@+id/friend_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
-
-            <com.example.godcode.ui.view.LetterView
+            <com.example.spay.ui.view.LetterView
                 android:id="@+id/letter_view"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
