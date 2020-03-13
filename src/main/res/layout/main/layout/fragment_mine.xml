@@ -34,30 +34,6 @@
             android:background="@color/theme_color">
 
 
-            <ImageView
-                android:id="@+id/head"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="35pt" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/head"
-                android:text="账户余额"
-                android:textColor="#fff"
-                android:textSize="32pt" />
-
-
-            <ImageView
-                android:layout_width="20pt"
-                android:layout_height="33pt"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="50pt"
-                android:src="@drawable/back4" />
 
 
         </RelativeLayout>
@@ -167,6 +143,42 @@
                     android:layout_marginLeft="20pt"
                     android:layout_toRightOf="@id/img3"
                     android:text="@string/setting"
+                    android:textColor="#000"
+                    android:textSize="28pt" />
+
+                <ImageView
+                    android:layout_width="20pt"
+                    android:layout_height="33pt"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back3" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl"
+                android:layout_width="match_parent"
+                android:layout_height="100pt"
+                android:layout_marginTop="30pt"
+                android:background="@drawable/shape_item1"
+                android:gravity="center_vertical"
+                android:paddingLeft="25pt"
+                android:paddingRight="30pt">
+
+                <ImageView
+                    android:id="@+id/head"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/user" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20pt"
+                    android:layout_toRightOf="@id/head"
+                    android:text="用户中心"
                     android:textColor="#000"
                     android:textSize="28pt" />
 

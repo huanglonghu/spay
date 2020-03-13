@@ -2,21 +2,31 @@ package com.example.spay.ui.fragment.mainActivity;
 
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.spay.R;
 import com.example.spay.bean.User;
 import com.example.spay.bean.WsHeart;
+import com.example.spay.catche.Loader.RxImageLoader;
+import com.example.spay.constant.Constant;
 import com.example.spay.databinding.FragmentMineBinding;
+import com.example.spay.greendao.option.UserOption;
 import com.example.spay.greendao.option.VersionMsgOption;
 import com.example.spay.observable.EventType;
 import com.example.spay.observable.RxBus;
 import com.example.spay.observable.RxEvent;
+import com.example.spay.presenter.Presenter;
 import com.example.spay.ui.base.BaseFragment;
 import com.example.spay.ui.base.GodCodeApplication;
+import com.example.spay.ui.fragment.deatailFragment.PresonalFragment;
+import com.example.spay.utils.ImagUtil;
+
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -27,9 +37,8 @@ public class MineFragment extends BaseFragment {
     private User.ResultBean result;
     private com.example.spay.greendao.entity.User user;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (view == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mine, container, false);
             binding.setPresenter(presenter);
@@ -82,6 +91,14 @@ public class MineFragment extends BaseFragment {
             }
         });
 
+        binding.rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PresonalFragment presonalFragment = new PresonalFragment();
+                Presenter.getInstance().step2Fragment(presonalFragment, "presonal");
+            }
+        });
+
 
     }
 
@@ -102,6 +119,25 @@ public class MineFragment extends BaseFragment {
     }
 
     private void setHeadImage() {
+
+        user = UserOption.getInstance().querryUser(Constant.userId);
+        if (user != null) {
+            binding.setUser(user);
+//            String headImageUrl = user.getHeadImageUrl();
+//            String url = ImagUtil.handleUrl(headImageUrl);
+//            if (!TextUtils.isEmpty(url)) {
+//                RxImageLoader.with(getContext()).getBitmap(url).subscribe(
+//                        imageBean -> {
+//
+//                            Bitmap bitmap = imageBean.getBitmap();
+//                            Drawable drawable = ImagUtil.circle(bitmap);
+//                            binding.head.setImageDrawable(drawable);
+//
+//                        }
+//                );
+//            }
+
+        }
 
     }
 

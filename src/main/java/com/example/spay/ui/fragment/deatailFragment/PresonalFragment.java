@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +29,9 @@ public class PresonalFragment extends BaseFragment implements EditPresonalFragme
     private View view;
     private User user;
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         if (binding == null) {
             user = UserOption.getInstance().querryUser(Constant.userId);
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal, container, false);
@@ -130,7 +129,7 @@ public class PresonalFragment extends BaseFragment implements EditPresonalFragme
                             editSuccess -> {
                                 user.setHeadImageUrl(Constant.baseUrl + headUrl);
                                 UserOption.getInstance().updateUser(user);
-                                MineFragment mineFragment= (MineFragment) presenter.getFragments().get(3);
+                                MineFragment mineFragment= (MineFragment) presenter.getFragments().get(2);
                                 mineFragment.refreshData();
                             }
                     );
