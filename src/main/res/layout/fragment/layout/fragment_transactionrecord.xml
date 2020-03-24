@@ -32,14 +32,14 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/record_date"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp">
 
                 <TextView
                     android:id="@+id/tv_date"
-                    android:layout_width="70dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:gravity="center"
                     android:textSize="17sp"
@@ -48,9 +48,9 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/down2" />
-            </RelativeLayout>
+            </LinearLayout>
 
 
             <TextView

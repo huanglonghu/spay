@@ -2,7 +2,6 @@ package com.example.spay.ui.fragment.deatailFragment;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +21,8 @@ public class SelectTimeFragment extends BaseFragment {
     private FragmentSelecttimeBinding binding;
     private View view;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_selecttime, container, false);
             binding.setPresenter(presenter);
@@ -56,6 +54,32 @@ public class SelectTimeFragment extends BaseFragment {
 
             }
         });
+
+
+        binding.selectWay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int type = binding.getType();
+                if (type == 0) {
+                    ((ViewGroup) ((ViewGroup) binding.datePicker.
+                            getChildAt(0)).
+                            getChildAt(0)).
+                            getChildAt(2).
+                            setVisibility(View.GONE);
+                    binding.setType(1);
+                }else {
+                    ((ViewGroup) ((ViewGroup) binding.datePicker.
+                            getChildAt(0)).
+                            getChildAt(0)).
+                            getChildAt(2).
+                            setVisibility(View.VISIBLE);
+                    binding.setType(0);
+                }
+
+            }
+        });
+
+
     }
 
     private int selectPosition;
@@ -90,7 +114,6 @@ public class SelectTimeFragment extends BaseFragment {
     @Override
     protected void lazyLoad() {
     }
-
 
 
     public interface TimeSelect {

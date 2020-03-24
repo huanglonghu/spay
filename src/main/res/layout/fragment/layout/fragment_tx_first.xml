@@ -182,14 +182,6 @@
                 android:textColor="#fff"
                 android:textSize="20sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btn_tx"
-                android:layout_marginTop="20dp"
-                android:text="正常工作日(周一至周五9:00-18:00)两小时内到账"
-                android:textColor="#000" />
-
         </RelativeLayout>
 
     </LinearLayout>

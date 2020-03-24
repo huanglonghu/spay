@@ -3,13 +3,11 @@ package com.example.spay.ui.fragment.deatailFragment;
 import android.app.DatePickerDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
-
 import com.example.spay.R;
 import com.example.spay.bean.Teansantion;
 import com.example.spay.bean.TeansantionType;
@@ -17,6 +15,7 @@ import com.example.spay.databinding.FragmentTransactionrecordBinding;
 import com.example.spay.greendao.option.TransationOption;
 import com.example.spay.greendao.option.TransationTypeOption;
 import com.example.spay.http.HttpUtil;
+import com.example.spay.presenter.Presenter;
 import com.example.spay.ui.adapter.TransationRecordListAdapter;
 import com.example.spay.ui.base.BaseFragment;
 import com.example.spay.constant.Constant;
@@ -31,16 +30,15 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class TransationRecordFragment extends BaseFragment implements BottomDialog.TypeSelect, MyListView.RefreshData {
+public class TransationRecordFragment extends BaseFragment implements BottomDialog.TypeSelect, MyListView.RefreshData,SelectTimeFragment.TimeSelect {
     private FragmentTransactionrecordBinding binding;
     private View view;
     private List<TeansantionType.ResultBean> teansantionTypeList;
     private List<Teansantion.DataBean> data;
     private TransationRecordListAdapter adapter;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_transactionrecord, container, false);
             binding.setPresenter(presenter);
@@ -141,28 +139,36 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
         Calendar c = Calendar.getInstance();
         int y = c.get(Calendar.YEAR);
         int m = c.get(Calendar.MONTH);
-        binding.tvDate.setText(y + "-" + (m + 1));
+        int d = c.get(Calendar.DAY_OF_MONTH);
+        binding.tvDate.setText(y + "-" + (m + 1)+"-"+d);
+
         binding.recordDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyDatePickerDialog myDatePickerDialog = new MyDatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        adapter.clearView();
-                        data.clear();
-                        date = String.format("%d-%d", year, month + 1);
-                        binding.tvDate.setText(date);
-                        binding.lvTransationrecord.setState(2);
-                    }
-                }, y, m + 1, 0);
-                ((ViewGroup) ((ViewGroup) myDatePickerDialog.getDatePicker().
-                        getChildAt(0)).
-                        getChildAt(0)).
-                        getChildAt(2).
-                        setVisibility(View.GONE);
-                myDatePickerDialog.show();
+
+                SelectTimeFragment selectTimeFragment = new SelectTimeFragment();
+                selectTimeFragment.setTimeSelect(TransationRecordFragment.this);
+                Presenter.getInstance().step2Fragment(selectTimeFragment,"selectDate");
+
             }
         });
+
+//        binding.recordDate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MyDatePickerDialog myDatePickerDialog = new MyDatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//                        adapter.clearView();
+//                        data.clear();
+//                        date = String.format("%d-%d-%d", year, month + 1,dayOfMonth);
+//                        binding.tvDate.setText(date);
+//                        binding.lvTransationrecord.setState(2);
+//                    }
+//                }, y, m + 1, 0);
+//                myDatePickerDialog.show();
+//            }
+//        });
     }
 
     @Override
@@ -190,6 +196,11 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
                 teansantionStr -> {
                     Teansantion teansantion = new Gson().fromJson(teansantionStr, Teansantion.class);
                     List<Teansantion.DataBean> list = teansantion.getData();
+
+                    if (page == 1 && data.size() > 0) {
+                        data.clear();
+                    }
+
                     if (list != null && list.size() > 0) {
                         data.addAll(list);
                         adapter.notifyDataSetChanged();
@@ -201,5 +212,13 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
 
                 }
         );
+    }
+
+    @Override
+    public void setDate(String date1, String date2) {
+        adapter.clearView();
+        data.clear();
+        binding.tvDate.setText(date);
+        binding.lvTransationrecord.setState(2);
     }
 }

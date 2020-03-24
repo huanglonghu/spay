@@ -2,7 +2,6 @@ package com.example.spay.ui.fragment.deatailFragment;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +34,8 @@ public class YSJLDetailFragment extends BaseFragment {
     private View view;
     private YSRecord.ResultBean.DataBean bean;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ysjl_detail, container, false);
             binding.setPresenter(presenter);

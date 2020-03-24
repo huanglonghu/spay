@@ -20,8 +20,15 @@
             type="String" />
 
         <variable
+            name="type"
+            type="int" />
+
+        <variable
             name="fragment"
             type="com.example.spay.ui.fragment.deatailFragment.SelectTimeFragment" />
+
+
+        <import type="android.view.View" />
     </data>
 
 
@@ -35,10 +42,38 @@
             layout="@layout/layout_toolbar2"
             bind:presenter="@{presenter}" />
 
+        <LinearLayout
+            android:id="@+id/selectWay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30pt"
+            android:layout_marginTop="40pt"
+            android:background="@drawable/bg_toggle_date"
+            android:paddingLeft="23pt"
+            android:paddingTop="15pt"
+            android:paddingRight="23pt"
+            android:paddingBottom="15pt">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{type==0?@string/arxz:@string/ayxz}"
+                android:textColor="#000"
+                android:textSize="26pt" />
+
+            <ImageView
+                android:layout_width="49pt"
+                android:layout_height="36pt"
+                android:layout_marginLeft="10pt"
+                android:src="@drawable/toggle" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="60pt"
             android:padding="20dp">
 
             <RelativeLayout
@@ -67,12 +102,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="@{type==0?View.VISIBLE:View.GONE}"
                 android:text="至" />
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
+                android:visibility="@{type==0?View.VISIBLE:View.GONE}"
                 android:onClick="@{()->fragment.select(1)}">
 
                 <TextView

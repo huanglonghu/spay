@@ -11,10 +11,11 @@
 
         <ImageView
             android:id="@+id/toolbar3_back"
-            android:layout_width="20pt"
-            android:layout_height="33pt"
+            android:layout_width="40pt"
+            android:layout_height="53pt"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:padding="10pt"
             android:src="@drawable/back" />
 
         <TextView
@@ -23,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/toolbar3_back"
+            android:layout_marginLeft="20pt"
             android:textColor="#fff"
             android:textSize="38pt" />
 

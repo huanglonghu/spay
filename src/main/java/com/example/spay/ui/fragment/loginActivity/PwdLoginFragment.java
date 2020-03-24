@@ -3,16 +3,15 @@ package com.example.spay.ui.fragment.loginActivity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.spay.R;
 import com.example.spay.bean.LoginBody;
 import com.example.spay.bean.LoginResponse;
+import com.example.spay.bean.RegisterBody;
 import com.example.spay.constant.Constant;
 import com.example.spay.databinding.FragmentPwdloginBinding;
 import com.example.spay.greendao.entity.LoginResult;
@@ -23,7 +22,6 @@ import com.example.spay.ui.activity.MainActivity;
 import com.example.spay.ui.base.BaseFragment;
 import com.example.spay.utils.SharepreferenceUtil;
 import com.google.gson.Gson;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -32,9 +30,8 @@ public class PwdLoginFragment extends BaseFragment {
     private FragmentPwdloginBinding binding;
     private LoginBody loginBody;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pwdlogin, container, false);
             binding.setPresenter(presenter);
@@ -92,7 +89,10 @@ public class PwdLoginFragment extends BaseFragment {
         HttpUtil.getInstance().login(loginBody).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 loginStr -> {
                     if (loginStr.contains("\"success\":false")) {
-                        Presenter.getInstance().step2Fragment("register");
+                        RegisterFragment registerFragment = new RegisterFragment();
+                        RegisterBody registerBody = new RegisterBody();
+                        registerFragment.initData(registerBody);
+                        presenter.step2Fragment(registerFragment,"register");
                     } else {
                         LoginResponse loginResponse = new Gson().fromJson(loginStr, LoginResponse.class);
                         LoginResponse.ResultBean result = loginResponse.getResult();

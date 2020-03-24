@@ -19,6 +19,7 @@ public class AddBankCard {
      */
 
     private int fK_UserID;
+
     private String bankName;
     private String mobile;
     private String bankCardNumber;
