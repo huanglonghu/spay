@@ -3,11 +3,12 @@ package com.example.spay.ui.fragment.deatailFragment;
 import android.app.DatePickerDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
+
 import com.example.spay.R;
 import com.example.spay.bean.Teansantion;
 import com.example.spay.bean.TeansantionType;
@@ -20,17 +21,21 @@ import com.example.spay.ui.adapter.TransationRecordListAdapter;
 import com.example.spay.ui.base.BaseFragment;
 import com.example.spay.constant.Constant;
 import com.example.spay.ui.view.widget.BottomDialog;
-import com.example.spay.ui.view.MyDatePickerDialog;
 import com.example.spay.ui.view.MyListView;
+import com.example.spay.utils.LogUtil;
 import com.example.spay.utils.StringUtil;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class TransationRecordFragment extends BaseFragment implements BottomDialog.TypeSelect, MyListView.RefreshData,SelectTimeFragment.TimeSelect {
+
+public class TransationRecordFragment extends BaseFragment implements BottomDialog.TypeSelect, MyListView.RefreshData, SelectTimeFragment.TimeSelect {
     private FragmentTransactionrecordBinding binding;
     private View view;
     private List<TeansantionType.ResultBean> teansantionTypeList;
@@ -38,7 +43,7 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
     private TransationRecordListAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_transactionrecord, container, false);
             binding.setPresenter(presenter);
@@ -50,8 +55,8 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
             binding.transationrecordToolbar.tvOption.setText(sx);
             data = new ArrayList<>();
             typeList = new ArrayList<>();
-            querryTeansationType();
             initView();
+            querryTeansationType();
             initListener();
         } else {
             refreshData(1);
@@ -91,16 +96,13 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
                         typeList.add(resultBean.getKey());
                     }
                     type = teansantionTypeList.get(0).getValue();
-                    date = binding.tvDate.getText().toString();
                     querryTeansationName();
                 }
         );
+
     }
 
-
     private String type;
-    private String date;
-
 
     private void querryTeansationName() {
         HttpUtil.getInstance().getTypeList2().subscribe(
@@ -140,35 +142,16 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
         int y = c.get(Calendar.YEAR);
         int m = c.get(Calendar.MONTH);
         int d = c.get(Calendar.DAY_OF_MONTH);
-        binding.tvDate.setText(y + "-" + (m + 1)+"-"+d);
-
+        date1 = y + "-" + (m + 1) + "-" + d;
+        binding.setDate1(date1);
         binding.recordDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 SelectTimeFragment selectTimeFragment = new SelectTimeFragment();
                 selectTimeFragment.setTimeSelect(TransationRecordFragment.this);
-                Presenter.getInstance().step2Fragment(selectTimeFragment,"selectDate");
-
+                Presenter.getInstance().step2Fragment(selectTimeFragment, "selectDate");
             }
         });
-
-//        binding.recordDate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MyDatePickerDialog myDatePickerDialog = new MyDatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
-//                    @Override
-//                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                        adapter.clearView();
-//                        data.clear();
-//                        date = String.format("%d-%d-%d", year, month + 1,dayOfMonth);
-//                        binding.tvDate.setText(date);
-//                        binding.lvTransationrecord.setState(2);
-//                    }
-//                }, y, m + 1, 0);
-//                myDatePickerDialog.show();
-//            }
-//        });
     }
 
     @Override
@@ -177,48 +160,96 @@ public class TransationRecordFragment extends BaseFragment implements BottomDial
 
     @Override
     public void selectType(int position) {
-        data.clear();
-        date = binding.tvDate.getText().toString();
         type = teansantionTypeList.get(position).getValue();
-        adapter.clearView();
         binding.lvTransationrecord.setState(2);
     }
 
+    private boolean isMonth;
+    private String date1;
+    private String date2;
+    private String date3;
+
     @Override
     public void refreshData(int page) {
-        HashMap<String, String> urlMap = new HashMap<>();
-        urlMap.put("UserId", String.valueOf(Constant.userId));
+        HashMap<String, Object> urlMap = new HashMap<>();
+        urlMap.put("UserId", Constant.userId);
         urlMap.put("type", type);
-        urlMap.put("time", date);
-        urlMap.put("page", page + "");
-        urlMap.put("limit", "20");
+        urlMap.put("page", page);
+        urlMap.put("limit", 20);
+        if (isMonth) {
+            urlMap.put("IsMonth", true);
+            urlMap.put("Time", date3);
+        } else {
+            urlMap.put("IsMonth", false);
+            urlMap.put("StartTime", date1);
+            if (!TextUtils.isEmpty(date2)) {
+                urlMap.put("EndTime", date2);
+            }
+        }
+        LogUtil.log("==================refreshData=================" + urlMap.toString());
         HttpUtil.getInstance().getTeansantion(urlMap).subscribe(
                 teansantionStr -> {
                     Teansantion teansantion = new Gson().fromJson(teansantionStr, Teansantion.class);
                     List<Teansantion.DataBean> list = teansantion.getData();
-
                     if (page == 1 && data.size() > 0) {
                         data.clear();
+                        adapter.clearView();
                     }
 
                     if (list != null && list.size() > 0) {
                         data.addAll(list);
-                        adapter.notifyDataSetChanged();
                         binding.setTeansation(teansantion);
                         binding.lvTransationrecord.setState(0);
                     } else {
                         binding.lvTransationrecord.setState(1);
                     }
-
+                    adapter.notifyDataSetChanged();
                 }
         );
     }
 
     @Override
     public void setDate(String date1, String date2) {
-        adapter.clearView();
-        data.clear();
-        binding.tvDate.setText(date);
+        isMonth = false;
+        if(getTime(date2)-getTime(date1)>0){
+            this.date1 = date1;
+            this.date2 = date2;
+        }else {
+            this.date1 = date2;
+            this.date2 = date1;
+        }
+        if (date1.equals(date2)) {
+            binding.setDate1(date1);
+        } else {
+            binding.setDate1(this.date1);
+            binding.setDate2(this.date2);
+        }
         binding.lvTransationrecord.setState(2);
     }
+
+    @Override
+    public void setDate(String date3) {
+        isMonth = true;
+        this.date3 = date3;
+        this.date1=null;
+        this.date2=null;
+        binding.setDate1(date3);
+        binding.setDate2(date2);
+        binding.lvTransationrecord.setState(2);
+    }
+
+
+
+    public long getTime(String user_time) {
+        long time=0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d;
+        try {
+            d = sdf.parse(user_time);
+            time = d.getTime();
+        } catch (ParseException e) {
+        }
+        return time;
+    }
+
 }

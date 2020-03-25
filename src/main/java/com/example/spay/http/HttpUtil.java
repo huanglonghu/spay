@@ -318,7 +318,7 @@ public class HttpUtil {
         return enqueueCall(call);
     }
 
-    public Observable<String> getTeansantion(HashMap<String, String> map) {
+    public Observable<String> getTeansantion(HashMap<String, Object> map) {
         Call<ResponseBody> call = httpInterface.getTransaction(map);
         return enqueueCall(call);
     }
@@ -832,7 +832,7 @@ public class HttpUtil {
                     netLoading.cancel();
                     map.remove(netLoading);
                 }
-                LogUtil.log("===============fail==============");
+                LogUtil.log("===============fail=============="+t.toString());
                 if (s.contains("java.net.ConnectException")) {
                     showErrorDialog();
                 } else {

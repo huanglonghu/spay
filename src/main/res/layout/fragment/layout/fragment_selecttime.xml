@@ -20,6 +20,10 @@
             type="String" />
 
         <variable
+            name="date3"
+            type="String" />
+
+        <variable
             name="type"
             type="int" />
 
@@ -49,6 +53,7 @@
             android:layout_marginLeft="30pt"
             android:layout_marginTop="40pt"
             android:background="@drawable/bg_toggle_date"
+            android:gravity="center_vertical"
             android:paddingLeft="23pt"
             android:paddingTop="15pt"
             android:paddingRight="23pt"
@@ -62,74 +67,106 @@
                 android:textSize="26pt" />
 
             <ImageView
-                android:layout_width="49pt"
-                android:layout_height="36pt"
+                android:layout_width="27pt"
+                android:layout_height="23pt"
                 android:layout_marginLeft="10pt"
                 android:src="@drawable/toggle" />
 
         </LinearLayout>
 
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60pt"
-            android:padding="20dp">
+            android:padding="20dp"
+            >
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:onClick="@{()->fragment.select(0)}">
-
-                <TextView
-                    android:id="@+id/start_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@{date1!=null?date1:@string/startDate}"
-                    android:textColor="@{selectPosition==0?@color/theme_color:@color/picker_text_color}" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@{selectPosition==0?@color/theme_color:@color/picker_text_color}" />
-
-
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/dateLayout1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="@{type==0?View.VISIBLE:View.GONE}"
-                android:text="至" />
+                android:visibility="@{type==0?View.VISIBLE:View.GONE}">
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:visibility="@{type==0?View.VISIBLE:View.GONE}"
-                android:onClick="@{()->fragment.select(1)}">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:onClick="@{()->fragment.select(0)}">
+
+                    <TextView
+                        android:id="@+id/start_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@{date1!=null?date1:@string/startDate}"
+                        android:textColor="@{selectPosition==0?@color/theme_color:@color/picker_text_color}" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@{selectPosition==0?@color/theme_color:@color/picker_text_color}" />
+
+
+                </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="至"
+                    android:visibility="@{type==0?View.VISIBLE:View.GONE}" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:onClick="@{()->fragment.select(1)}">
+
+                    <TextView
+                        android:id="@+id/end_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@{date2!=null?date2:@string/endDate}"
+                        android:textColor="@{selectPosition==1?@color/theme_color:@color/picker_text_color}" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@{selectPosition==1?@color/theme_color:@color/picker_text_color}" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/dateLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:visibility="@{type==1?View.VISIBLE:View.GONE}">
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@{date2!=null?date2:@string/endDate}"
-                    android:textColor="@{selectPosition==1?@color/theme_color:@color/picker_text_color}" />
+                    android:text="@{date3}"
+                    android:textColor="@color/theme_color" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
-                    android:background="@{selectPosition==1?@color/theme_color:@color/picker_text_color}" />
+                    android:background="@color/theme_color" />
 
 
             </RelativeLayout>
 
-        </LinearLayout>
+
+        </FrameLayout>
 
 
         <DatePicker

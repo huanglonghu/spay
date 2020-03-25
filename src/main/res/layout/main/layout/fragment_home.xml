@@ -241,6 +241,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="14pt"
                         android:textColor="#000"
+                        android:singleLine="true"
+                        android:ellipsize="end"
                         android:textSize="29pt" />
 
 
@@ -272,6 +274,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="14pt"
+                        android:singleLine="true"
+                        android:ellipsize="end"
                         android:textColor="#000"
                         android:textSize="29pt" />
 

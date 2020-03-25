@@ -2,12 +2,10 @@ package com.example.spay.ui.fragment.deatailFragment;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
 import com.example.spay.R;
 import com.example.spay.bean.YSRecord;
 import com.example.spay.databinding.FragmentYsjlBinding;
@@ -38,9 +36,8 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
     private CompositeDisposable compositeDisposable;
 
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         if (binding == null) {
             binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.fragment_ysjl, null, false);
             binding.setPresenter(presenter);
@@ -187,6 +184,11 @@ public class YSJLFragment extends BaseFragment implements MyListView.RefreshData
         data.clear();
         ysjlListAdapter.clearView();
         binding.lvYsjl.setState(2);
+    }
+
+    @Override
+    public void setDate(String date3) {
+
     }
 
     @Override

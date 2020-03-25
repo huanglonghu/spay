@@ -2,11 +2,9 @@ package com.example.spay.ui.fragment.deatailFragment;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.spay.R;
 import com.example.spay.bean.FrcationRecord;
 import com.example.spay.bean.MobileRechargeRecord;
@@ -27,7 +25,6 @@ import com.example.spay.ui.base.BaseFragment;
 import com.example.spay.utils.DateUtil;
 import com.example.spay.utils.FormatUtil;
 import com.example.spay.utils.GsonUtil;
-
 import java.text.DecimalFormat;
 
 public class TransationRecordDetailFragment extends BaseFragment {
@@ -39,9 +36,8 @@ public class TransationRecordDetailFragment extends BaseFragment {
     private String[] typeArray = {"", "转账支出", "二维码收款", "二维码付款", "商户消费", "充值", "提现", "退款", "转账收入", "产品营收", "手机充值","购买积分"};
     private DecimalFormat decimalFormat;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (binding == null) {
             id = getArguments().getInt("id");
             relatedKey = getArguments().getInt("relatedKey");
@@ -74,7 +70,7 @@ public class TransationRecordDetailFragment extends BaseFragment {
                             transcationMsg.setMoney(decimalFormat.format(result.getPaymentAmount()));
                             transcationMsg.setPayType(payType[result.getPaymentGenre()]);
                             transcationMsg.setPayWay(payWay[result.getPaymentMode()]);
-                            transcationMsg.setTranscationObj(result.getDisbursUserName());
+                            transcationMsg.setTranscationObj(result.getIncomeUserName());
                             break;
                         case 2:
                             QrcodeGathering qrcodeGathering = GsonUtil.getInstance().fromJson(transactionStr, QrcodeGathering.class);
@@ -176,7 +172,6 @@ public class TransationRecordDetailFragment extends BaseFragment {
     }
 
     private String[] payWay = {"微信", "支付宝", "余额", "银行卡"};
-
     private String[] payType = {"消费支出", "转账支出", "", "盈利分成", "扫码支出"};
     private String[] txStatus = {"未审核", "正在处理", "提现成功", "提现失败", "审核不通过"};
     private String[] incomeType = {"消费收入", "退款收入", "转账收入", "扫码收入", "盈利分成"};

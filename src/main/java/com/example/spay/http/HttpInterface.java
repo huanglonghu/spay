@@ -130,7 +130,7 @@ public interface HttpInterface {
     Call<ResponseBody> getTeansantionTypeList2();
 
     @GET("api/services/app/TransactionReport/GetPagedTransactionReports")
-    Call<ResponseBody> getTransaction(@QueryMap Map<String, String> map);
+    Call<ResponseBody> getTransaction(@QueryMap Map<String,Object> map);
 
     @POST("api/services/app/CommonPaymentAppServices/TransferToUser")
     Call<ResponseBody> transfer(@Body TransferBody transferBody);

@@ -3,13 +3,10 @@ package com.example.spay.ui.fragment.mainActivity;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.android.qzs.voiceannouncementlibrary.VoiceUtils;
 import com.example.spay.R;
 import com.example.spay.bean.DivideIncome;
 import com.example.spay.databinding.FragmentHomeBinding;
@@ -23,17 +20,11 @@ import com.example.spay.observable.RxEvent;
 import com.example.spay.service.NetStateReceiver;
 import com.example.spay.ui.base.BaseFragment;
 import com.example.spay.constant.Constant;
-import com.example.spay.ui.fragment.deatailFragment.MobileRechargeFragment;
 import com.example.spay.ui.view.widget.NetStateDialog;
 import com.example.spay.utils.FormatUtil;
 import com.example.spay.utils.GsonUtil;
-import com.example.spay.utils.LogUtil;
 import com.google.gson.Gson;
-
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -41,9 +32,8 @@ public class HomeFragment extends BaseFragment {
 
     private FragmentHomeBinding binding;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
             binding.setPresenter(presenter);

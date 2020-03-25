@@ -10,7 +10,17 @@
 
         <variable
             name="teansation"
-            type="com.example.spay.bean.Teansantion"/>
+            type="com.example.spay.bean.Teansantion" />
+
+        <variable
+            name="date1"
+            type="String" />
+
+        <variable
+            name="date2"
+            type="String" />
+
+        <import type="android.view.View" />
     </data>
 
     <LinearLayout
@@ -35,19 +45,37 @@
             <LinearLayout
                 android:id="@+id/record_date"
                 android:layout_width="wrap_content"
+                android:gravity="center_vertical"
                 android:layout_height="30dp">
 
+
                 <TextView
-                    android:id="@+id/tv_date"
+                    android:id="@+id/tv_date1"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:text="@{date1}"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10pt"
+                    android:layout_marginRight="10pt"
+                    android:text="至"
                     android:textSize="17sp"
-                    />
+                    android:visibility="@{date2==null?View.GONE:View.VISIBLE}" />
+
+                <TextView
+                    android:id="@+id/tv_date2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:text="@{date2}"
+                    android:visibility="@{date2==null?View.GONE:View.VISIBLE}" />
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="30pt"
+                    android:layout_height="16pt"
                     android:layout_marginLeft="10dp"
                     android:src="@drawable/down2" />
             </LinearLayout>
@@ -57,10 +85,9 @@
                 android:id="@+id/sz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
                 android:layout_below="@id/record_date"
                 android:text='@{@string/zhichu+"¥"+teansation.paySumMoney+"  "+@string/sr+"¥"+teansation.incomeSumMoney}'
-                />
+                android:textSize="15sp" />
 
         </RelativeLayout>
 
@@ -68,8 +95,7 @@
             android:id="@+id/lv_transationrecord"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@drawable/divider2_a"
-            />
+            android:divider="@drawable/divider2_a" />
 
     </LinearLayout>
 </layout>

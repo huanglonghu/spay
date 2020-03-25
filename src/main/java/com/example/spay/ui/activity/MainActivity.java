@@ -53,10 +53,16 @@ import com.example.spay.utils.SharepreferenceUtil;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
@@ -95,16 +101,7 @@ public class MainActivity extends BaseActivity {
 
                 switch (rxEvent.getEventType()) {
                     case EventType.EVENTTYPE_ADDFRIEND_SUCCESS:
-                        Flowable.intervalRange(0, 2, 0, 500, TimeUnit.MILLISECONDS)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .doOnComplete(new Action() {
-                                    @Override
-                                    public void run() throws Exception {
-                                        FriendOption.getInstance(MainActivity.this).querryFriendList(1, true);
-                                    }
-                                })
-                                .subscribe();
-
+                        FriendOption.getInstance(MainActivity.this).querryFriendList(1, true);
                         break;
                     case EventType.EVENTTYPE_EXIT:
                         Presenter.getInstance().exit(MainActivity.this);

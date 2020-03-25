@@ -17,9 +17,12 @@ public class Constant {
     public static double toDayMoney;
     public static double yesterDayMoney;
 
-    //http://192.168.1.188:8011
-    //http://api.sy1999.com:8011
-    //http://api.sy1999.com:8027
-    //103.243.180.251
+
+    //http://192.168.1.188:5000;
+//http://192.168.1.188:8027
+
+    //http://www.zxylonline.com:8011
+    //http://www.zxylonline.com:8027
+
 
 }

@@ -87,6 +87,7 @@
                 android:id="@+id/recharge"
                 android:layout_width="match_parent"
                 android:layout_height="100pt"
+                android:visibility="gone"
                 android:background="@drawable/shape_item1"
                 android:paddingLeft="25pt"
                 android:paddingRight="30pt">
@@ -199,6 +200,7 @@
                 android:layout_height="100pt"
                 android:layout_marginTop="20pt"
                 android:background="@drawable/shape_item1"
+                android:visibility="gone"
                 android:paddingLeft="25pt"
                 android:paddingRight="30pt">
 

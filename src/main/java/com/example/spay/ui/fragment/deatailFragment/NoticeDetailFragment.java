@@ -3,7 +3,6 @@ package com.example.spay.ui.fragment.deatailFragment;
 import android.databinding.DataBindingUtil;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +22,8 @@ public class NoticeDetailFragment extends BaseFragment {
     private View view;
     private int noticeId;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (binding == null) {
             noticeId = getArguments().getInt("noticeId");
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_notice_detail, container, false);
